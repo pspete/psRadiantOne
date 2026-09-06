@@ -13,6 +13,18 @@
   - `Get-R1FIDRole`, `New-R1FIDRole`, `Set-R1FIDRole`, `Remove-R1FIDRole`.
   - `Get-R1DirectoryManager`, `Set-R1DirectoryManager`, `Get-R1SpecialGroup`, `Set-R1SpecialGroup`.
 - Command help under `docs/collections/_commands`, and the generated `psRadiantOne-help.xml`.
+- `Invoke-R1RestMethod` accepts `SslProtocol`, passed through to `Invoke-WebRequest` for an endpoint
+  requiring a specific TLS protocol. PowerShell Core only.
+
+## Changed
+
+- `Invoke-R1RestMethod` no longer pins TLS 1.2 on PowerShell Core. `WebSslProtocol` is a flags enum,
+  so pinning `Tls12` permitted TLS 1.2 alone and excluded TLS 1.3; the connection now negotiates the
+  strongest protocol both ends support.
+- `Invoke-R1RestMethod` leaves a `SystemDefault` security protocol untouched under Windows PowerShell
+  rather than replacing it with TLS 1.2 only, and combines TLS 1.2 with the protocols already
+  permitted rather than overwriting them. The previous behaviour downgraded a correctly configured
+  process, and could strip TLS 1.3 from one that had it enabled.
 
 - Private HTTP and request-building plumbing shared by every command:
   - `Invoke-R1RestMethod` - the module's single HTTP entry point, sending the session token as a

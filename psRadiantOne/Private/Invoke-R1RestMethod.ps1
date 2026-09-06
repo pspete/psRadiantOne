@@ -60,6 +60,14 @@ function Invoke-R1RestMethod {
 	Bypass certificate validation for the request. Applies to deployments presenting a self-signed
 	certificate.
 
+	.PARAMETER SslProtocol
+	Force the request to use a specific TLS protocol, e.g. 'Tls12', or 'Tls12,Tls13' to allow either.
+	PowerShell Core only; ignored under Windows PowerShell, whose Invoke-WebRequest has no such
+	parameter.
+
+	Left unset the connection negotiates the strongest protocol both ends support, so specify this
+	only for an endpoint which requires a specific protocol.
+
 	.EXAMPLE
 	Invoke-R1RestMethod -Uri $URI -Method GET
 
@@ -112,7 +120,10 @@ function Invoke-R1RestMethod {
 		[string]$OutFile,
 
 		[Parameter(Mandatory = $false)]
-		[switch]$SkipCertificateCheck
+		[switch]$SkipCertificateCheck,
+
+		[Parameter(Mandatory = $false)]
+		[string]$SslProtocol
 	)
 
 	Begin {
@@ -158,9 +169,15 @@ function Invoke-R1RestMethod {
 
 			$PSBoundParameters.Add('SkipHeaderValidation', $true)
 
+			#No protocol is pinned here. .NET negotiates the strongest protocol both ends support,
+			#and WebSslProtocol is a flags enum, so pinning 'Tls12' would set TLS 1.2 as the only
+			#permitted protocol and exclude TLS 1.3. A caller needing a specific protocol passes
+			#SslProtocol, which reaches Invoke-WebRequest unaltered.
+
 		} else {
 
-			#SkipCertificateCheck is a PowerShell Core parameter; Windows PowerShell requires a callback
+			#SslProtocol and SkipCertificateCheck are PowerShell Core parameters
+			$null = $PSBoundParameters.Remove('SslProtocol')
 			$null = $PSBoundParameters.Remove('SkipCertificateCheck')
 
 			if ($SkipCertificateCheck) {
@@ -169,15 +186,19 @@ function Invoke-R1RestMethod {
 
 			}
 
-		}
+			#A SecurityProtocol of SystemDefault (0) lets Schannel negotiate the strongest protocol
+			#both ends support, which is the correct modern value and is left untouched. Only a
+			#process pinned to explicit legacy protocols needs TLS 1.2 adding, and it is combined
+			#with the protocols already permitted rather than replacing them.
+			$SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol
 
-		#If Tls12 Security Protocol is available
-		if (([Net.SecurityProtocolType].GetEnumNames() -contains 'Tls12') -and
+			if (([int]$SecurityProtocol -ne 0) -and
+				([Net.SecurityProtocolType].GetEnumNames() -contains 'Tls12') -and
+				(-not ($SecurityProtocol.HasFlag([Net.SecurityProtocolType]::Tls12)))) {
 
-			#And Tls12 is not already in use
-			(-not ([System.Net.ServicePointManager]::SecurityProtocol -match 'Tls12'))) {
+				[Net.ServicePointManager]::SecurityProtocol = $SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
-			[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+			}
 
 		}
 
