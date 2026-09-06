@@ -53,6 +53,30 @@
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @(
 
+        'Connect-R1Session',
+        'Disconnect-R1Session',
+        'Get-R1AccessToken',
+        'Get-R1DirectoryManager',
+        'Get-R1FIDRole',
+        'Get-R1FIDUser',
+        'Get-R1Session',
+        'Get-R1SpecialGroup',
+        'New-R1AccessToken',
+        'New-R1FIDRole',
+        'New-R1FIDUser',
+        'Remove-R1AccessToken',
+        'Remove-R1FIDRole',
+        'Remove-R1FIDUser',
+        'Reset-R1Password',
+        'Set-R1DirectoryManager',
+        'Set-R1FIDRole',
+        'Set-R1FIDUser',
+        'Set-R1FIDUserRole',
+        'Set-R1SpecialGroup',
+        'Test-R1AdapToken',
+        'Test-R1CallerPrivilege',
+        'Update-R1AuthToken'
+
     )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
