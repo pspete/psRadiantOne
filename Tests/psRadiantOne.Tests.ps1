@@ -233,13 +233,13 @@ Describe 'Module' -Tag 'Consistency' {
 	Context 'Secure Value Handling' -Tag 'SecureValueHandling' {
 
 		#Any function that decodes a SecureString (or otherwise obtains a plaintext secret) and sends a
-		#JSON request body via Invoke-RORestMethod must convert that body to UTF8 bytes (not a
+		#JSON request body via Invoke-R1RestMethod must convert that body to UTF8 bytes (not a
 		#String) before the call, so Windows PowerShell ParameterBinding/Module Logging cannot capture the
 		#plaintext value. See https://github.com/pspete/psPAS/issues/602
 
 		#Fill in with the actual secret-shaped field names this module's API uses - verify against real
 		#payloads, don't copy another module's list unchecked even if the platform seems related.
-		$SecretFieldNames = 'REPLACE_WITH_ACTUAL_FIELD_NAMES'
+		$SecretFieldNames = 'password', 'newPassword', 'oldPassword', 'currentPassword', 'bindReqPassword', 'clientSecret', 'secretKey', 'accessKeySecret'
 		$SecretFieldPattern = "(?i)'($($SecretFieldNames -join '|'))'"
 		$SecretDecodePattern = 'ConvertTo-InsecureString'
 
@@ -248,19 +248,19 @@ Describe 'Module' -Tag 'Consistency' {
 			$Content = Get-Content -Path $Script.FullName -Raw
 
 			$HandlesSecret = ($Content -match $SecretFieldPattern) -or ($Content -match $SecretDecodePattern)
-			$BuildsJsonBody = ($Content -match 'ConvertTo-Json') -or ($Content -match 'ConvertTo-ROJsonBody')
-			$SendsRequest = $Content -match 'Invoke-RORestMethod'
+			$BuildsJsonBody = ($Content -match 'ConvertTo-Json') -or ($Content -match 'ConvertTo-R1JsonBody')
+			$SendsRequest = $Content -match 'Invoke-R1RestMethod'
 
 			if ($HandlesSecret -and $BuildsJsonBody -and $SendsRequest) {
 
-				It "$($Script.Name) converts its request body to UTF8 bytes before calling Invoke-RORestMethod" -Tag "$($Script.BaseName)" -TestCases @{
+				It "$($Script.Name) converts its request body to UTF8 bytes before calling Invoke-R1RestMethod" -Tag "$($Script.BaseName)" -TestCases @{
 					'Content' = $Content
 				} {
 					param($Content)
 
 					#Accepts either inline UTF8 encoding, or a dedicated module-specific secret-body helper
 					#(the more mature version of this pattern once one exists for this module).
-					$Content | Should -Match '(\[System\.Text\.Encoding\]::UTF8\.GetBytes\(|ConvertTo-ROSecretBody)'
+					$Content | Should -Match '(\[System\.Text\.Encoding\]::UTF8\.GetBytes\(|ConvertTo-R1SecretBody)'
 
 				}
 
@@ -271,7 +271,7 @@ Describe 'Module' -Tag 'Consistency' {
 		#The pattern-based scan above can't see a secret that only exists in the *caller's* data (e.g. a
 		#hashtable value passed in via a parameter) rather than as literal source text in the file itself -
 		#list any scripts known to handle a secret this way as explicit named exceptions here, e.g.:
-		#'Set-ROUserSecurityQuestion.ps1' | ForEach-Object { ... }
+		#'Set-R1Example.ps1' | ForEach-Object { ... }
 
 	}
 
