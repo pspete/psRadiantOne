@@ -1,0 +1,56 @@
+# version format
+version: 0.0.{build}
+
+environment:
+  # Plain (non-secret) config - edit these per new project:
+  git_user_name: 'Pete Maan'
+  github_repo_owner: 'pspete'
+  release_version_gate: '0.1.0'
+
+  # Secure variables - populate per project via the AppVeyor UI, do not commit real values here:
+  access_token:
+    secure: REPLACE_ME
+  psgallery_key:
+    secure: REPLACE_ME
+  github_email:
+    secure: REPLACE_ME
+  CODECOV_TOKEN:
+    secure: REPLACE_ME
+
+skip_tags: true
+
+skip_commits:
+  files:
+    - docs\*
+    - .github\*
+    - .vscode\*
+    - README.md
+    - LICENSE.md
+    - CONTRIBUTING.md
+    - CODE_OF_CONDUCT.md
+    - ISSUE_TEMPLATE.md
+    - PULL_REQUEST_TEMPLATE.md
+    - appveyor.yml
+    - CHANGELOG.md
+  message: /update readme.*|update version.*|update appveyor.*/
+
+only_commits:
+  files:
+    - build\
+    - 'psRadiantOne\'
+    - Tests\
+
+image: Visual Studio 2019
+
+install:
+  - pwsh.exe -File .\build\install.ps1
+
+build_script:
+  - pwsh.exe -File .\build\build.ps1
+
+test_script:
+  - pwsh.exe -File .\build\test.ps1
+
+deploy_script:
+  - pwsh.exe -File .\build\deploy-github.ps1
+  - pwsh.exe -File .\build\deploy-psgallery.ps1
