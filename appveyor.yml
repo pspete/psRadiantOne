@@ -9,13 +9,13 @@ environment:
 
   # Secure variables - populate per project via the AppVeyor UI, do not commit real values here:
   access_token:
-    secure: REPLACE_ME
+    secure: nXh9mZ0YD5M116yhStlR/Tzg+Kf+D6CUpNP+tIlWdNTVxNjVzT2vzl8wOD8kvtOiSORSWDsyvKZVx2+IsA0A1X05ohYwmkXQIF9TaPHiHtFmym8Y5btpRO/2AaWMfmIJ
   psgallery_key:
-    secure: REPLACE_ME
+    secure: FuPgJskczZMptxRgdUlBAy7OYmXBQl4zq86kXXSmBt6wKudnM2PK7W6cM7bj0te1
   github_email:
-    secure: REPLACE_ME
+    secure: x5ljenzXfYXkzpEu9eX7AQvb3AkFbiXG2NndMzw9Zc4=
   CODECOV_TOKEN:
-    secure: REPLACE_ME
+    secure: nUMw4tUP8DnGUwUMbXy8WrcW6YTBwS1td2BR1bHV9tE8MWE4XEYWDjPmUA/skGJp
 
 skip_tags: true
 
