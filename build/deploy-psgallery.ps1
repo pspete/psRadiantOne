@@ -13,7 +13,7 @@ if (-not ($ENV:APPVEYOR_PULL_REQUEST_NUMBER)) {
 	<#---------------------------------#>
 	<# If Not a PR                     #>
 	<#---------------------------------#>
-	If (($ENV:APPVEYOR_REPO_BRANCH -eq 'main') -and ($env:APPVEYOR_BUILD_VERSION -ge $env:release_version_gate)) {
+	If (($ENV:APPVEYOR_REPO_BRANCH -eq 'main') -and ([version]$env:APPVEYOR_BUILD_VERSION -ge [version]$env:release_version_gate)) {
 
 		Write-Host 'Deploy Process: PowerShell Gallery' -ForegroundColor Yellow
 
