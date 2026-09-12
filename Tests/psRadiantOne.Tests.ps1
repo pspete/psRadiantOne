@@ -247,6 +247,8 @@ Describe 'Module' -Tag 'Consistency' {
 			'Set-R1License'                   = 'Applies a license. The body is the license itself, which is the whole resource, so there is nothing to preserve.'
 			'Set-R1CustomLimit'               = 'The request body is the complete collection of custom limits by definition, so there is nothing to preserve.'
 			'Set-R1GlobalSpecialAttribute'    = 'The request body has a single property, which is the value being set, so there is nothing to preserve.'
+			'Enable-R1NamingContext'          = 'Toggles the active state. The request body has a single property, which is the state being set.'
+			'Disable-R1NamingContext'         = 'Toggles the active state. The request body has a single property, which is the state being set.'
 		}
 
 		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse

@@ -69,6 +69,12 @@ they cover rather than split into added, changed and fixed.
 
 - Global namespace settings: `Get-R1GlobalInterceptionSetting` / `Set-R1GlobalInterceptionSetting`,
   `Get-R1GlobalSpecialAttribute` / `Set-R1GlobalSpecialAttribute` and `Get-R1GlobalDynamicGroup`.
+- Naming contexts: `Get-R1NamingContext`, `Get-R1NamingContextChild`, `New-R1NamingContext`,
+  `Remove-R1NamingContext`, `Enable-R1NamingContext` / `Disable-R1NamingContext`,
+  `New-R1NamingContextLabel`, `New-R1NamingContextContent`, `New-R1NamingContextContainer` and
+  `New-R1NamingContextLink`. The two list commands follow the offset pagination of the API and return
+  every page. No total is reported by the API, so the end of a collection is recognised by a page
+  holding fewer nodes than were asked for.
 
 ## Notes
 
