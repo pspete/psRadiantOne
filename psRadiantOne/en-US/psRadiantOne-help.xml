@@ -20,7 +20,13 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
           <maml:name>BaseURI</maml:name>
           <maml:description>
-            <maml:para>The base URL of the RadiantOne deployment to connect to, e.g. https://radiantone.company.com</maml:para>
+            <maml:para>The URL of the RadiantOne API endpoint.</maml:para>
+            <maml:para>This is the API address, not the Control Panel UI address. On a RadiantOne cloud tenant the two differ by an /api suffix, and both are listed in the Application Endpoints panel of the Environment Operations Center:</maml:para>
+            <maml:para>- Control Panel UI: https://tenant.example.radiantlogic.io</maml:para>
+            <maml:para>- API:              https://tenant.example.radiantlogic.io/api</maml:para>
+            <maml:para></maml:para>
+            <maml:para>Supplying the Control Panel UI address produces a valid looking URL which returns 404 for every request, so copy the API address. A trailing slash is accepted and removed.</maml:para>
+            <maml:para>The LDAPS and REST addresses listed alongside them are the directory and REST client endpoints, and are not this API.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -58,7 +64,13 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
         <maml:name>BaseURI</maml:name>
         <maml:description>
-          <maml:para>The base URL of the RadiantOne deployment to connect to, e.g. https://radiantone.company.com</maml:para>
+          <maml:para>The URL of the RadiantOne API endpoint.</maml:para>
+          <maml:para>This is the API address, not the Control Panel UI address. On a RadiantOne cloud tenant the two differ by an /api suffix, and both are listed in the Application Endpoints panel of the Environment Operations Center:</maml:para>
+          <maml:para>- Control Panel UI: https://tenant.example.radiantlogic.io</maml:para>
+          <maml:para>- API:              https://tenant.example.radiantlogic.io/api</maml:para>
+          <maml:para></maml:para>
+          <maml:para>Supplying the Control Panel UI address produces a valid looking URL which returns 404 for every request, so copy the API address. A trailing slash is accepted and removed.</maml:para>
+          <maml:para>The LDAPS and REST addresses listed alongside them are the directory and REST client endpoints, and are not this API.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -129,14 +141,14 @@
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>$cred = Get-Credential
-Connect-R1Session -BaseURI 'https://radiantone.company.com' -Credential $cred</dev:code>
+Connect-R1Session -BaseURI 'https://tenant.example.radiantlogic.io/api' -Credential $cred</dev:code>
         <dev:remarks>
-          <maml:para>Authenticates as the supplied user and establishes the session used by all other commands.</maml:para>
+          <maml:para>Authenticates as the supplied user and establishes the session used by all other commands. Note the /api suffix: this is the API endpoint address, not the Control Panel UI address.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>$reset = Connect-R1Session -BaseURI 'https://radiantone.company.com' -Credential $cred
+        <dev:code>$reset = Connect-R1Session -BaseURI 'https://tenant.example.radiantlogic.io/api' -Credential $cred
 Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecureString)</dev:code>
         <dev:remarks>
           <maml:para>Handles an expired password: the connect attempt returns the reset information, whose resetToken drives the password reset.</maml:para>
@@ -144,7 +156,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 3 --------------------------</maml:title>
-        <dev:code>Connect-R1Session -BaseURI 'https://radiantone.lab.local' -Credential $cred -SkipCertificateCheck</dev:code>
+        <dev:code>Connect-R1Session -BaseURI 'https://radiantone.lab.local:7070/api' -Credential $cred -SkipCertificateCheck</dev:code>
         <dev:remarks>
           <maml:para>Connects to a deployment presenting a self-signed certificate.</maml:para>
         </dev:remarks>

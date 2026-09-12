@@ -35,14 +35,15 @@ terminating error.
 ### Example 1
 ```powershell
 $cred = Get-Credential
-Connect-R1Session -BaseURI 'https://radiantone.company.com' -Credential $cred
+Connect-R1Session -BaseURI 'https://tenant.example.radiantlogic.io/api' -Credential $cred
 ```
 
 Authenticates as the supplied user and establishes the session used by all other commands.
+Note the /api suffix: this is the API endpoint address, not the Control Panel UI address.
 
 ### Example 2
 ```powershell
-$reset = Connect-R1Session -BaseURI 'https://radiantone.company.com' -Credential $cred
+$reset = Connect-R1Session -BaseURI 'https://tenant.example.radiantlogic.io/api' -Credential $cred
 Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecureString)
 ```
 
@@ -50,7 +51,7 @@ Handles an expired password: the connect attempt returns the reset information, 
 
 ### Example 3
 ```powershell
-Connect-R1Session -BaseURI 'https://radiantone.lab.local' -Credential $cred -SkipCertificateCheck
+Connect-R1Session -BaseURI 'https://radiantone.lab.local:7070/api' -Credential $cred -SkipCertificateCheck
 ```
 
 Connects to a deployment presenting a self-signed certificate.
@@ -58,7 +59,20 @@ Connects to a deployment presenting a self-signed certificate.
 ## PARAMETERS
 
 ### -BaseURI
-The base URL of the RadiantOne deployment to connect to, e.g. https://radiantone.company.com
+The URL of the RadiantOne API endpoint.
+
+This is the API address, not the Control Panel UI address. On a RadiantOne cloud tenant the two
+differ by an /api suffix, and both are listed in the Application Endpoints panel of the Environment
+Operations Center:
+
+- Control Panel UI: https://tenant.example.radiantlogic.io
+- API:              https://tenant.example.radiantlogic.io/api
+
+Supplying the Control Panel UI address produces a valid looking URL which returns 404 for every
+request, so copy the API address. A trailing slash is accepted and removed.
+
+The LDAPS and REST addresses listed alongside them are the directory and REST client endpoints, and
+are not this API.
 
 ```yaml
 Type: String

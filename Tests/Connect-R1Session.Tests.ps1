@@ -107,6 +107,33 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Failure' {
+
+			It 'names the url which was called when login fails' {
+
+				Mock Invoke-R1RestMethod -MockWith { throw 'Not Found' }
+
+				$Credential = New-Object System.Management.Automation.PSCredential('testuser', ('P@ssword' | ConvertTo-SecureString -AsPlainText -Force))
+
+				{ Connect-R1Session -BaseURI 'https://radiantone.company.com' -Credential $Credential } |
+					Should -Throw -ExpectedMessage '*https://radiantone.company.com/authentication-service/v2/login*'
+
+			}
+
+			It 'leaves no partial session behind when login fails' {
+
+				Mock Invoke-R1RestMethod -MockWith { throw 'Not Found' }
+
+				$Credential = New-Object System.Management.Automation.PSCredential('testuser', ('P@ssword' | ConvertTo-SecureString -AsPlainText -Force))
+
+				try { Connect-R1Session -BaseURI 'https://radiantone.company.com' -Credential $Credential } catch { }
+
+				$Script:psRadiantOneSession.BaseURI | Should -BeNullOrEmpty
+
+			}
+
+		}
+
 		Context 'Output' {
 
 			It 'sets the session token' {

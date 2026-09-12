@@ -66,7 +66,21 @@ function Connect-R1Session {
 
 			#Leave no partial session behind if the login attempt failed
 			$Script:psRadiantOneSession.BaseURI = $null
-			throw $PSItem
+
+			#Name the url which was called; a base url pointing at the control panel ui rather than
+			#the api endpoint is otherwise indistinguishable from a credential problem
+			$PSCmdlet.ThrowTerminatingError(
+
+				[System.Management.Automation.ErrorRecord]::new(
+
+					[System.Exception]::new("Login to $URI failed. $($PSItem.Exception.Message)", $PSItem.Exception),
+					'psRadiantOne.LoginFailed',
+					[System.Management.Automation.ErrorCategory]::AuthenticationError,
+					$URI
+
+				)
+
+			)
 
 		} finally {
 
