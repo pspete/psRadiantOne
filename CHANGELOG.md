@@ -90,6 +90,7 @@ they cover rather than split into added, changed and fixed.
   `Get-R1NamingContextSpecialAttribute` / `Set-R1NamingContextSpecialAttribute`,
   `Get-R1NamingContextVirtualTreeProperty` / `Set-R1NamingContextVirtualTreeProperty` and
   `Get-R1NamingContextRelationshipTree`.
+- Namespace views: `Get-R1NamespaceView` and `Remove-R1NamespaceView`.
 
 ## Notes
 
