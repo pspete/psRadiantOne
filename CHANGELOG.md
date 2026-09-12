@@ -2,6 +2,13 @@
 
 ## Added
 
+- Access control commands, covering the `settings-service` access control and ACI endpoints:
+  - `Get-R1AccessControlSetting` / `Set-R1AccessControlSetting`
+  - `Get-R1Aci`, `New-R1Aci`, `Set-R1Aci`, `Remove-R1Aci`
+  - `Get-R1AciLocation`, and `Test-R1Aci`, which reports whether an ACI can be parsed
+  The ACI endpoints take the holding `baseDn` as a query parameter, required everywhere except when
+  listing. The shapes of `AccessControl` and `Aci` were confirmed against a live 8.5 tenant.
+
 - Session and authentication commands, covering the RadiantOne `authentication-service`:
   - `Connect-R1Session` / `Disconnect-R1Session` / `Get-R1Session`, `Update-R1AuthToken` and
     `Reset-R1Password`. An expired password is surfaced by `Connect-R1Session` as the password reset
