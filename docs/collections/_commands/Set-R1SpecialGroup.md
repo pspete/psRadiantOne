@@ -13,12 +13,16 @@ Updates the special groups settings.
 ## SYNTAX
 
 ```
-Set-R1SpecialGroup [-specialUsersGroupDn] <String> [-administratorsGroupDn] <String> [-WhatIf] [-Confirm]
+Set-R1SpecialGroup [[-specialUsersGroupDn] <String>] [[-administratorsGroupDn] <String>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 Sets the DNs of the groups used as the special users group and the administrators group.
+
+The current settings are retrieved before they are updated, and sent back with the supplied values
+applied over them, so either group DN can be set without restating the other. The command therefore
+issues a GET followed by a PUT.
 
 ## EXAMPLES
 
@@ -28,6 +32,13 @@ Set-R1SpecialGroup -specialUsersGroupDn 'ou=special,cn=config' -administratorsGr
 ```
 
 Sets both special group DNs.
+
+### Example 2
+```powershell
+Set-R1SpecialGroup -administratorsGroupDn 'cn=directory administrators,ou=globalgroups,cn=config'
+```
+
+Sets the administrators group DN, leaving the special users group DN as it is.
 
 ## PARAMETERS
 
@@ -70,7 +81,7 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -85,7 +96,7 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 0
 Default value: None
 Accept pipeline input: True (ByPropertyName)

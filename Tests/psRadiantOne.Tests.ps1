@@ -230,6 +230,55 @@ Describe 'Module' -Tag 'Consistency' {
 
 	}
 
+	Context 'Read Modify Write' -Tag 'ReadModifyWrite' {
+
+		#The RadiantOne update endpoints replace the resource rather than merging into it: a property
+		#absent from the request is cleared, and a permission absent from a role is reset to NONE.
+		#A command issuing a PUT must therefore retrieve the resource first and send it back with the
+		#caller's values applied over it, which is what Merge-R1Parameter is for. Sending only the
+		#bound parameters silently destroys everything the caller did not restate.
+
+		#Commands whose PUT is not a partial update of a resource, with the reason each is exempt.
+		$ReadModifyWriteExempt = @{
+			'Update-R1AuthToken' = 'Refreshes the authentication token. An action with no request body.'
+			'Set-R1FIDUserRole'  = 'The request body is the complete list of roles by definition, so there is nothing to preserve.'
+		}
+
+		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse
+
+		Foreach ($Script in $PublicScripts) {
+
+			$Content = Get-Content -Path $Script.FullName -Raw
+
+			if ($Content -match 'Method\s+PUT') {
+
+				if ($ReadModifyWriteExempt.ContainsKey($Script.BaseName)) {
+
+					It "$($Script.Name) is exempt: $($ReadModifyWriteExempt[$Script.BaseName])" -Tag "$($Script.BaseName)" {
+						$true | Should -BeTrue
+					}
+
+				} else {
+
+					It "$($Script.Name) retrieves the resource before updating it" -Tag "$($Script.BaseName)" -TestCases @{
+						'Content' = $Content
+						'Name'    = $Script.BaseName
+					} {
+						param($Content, $Name)
+
+						#Add the command to $ReadModifyWriteExempt above, with a reason, if its PUT
+						#genuinely does not need the resource retrieving first.
+						$Content | Should -Match 'Merge-R1Parameter'
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	Context 'Secure Value Handling' -Tag 'SecureValueHandling' {
 
 		#Any function that decodes a SecureString (or otherwise obtains a plaintext secret) and sends a

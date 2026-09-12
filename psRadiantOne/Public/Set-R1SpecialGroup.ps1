@@ -4,14 +4,14 @@ function Set-R1SpecialGroup {
 	[OutputType([void])]
 	param(
 		[parameter(
-			Mandatory = $true,
+			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
 		[ValidateNotNullOrEmpty()]
 		[string]$specialUsersGroupDn,
 
 		[parameter(
-			Mandatory = $true,
+			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
 		[ValidateNotNullOrEmpty()]
@@ -28,7 +28,18 @@ function Set-R1SpecialGroup {
 
 		$URI = Resolve-R1ServiceUrl -Service Auth -Path 'special_groups'
 
-		$Body = $PSBoundParameters | Get-Parameter | ConvertTo-R1JsonBody
+		#Retrieve the current settings and send them back with the supplied values applied over them,
+		#so that either group DN can be set without restating the other.
+		$Existing = Get-R1SpecialGroup
+
+		$Template = [ordered]@{
+			specialUsersGroupDn   = $null
+			administratorsGroupDn = $null
+		}
+
+		$Request = Merge-R1Parameter -Template $Template -BoundParameter ($PSBoundParameters | Get-Parameter) -Fallback $Existing
+
+		$Body = $Request | ConvertTo-R1JsonBody
 
 		if ($PSCmdlet.ShouldProcess($Script:psRadiantOneSession.BaseURI, 'Update Special Groups Settings')) {
 

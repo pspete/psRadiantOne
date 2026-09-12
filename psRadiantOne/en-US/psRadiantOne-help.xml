@@ -3739,11 +3739,12 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:details>
     <maml:description>
       <maml:para>Sets the DNs of the groups used as the special users group and the administrators group.</maml:para>
+      <maml:para>The current settings are retrieved before they are updated, and sent back with the supplied values applied over them, so either group DN can be set without restating the other. The command therefore issues a GET followed by a PUT.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Set-R1SpecialGroup</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
           <maml:name>specialUsersGroupDn</maml:name>
           <maml:description>
             <maml:para>The DN of the group holding special users.</maml:para>
@@ -3755,7 +3756,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
           <maml:name>administratorsGroupDn</maml:name>
           <maml:description>
             <maml:para>The DN of the group holding administrators.</maml:para>
@@ -3816,7 +3817,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
         <maml:name>administratorsGroupDn</maml:name>
         <maml:description>
           <maml:para>The DN of the group holding administrators.</maml:para>
@@ -3828,7 +3829,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
         <maml:name>specialUsersGroupDn</maml:name>
         <maml:description>
           <maml:para>The DN of the group holding special users.</maml:para>
@@ -3872,6 +3873,13 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         <dev:code>Set-R1SpecialGroup -specialUsersGroupDn 'ou=special,cn=config' -administratorsGroupDn 'ou=admins,cn=config'</dev:code>
         <dev:remarks>
           <maml:para>Sets both special group DNs.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Set-R1SpecialGroup -administratorsGroupDn 'cn=directory administrators,ou=globalgroups,cn=config'</dev:code>
+        <dev:remarks>
+          <maml:para>Sets the administrators group DN, leaving the special users group DN as it is.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

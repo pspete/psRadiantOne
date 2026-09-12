@@ -62,6 +62,16 @@
 
 ## Changed
 
+- A `Set-*` command issuing a PUT now retrieves the resource first and sends it back complete, with
+  the caller's values applied over it. The RadiantOne update endpoints replace rather than merge, so
+  sending only the supplied properties silently cleared everything else. This is enforced by the
+  `ReadModifyWrite` test, which fails any public command containing `-Method PUT` that does not use
+  `Merge-R1Parameter`, unless it is listed as exempt with a reason. Exempt: `Update-R1AuthToken`, a
+  bodyless action, and `Set-R1FIDUserRole`, whose body is the complete collection by definition.
+- `Set-R1SpecialGroup` takes both group DNs as optional, so either can be set without restating the
+  other.
+
+
 - `Invoke-R1RestMethod` no longer pins TLS 1.2 on PowerShell Core. `WebSslProtocol` is a flags enum,
   so pinning `Tls12` permitted TLS 1.2 alone and excluded TLS 1.3; the connection now negotiates the
   strongest protocol both ends support.
