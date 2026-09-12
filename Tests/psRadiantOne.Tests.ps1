@@ -242,6 +242,7 @@ Describe 'Module' -Tag 'Consistency' {
 		$ReadModifyWriteExempt = @{
 			'Update-R1AuthToken' = 'Refreshes the authentication token. An action with no request body.'
 			'Set-R1FIDUserRole'  = 'The request body is the complete list of roles by definition, so there is nothing to preserve.'
+			'Update-R1AttributeEncryptionKey' = 'Rotates the encryption key. An action whose body is the new key, not a partial update of a resource.'
 		}
 
 		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse

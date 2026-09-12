@@ -53,17 +53,22 @@
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @(
 
+        'Add-R1TruststoreCertificate',
         'Connect-R1Session',
         'Disconnect-R1Session',
+        'Export-R1TruststoreCertificate',
         'Get-R1AccessControlSetting',
         'Get-R1AccessToken',
         'Get-R1Aci',
         'Get-R1AciLocation',
+        'Get-R1AttributeEncryption',
+        'Get-R1AttributeEncryptionKmsSetting',
         'Get-R1DirectoryManager',
         'Get-R1FIDRole',
         'Get-R1FIDUser',
         'Get-R1Session',
         'Get-R1SpecialGroup',
+        'Get-R1TruststoreCertificate',
         'New-R1AccessToken',
         'New-R1Aci',
         'New-R1FIDRole',
@@ -72,9 +77,12 @@
         'Remove-R1Aci',
         'Remove-R1FIDRole',
         'Remove-R1FIDUser',
+        'Remove-R1TruststoreCertificate',
         'Reset-R1Password',
         'Set-R1AccessControlSetting',
         'Set-R1Aci',
+        'Set-R1AttributeEncryption',
+        'Set-R1AttributeEncryptionKmsSetting',
         'Set-R1DirectoryManager',
         'Set-R1FIDRole',
         'Set-R1FIDUser',
@@ -83,6 +91,7 @@
         'Test-R1Aci',
         'Test-R1AdapToken',
         'Test-R1CallerPrivilege',
+        'Update-R1AttributeEncryptionKey',
         'Update-R1AuthToken'
 
     )

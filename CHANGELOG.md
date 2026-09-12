@@ -2,6 +2,15 @@
 
 ## Added
 
+- Attribute encryption commands: `Get-R1AttributeEncryption` / `Set-R1AttributeEncryption`,
+  `Get-R1AttributeEncryptionKmsSetting` / `Set-R1AttributeEncryptionKmsSetting`, and
+  `Update-R1AttributeEncryptionKey`. The KMS retrieval reports only whether credentials are stored,
+  so `Set-R1AttributeEncryptionKmsSetting` carries forward the region and alias and takes
+  `-useExistingCredentials` to keep the stored credentials. None have been exercised against a live
+  deployment: changing attribute encryption or rotating a key risks unreadable data.
+- Client certificate truststore commands: `Get-R1TruststoreCertificate`,
+  `Add-R1TruststoreCertificate`, `Remove-R1TruststoreCertificate` and
+  `Export-R1TruststoreCertificate`. The import is multipart form data, the export a binary download.
 - Access control commands, covering the `settings-service` access control and ACI endpoints:
   - `Get-R1AccessControlSetting` / `Set-R1AccessControlSetting`
   - `Get-R1Aci`, `New-R1Aci`, `Set-R1Aci`, `Remove-R1Aci`
