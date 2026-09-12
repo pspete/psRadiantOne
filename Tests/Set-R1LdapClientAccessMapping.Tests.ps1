@@ -78,7 +78,11 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					@($Body | ConvertFrom-Json).Count -eq 1
+					#Assign before counting: Windows PowerShell's ConvertFrom-Json emits an array
+					#root as a single object, so @($x | ConvertFrom-Json).Count is 1 whatever the
+					#array holds. Assignment collects it properly on both hosts.
+					$Decoded = $Body | ConvertFrom-Json
+					@($Decoded).Count -eq 1
 
 				} -Times 1 -Exactly -Scope It
 
