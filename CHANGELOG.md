@@ -82,6 +82,10 @@ they cover rather than split into added, changed and fixed.
   `Test-R1InterceptionScriptCode` and `New-R1InterceptionScriptJar`. The two upload commands take a
   local file path and send it as multipart form data, which works on Windows PowerShell as well as
   PowerShell 7.
+- Namespace utilities: `Test-R1LdapFilter`, `Test-R1ComputedAttributeName`,
+  `Test-R1JoinCondition`, `Get-R1JoinCondition`, `Get-R1DynamicGroupFormat` and
+  `Get-R1LinkedAttributeDefault`. The three Test commands return a boolean; where the API also
+  reports why a value was rejected, that reason is written to the verbose stream.
 
 ## Notes
 
