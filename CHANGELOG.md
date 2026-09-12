@@ -2,6 +2,18 @@
 
 ## Added
 
+- Password policy commands: `Get-R1PasswordPolicy`, `Set-R1PasswordPolicy` (33 settings),
+  `Remove-R1PasswordPolicy`, `Get-R1PasswordDictionary`, `Add-R1PasswordDictionaryWord`,
+  `Remove-R1PasswordDictionaryWord`, `Get-R1PasswordEncryption` and `Test-R1PasswordStrengthRule`.
+  The API requires `policyName` as a query parameter on retrieval, update and deletion, which the
+  published command map had missed; a live probe returned "Required parameter 'policyName' is not
+  present" and surfaced it. `Get-R1PasswordPolicy -NewPolicy` returns an empty policy populated with
+  the API defaults.
+- OIDC provider commands: `Get-R1OidcProvider`, `New-R1OidcProvider`, `Set-R1OidcProvider`,
+  `Remove-R1OidcProvider`, `Get-R1OidcLoginInfo`, `Get-R1OidcDiscoveryEndpoint`,
+  `Get-R1OidcDiscoveryInfo` and `Get-R1OidcScopesClaim`. The client secret is never returned by the
+  retrieval, so `Set-R1OidcProvider` leaves it unchanged when omitted and takes
+  `-useExistingCredentials` to be explicit about that.
 - External token validator commands: `Get-R1TokenValidator`, `New-R1TokenValidator`,
   `Set-R1TokenValidator` and `Remove-R1TokenValidator`. The API defines two variants discriminated
   by `apiService`, but they carry identical properties, so one command covers both. The
