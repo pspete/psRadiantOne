@@ -65,6 +65,11 @@ they cover rather than split into added, changed and fixed.
   `Get-R1ServiceSummary`, `Get-R1WhatsNew`, `Get-R1SaasConfiguration`, `Get-R1LoginPageInfo`,
   `Get-R1ControlPanelMessage`.
 
+### Directory namespace
+
+- Global namespace settings: `Get-R1GlobalInterceptionSetting` / `Set-R1GlobalInterceptionSetting`,
+  `Get-R1GlobalSpecialAttribute` / `Set-R1GlobalSpecialAttribute` and `Get-R1GlobalDynamicGroup`.
+
 ## Notes
 
 These are the behaviours worth knowing before using the module, rather than a record of changes.
