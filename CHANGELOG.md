@@ -27,6 +27,11 @@
   - `tuningPermissions` is absent from the spec and could not be set at all.
   - `securityPermissions` also takes `passwordPoliciesPermission`, and `administrationPermissions`
     also takes `auditLoggingPermission` and `featureManagementPermission`.
+- `Set-R1FIDRole` retrieves the role before updating it and sends the complete role back, so a
+  permission left unspecified keeps its current value. The endpoint resets any permission absent
+  from the request to NONE, so updating one permission previously cleared every other permission the
+  role held. Set a permission to NONE explicitly to clear it. The command now issues a GET followed
+  by a PUT.
 - `Set-R1FIDUser` accepts `-roles`, and retrieves the user before updating it so that a property
   left unspecified keeps its current value. The control panel sends back the complete object it
   retrieved; sending only the supplied properties risked clearing the rest, since the endpoint is a

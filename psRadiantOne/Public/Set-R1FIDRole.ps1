@@ -131,7 +131,42 @@ function Set-R1FIDRole {
 
 		$URI = Resolve-R1ServiceUrl -Service Auth -Path "roles/$($name | Get-EscapedString)"
 
-		$Body = $PSBoundParameters | Get-Parameter | ConvertTo-R1JsonBody
+		#The API resets any permission absent from the request to NONE, and the control panel sends
+		#back the complete role it retrieved. Do the same, so that a permission left unspecified keeps
+		#its current value rather than being silently cleared.
+		$Existing = Get-R1FIDRole -name $name
+
+		#Key order follows the request the control panel sends. entryDn and defaultRole are omitted
+		#from it, so they are not sent back unless entryDn is given explicitly.
+		$Template = [ordered]@{
+			directoryBrowserPermission    = 'NONE'
+			identityManagerPermission     = 'NONE'
+			tasksPermission               = 'NONE'
+			globalSyncPermission          = 'NONE'
+			observabilityPermission       = 'NONE'
+			dashboardPermission           = 'NONE'
+			fileManagerPermission         = 'NONE'
+			dataCatalogPermissions        = $null
+			securityPermissions           = $null
+			directoryNamespacePermissions = $null
+			tuningPermissions             = $null
+			exportImportPermissions       = $null
+			settingsPermissions           = $null
+			administrationPermissions     = $null
+			classicControlPanelPermission = $null
+			revokeTokenPermission         = $false
+			name                          = $name
+		}
+
+		$Request = Merge-R1Parameter -Template $Template -BoundParameter ($PSBoundParameters | Get-Parameter -ParametersToRemove entryDn) -Fallback $Existing
+
+		if ($PSBoundParameters.ContainsKey('entryDn')) {
+
+			$Request['entryDn'] = $entryDn
+
+		}
+
+		$Body = $Request | ConvertTo-R1JsonBody
 
 		if ($PSCmdlet.ShouldProcess($name, 'Update FID Role')) {
 

@@ -45,7 +45,27 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
 
 			Mock Invoke-R1RestMethod -MockWith {
-				[pscustomobject]@{ 'Prop' = 'Value' }
+				[pscustomobject]@{
+					'name'                          = 'engineering'
+					'entryDn'                       = 'cn=engineering,ou=globalroles,cn=config'
+					'defaultRole'                   = $false
+					'directoryBrowserPermission'    = 'VIEW'
+					'identityManagerPermission'     = 'NONE'
+					'tasksPermission'               = 'NONE'
+					'globalSyncPermission'          = 'NONE'
+					'observabilityPermission'       = 'NONE'
+					'dashboardPermission'           = 'VIEW'
+					'fileManagerPermission'         = 'NONE'
+					'revokeTokenPermission'         = $false
+					'dataCatalogPermissions'        = [pscustomobject]@{ 'dataSourcesPermission' = 'EDIT' }
+					'securityPermissions'           = [pscustomobject]@{ 'accessControlPermission' = 'VIEW' }
+					'directoryNamespacePermissions' = [pscustomobject]@{ 'namespaceDesignPermission' = 'NONE' }
+					'tuningPermissions'             = [pscustomobject]@{ 'logSettingsPermission' = 'VIEW' }
+					'settingsPermissions'           = [pscustomobject]@{ 'clientProtocolsPermission' = 'EDIT' }
+					'administrationPermissions'     = [pscustomobject]@{ 'rolesPermission' = 'NONE' }
+					'exportImportPermissions'       = [pscustomobject]@{ 'exportEnabled' = $true }
+					'classicControlPanelPermission' = [pscustomobject]@{ 'enabled' = $false }
+				}
 			}
 
 			Set-R1FIDRole -name engineering -tasksPermission EDIT -Confirm:$false
@@ -55,7 +75,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends request' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -Times 1 -Exactly -Scope It
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -eq 'PUT' } -Times 1 -Exactly -Scope It
 
 			}
 
@@ -63,7 +83,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					$URI -eq 'https://radiantone.company.com/authentication-service/roles/engineering'
+					($URI -eq 'https://radiantone.company.com/authentication-service/roles/engineering') -and ($Method -eq 'PUT')
 
 				} -Times 1 -Exactly -Scope It
 
@@ -79,7 +99,65 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($Body | ConvertFrom-Json).tasksPermission -eq 'EDIT'
+					($Method -eq 'PUT') -and (($Body | ConvertFrom-Json).tasksPermission -eq 'EDIT')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'retrieves the existing role before updating it' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -eq 'GET' } -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'preserves scalar permissions which were not specified' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Decoded = $Body | ConvertFrom-Json
+					($Decoded.directoryBrowserPermission -eq 'VIEW') -and ($Decoded.dashboardPermission -eq 'VIEW')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'preserves nested permission objects which were not specified' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Decoded = $Body | ConvertFrom-Json
+					($Decoded.dataCatalogPermissions.dataSourcesPermission -eq 'EDIT') -and
+					($Decoded.settingsPermissions.clientProtocolsPermission -eq 'EDIT') -and
+					($Decoded.tuningPermissions.logSettingsPermission -eq 'VIEW')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'does not send defaultRole, which the api maintains' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$null -eq ($Body | ConvertFrom-Json).defaultRole
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'overrides only the specified permission' {
+
+				Set-R1FIDRole -name engineering -settingsPermissions @{ tokenValidatorPermission = 'EDIT' } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Decoded = $Body | ConvertFrom-Json
+					($Decoded.settingsPermissions.tokenValidatorPermission -eq 'EDIT') -and
+					($Decoded.directoryBrowserPermission -eq 'VIEW')
 
 				} -Times 1 -Exactly -Scope It
 

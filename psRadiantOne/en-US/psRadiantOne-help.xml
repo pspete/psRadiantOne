@@ -2695,7 +2695,9 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:details>
     <maml:description>
       <maml:para>Updates an existing FID role.</maml:para>
-      <maml:para>Any permission left unspecified defaults to NONE, so a complete set of the permissions the role should hold must be supplied.</maml:para>
+      <maml:para>The role is retrieved before it is updated, and the complete role is sent back with the supplied values applied over it. A permission left unspecified therefore keeps its current value.</maml:para>
+      <maml:para>This matters because the endpoint resets any permission absent from the request to NONE. Sending only the supplied permissions would silently clear every other permission the role holds. The control panel avoids this the same way, by sending back the whole role it retrieved. One consequence is that the command issues two requests: a GET followed by a PUT.</maml:para>
+      <maml:para>To clear a permission, set it to NONE explicitly.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>

@@ -26,8 +26,15 @@ Set-R1FIDRole [-name] <String> [[-entryDn] <String>] [[-directoryBrowserPermissi
 ## DESCRIPTION
 Updates an existing FID role.
 
-Any permission left unspecified defaults to NONE, so a complete set of the permissions the role
-should hold must be supplied.
+The role is retrieved before it is updated, and the complete role is sent back with the supplied
+values applied over it. A permission left unspecified therefore keeps its current value.
+
+This matters because the endpoint resets any permission absent from the request to NONE. Sending
+only the supplied permissions would silently clear every other permission the role holds. The
+control panel avoids this the same way, by sending back the whole role it retrieved. One consequence
+is that the command issues two requests: a GET followed by a PUT.
+
+To clear a permission, set it to NONE explicitly.
 
 ## EXAMPLES
 
