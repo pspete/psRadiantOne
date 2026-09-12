@@ -24,10 +24,6 @@ encryption or compressed LDIF encryption.
 The request body is sent as UTF8 bytes so that the plaintext key cannot be captured by Windows
 PowerShell parameter binding or module logging.
 
-This command has not been exercised against a live deployment. Rotating an encryption key is
-potentially unrecoverable, so it was not tested against the deployment available. Take a backup
-first.
-
 ## EXAMPLES
 
 ### Example 1
@@ -136,5 +132,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Void
 
 ## NOTES
+
+Rotating an encryption key is potentially unrecoverable. Take a backup first.
+
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS

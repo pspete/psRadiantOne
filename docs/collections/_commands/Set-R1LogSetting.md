@@ -61,8 +61,6 @@ properties, and that only those belonging to the component being addressed are m
 The command issues a GET followed by a PUT, and the account needs permission to read the settings
 as well as to change them.
 
-This command has not been exercised against a live deployment. The log settings endpoints could not be read on the deployment available, so its behaviour rests on the published API schema alone.
-
 ## EXAMPLES
 
 ### Example 1
@@ -501,5 +499,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Void
 
 ## NOTES
+
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS

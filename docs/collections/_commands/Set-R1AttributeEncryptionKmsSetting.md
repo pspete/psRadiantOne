@@ -29,8 +29,6 @@ useExistingCredentials to keep the stored ones.
 The request body is sent as UTF8 bytes so that the plaintext credentials cannot be captured by
 Windows PowerShell parameter binding or module logging.
 
-This command has not been exercised against a live deployment.
-
 ## EXAMPLES
 
 ### Example 1
@@ -169,5 +167,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Void
 
 ## NOTES
+
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS

@@ -45,6 +45,8 @@ function Set-R1DirectoryManager {
 		#allowed IP list of the directory manager account.
 		$Existing = Get-R1DirectoryManager
 
+		#The API names this property username; the published schema documents it as userName, and both
+		#the read and the update share that one schema
 		$Template = [ordered]@{
 			username   = $null
 			allowedIps = @()

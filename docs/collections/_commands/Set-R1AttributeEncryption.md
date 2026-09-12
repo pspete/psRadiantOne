@@ -28,8 +28,6 @@ as well as to change them.
 hdapAttrKeyExists, ldifzKeyExists and availableCiphers report state the API maintains and are
 not sent back.
 
-This command has not been exercised against a live deployment. Changing attribute encryption risks making already encrypted attributes unreadable, so it was not tested against the deployment available.
-
 ## EXAMPLES
 
 ### Example 1
@@ -146,5 +144,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Void
 
 ## NOTES
+
+Changing attribute encryption risks making already encrypted attributes unreadable.
+
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS

@@ -51,6 +51,7 @@ function ConvertTo-MultipartFormData {
 
 				$FileContentType = switch ($Value.Extension.ToLowerInvariant()) {
 					'.jar' { 'application/java-archive' }
+					'.java' { 'text/x-java-source' }
 					'.zip' { 'application/zip' }
 					'.xml' { 'application/xml' }
 					'.json' { 'application/json' }

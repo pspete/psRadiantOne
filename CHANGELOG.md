@@ -65,6 +65,33 @@ they cover rather than split into added, changed and fixed.
   `Get-R1ServiceSummary`, `Get-R1WhatsNew`, `Get-R1SaasConfiguration`, `Get-R1LoginPageInfo`,
   `Get-R1ControlPanelMessage`.
 
+### Directory namespace
+
+- Global namespace settings: `Get-R1GlobalInterceptionSetting` / `Set-R1GlobalInterceptionSetting`,
+  `Get-R1GlobalSpecialAttribute` / `Set-R1GlobalSpecialAttribute` and `Get-R1GlobalDynamicGroup`.
+- Naming contexts: `Get-R1NamingContext`, `Get-R1NamingContextChild`, `New-R1NamingContext`,
+  `Remove-R1NamingContext`, `Enable-R1NamingContext` / `Disable-R1NamingContext`,
+  `New-R1NamingContextLabel`, `New-R1NamingContextContent`, `New-R1NamingContextContainer` and
+  `New-R1NamingContextLink`. The two list commands follow the offset pagination of the API and return
+  every page. No total is reported by the API, so the end of a collection is recognised by a page
+  holding fewer nodes than were asked for.
+- Interception scripts: `Get-R1InterceptionScript`, `Import-R1InterceptionScript`,
+  `Remove-R1InterceptionScript`, `Get-R1InterceptionScriptLibrary`,
+  `Import-R1InterceptionScriptLibrary`, `Remove-R1InterceptionScriptLibrary`,
+  `Get-R1GlobalInterceptionScript` / `Set-R1GlobalInterceptionScript`,
+  `Test-R1InterceptionScriptCode` and `New-R1InterceptionScriptJar`. The two upload commands take a
+  local file path and send it as multipart form data, which works on Windows PowerShell as well as
+  PowerShell 7.
+- Namespace utilities: `Test-R1LdapFilter`, `Test-R1ComputedAttributeName`,
+  `Test-R1JoinCondition`, `Get-R1JoinCondition`, `Get-R1DynamicGroupFormat` and
+  `Get-R1LinkedAttributeDefault`. The three Test commands return a boolean; where the API also
+  reports why a value was rejected, that reason is written to the verbose stream.
+- Naming context special attributes, virtual tree and relationship tree:
+  `Get-R1NamingContextSpecialAttribute` / `Set-R1NamingContextSpecialAttribute`,
+  `Get-R1NamingContextVirtualTreeProperty` / `Set-R1NamingContextVirtualTreeProperty` and
+  `Get-R1NamingContextRelationshipTree`.
+- Namespace views: `Get-R1NamespaceView` and `Remove-R1NamespaceView`.
+
 ## Notes
 
 These are the behaviours worth knowing before using the module, rather than a record of changes.

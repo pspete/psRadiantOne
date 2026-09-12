@@ -36,8 +36,6 @@ request path. Data sources and plugins are addressed by name on their own paths 
 What a component returns varies: the API defines seven shapes keyed by logSettingsComponent, from
 a plugin carrying only a log level to the LDAP access component carrying eighteen properties.
 
-This command has not been exercised against a live deployment. The log settings endpoints could not be read on the deployment available, so its behaviour rests on the published API schema alone.
-
 ## EXAMPLES
 
 ### Example 1
@@ -121,5 +119,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### psRadiantOne.LogSettings
 
 ## NOTES
+
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS

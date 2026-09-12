@@ -20,8 +20,6 @@ Read-R1License [-license] <String> [<CommonParameters>]
 Reads a license and returns the type, product, expiry and validity it carries, without applying it
 to the deployment.
 
-This command has not been exercised against a live deployment. The license endpoint returned 404 on the RadiantOne SaaS tenant available for testing, where licensing appears to be handled through the environment operations center rather than this API.
-
 ## EXAMPLES
 
 ### Example 1
@@ -67,5 +65,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### psRadiantOne.LicenseInfo
 
 ## NOTES
+
+On a RadiantOne SaaS tenant the license endpoints return 404, licensing being handled through the
+environment operations center rather than through this API.
+
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS

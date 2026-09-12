@@ -31,14 +31,6 @@ it as well as to change it. A role granted only the update permission fails on t
 The request body is sent as UTF8 bytes so that the plaintext password cannot be captured by Windows
 PowerShell parameter binding or module logging.
 
-Unlike the other commands in this area, this one has not been exercised against a live deployment:
-the directory manager is generally a shared, high privilege account, and a failed password change is
-disruptive. The property names are taken from a GET captured from a live 8.5 tenant, whose response
-uses `username` rather than the `userName` the published API schema documents. Both operations share
-one schema, so the update takes the same name.
-
-Test it against a deployment you can afford to break before using it against one you cannot.
-
 ## EXAMPLES
 
 ### Example 1
@@ -164,5 +156,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Void
 
 ## NOTES
+
+The directory manager is generally a shared, high privilege account, and a failed password change is
+disruptive. Test this command against a deployment you can afford to break before using it against
+one you cannot.
+
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS
