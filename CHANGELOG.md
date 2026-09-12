@@ -1,161 +1,91 @@
 # Unreleased
 
+First release. Everything below is new, so the entries are grouped by the area of the RadiantOne API
+they cover rather than split into added, changed and fixed.
+
 ## Added
 
-- Log settings commands: `Get-R1LogSetting` / `Set-R1LogSetting`, addressing a component, a data
-  source or a plugin. The thirteen component names are fixed by the API and several contain spaces,
-  which are escaped into the path. Log settings are polymorphic - seven shapes keyed by
-  `logSettingsComponent` - so `Set-R1LogSetting` retrieves whichever shape the component uses and
-  applies the supplied values over it, preserving that variant's properties and introducing none
-  foreign to it. Neither has been exercised against a live deployment.
-- Identity observability commands: `Get-R1PipelineConnectorConfig` / `Set-R1PipelineConnectorConfig`,
-  `Get-R1PipelineConnectorType`, `Reset-R1PipelineConnector`, `Suspend-R1Pipeline`,
-  `Resume-R1Pipeline` and `Invoke-R1PipelineConnectorScript`.
-- Entry statistics commands: `Get-R1Operation`, `New-R1Operation`, `Stop-R1Operation` and
-  `Resume-R1Operation`. A refresh which runs long enough to be tracked carries its entry statistics
-  in the operation result once it completes.
-- `Get-R1CustomLimit` / `Set-R1CustomLimit`, which replace the whole collection of custom limits.
-- Platform settings commands, covering the remaining `settings-service` configuration:
-  `Get-`/`Set-R1ChangeLogSetting`, `Get-`/`Set-R1GlobalAttributeSetting`,
-  `Get-`/`Set-R1LdapClientAccess`, `Get-`/`Set-R1RestClientAccess`,
-  `Get-`/`Set-R1ControlPanelConfiguration`, `Get-`/`Set-R1GlobalLimit`,
-  `Get-`/`Set-R1AccessRegulationLimit`, `Get-`/`Set-R1BackendLimit`.
-- Dashboard and deployment readers: `Get-R1Dashboard`, `Get-R1DashboardLink`, `Get-R1ProductVersion`,
-  `Get-R1ServiceSummary`, `Get-R1WhatsNew`, `Get-R1SaasConfiguration`, `Get-R1LoginPageInfo`,
-  `Get-R1LogTimezone` and `Get-R1Statistic`.
-- `Get-R1Feature` / `Set-R1Feature`. The API replaces the whole flag collection on update, so
-  `Set-R1Feature` retrieves every flag and applies the requested changes over them; flags which were
-  not named keep their value, and naming a flag the deployment does not have is an error. Several
-  flags can be set in one request by piping them in.
-- `Get-R1LdapClientAccessMapping` / `Set-R1LdapClientAccessMapping`, `Get-R1ControlPanelMessage`, and
-  `Get-R1License` / `Set-R1License` / `Read-R1License`. The license endpoint returned 404 on the SaaS
-  tenant available for testing, so those three are unverified.
-- Password policy commands: `Get-R1PasswordPolicy`, `Set-R1PasswordPolicy` (33 settings),
-  `Remove-R1PasswordPolicy`, `Get-R1PasswordDictionary`, `Add-R1PasswordDictionaryWord`,
-  `Remove-R1PasswordDictionaryWord`, `Get-R1PasswordEncryption` and `Test-R1PasswordStrengthRule`.
-  The API requires `policyName` as a query parameter on retrieval, update and deletion, which the
-  published command map had missed; a live probe returned "Required parameter 'policyName' is not
-  present" and surfaced it. `Get-R1PasswordPolicy -NewPolicy` returns an empty policy populated with
-  the API defaults.
-- OIDC provider commands: `Get-R1OidcProvider`, `New-R1OidcProvider`, `Set-R1OidcProvider`,
+### Session & authentication
+
+- `Connect-R1Session` / `Disconnect-R1Session` / `Get-R1Session`, `Update-R1AuthToken` and
+  `Reset-R1Password`. `-BaseURI` takes the API endpoint address, which on a cloud tenant is the
+  control panel address with `/api` appended; both are listed in the EOC Application Endpoints panel.
+  An expired password is surfaced by `Connect-R1Session` as the reset information the API returns,
+  whose `resetToken` drives `Reset-R1Password`.
+- `Disconnect-R1Session` takes `-Force` to clear the local session where the token could not be
+  revoked. Revoking requires `SCOPE_AUTH_TOKEN_REVOKE`; without it the token stays valid, so by
+  default the failure is reported and the session left in place, keeping the revocation retryable.
+- `Test-R1AdapToken` and `Test-R1CallerPrivilege`.
+- `Get-R1AccessToken`, `New-R1AccessToken`, `Remove-R1AccessToken`. The token value is returned only
+  when it is created and cannot be retrieved again.
+
+### Users, roles and the directory manager
+
+- `Get-R1FIDUser`, `New-R1FIDUser`, `Set-R1FIDUser`, `Remove-R1FIDUser` and `Set-R1FIDUserRole`.
+  `Get-R1FIDUser` follows the API's cursor pagination and returns every page. Roles may be supplied
+  when creating or updating a user, which the API accepts despite the schema marking them read-only.
+- `Get-R1FIDRole`, `New-R1FIDRole`, `Set-R1FIDRole`, `Remove-R1FIDRole`.
+- `Get-R1DirectoryManager` / `Set-R1DirectoryManager`, `Get-R1SpecialGroup` / `Set-R1SpecialGroup`.
+
+### Security settings
+
+- Access control: `Get-R1AccessControlSetting` / `Set-R1AccessControlSetting`, `Get-R1Aci`,
+  `New-R1Aci`, `Set-R1Aci`, `Remove-R1Aci`, `Get-R1AciLocation` and `Test-R1Aci`.
+- Attribute encryption: `Get-R1AttributeEncryption` / `Set-R1AttributeEncryption`,
+  `Get-R1AttributeEncryptionKmsSetting` / `Set-R1AttributeEncryptionKmsSetting` and
+  `Update-R1AttributeEncryptionKey`.
+- Client certificate truststore: `Get-R1TruststoreCertificate`, `Add-R1TruststoreCertificate`,
+  `Remove-R1TruststoreCertificate` and `Export-R1TruststoreCertificate`.
+- External token validators: `Get-R1TokenValidator`, `New-R1TokenValidator`, `Set-R1TokenValidator`
+  and `Remove-R1TokenValidator`.
+- OIDC providers: `Get-R1OidcProvider`, `New-R1OidcProvider`, `Set-R1OidcProvider`,
   `Remove-R1OidcProvider`, `Get-R1OidcLoginInfo`, `Get-R1OidcDiscoveryEndpoint`,
-  `Get-R1OidcDiscoveryInfo` and `Get-R1OidcScopesClaim`. The client secret is never returned by the
-  retrieval, so `Set-R1OidcProvider` leaves it unchanged when omitted and takes
-  `-useExistingCredentials` to be explicit about that.
-- External token validator commands: `Get-R1TokenValidator`, `New-R1TokenValidator`,
-  `Set-R1TokenValidator` and `Remove-R1TokenValidator`. The API defines two variants discriminated
-  by `apiService`, but they carry identical properties, so one command covers both. The
-  `claimsMapper` object wraps a single list, which the commands take directly as
-  `-claimsExpressionList`. None have been exercised against a live deployment.
-- Audit logging commands: `Get-R1AuditLogSetting` / `Set-R1AuditLogSetting`, and `Export-R1AuditLog`,
-  which downloads the logs to a file.
-- Attribute encryption commands: `Get-R1AttributeEncryption` / `Set-R1AttributeEncryption`,
-  `Get-R1AttributeEncryptionKmsSetting` / `Set-R1AttributeEncryptionKmsSetting`, and
-  `Update-R1AttributeEncryptionKey`. The KMS retrieval reports only whether credentials are stored,
-  so `Set-R1AttributeEncryptionKmsSetting` carries forward the region and alias and takes
-  `-useExistingCredentials` to keep the stored credentials. None have been exercised against a live
-  deployment: changing attribute encryption or rotating a key risks unreadable data.
-- Client certificate truststore commands: `Get-R1TruststoreCertificate`,
-  `Add-R1TruststoreCertificate`, `Remove-R1TruststoreCertificate` and
-  `Export-R1TruststoreCertificate`. The import is multipart form data, the export a binary download.
-- Access control commands, covering the `settings-service` access control and ACI endpoints:
-  - `Get-R1AccessControlSetting` / `Set-R1AccessControlSetting`
-  - `Get-R1Aci`, `New-R1Aci`, `Set-R1Aci`, `Remove-R1Aci`
-  - `Get-R1AciLocation`, and `Test-R1Aci`, which reports whether an ACI can be parsed
-  The ACI endpoints take the holding `baseDn` as a query parameter, required everywhere except when
-  listing. The shapes of `AccessControl` and `Aci` were confirmed against a live 8.5 tenant.
+  `Get-R1OidcDiscoveryInfo` and `Get-R1OidcScopesClaim`.
+- Audit logging: `Get-R1AuditLogSetting` / `Set-R1AuditLogSetting` and `Export-R1AuditLog`.
+- Password policies: `Get-R1PasswordPolicy`, `Set-R1PasswordPolicy`, `Remove-R1PasswordPolicy`,
+  `Get-R1PasswordDictionary`, `Add-R1PasswordDictionaryWord`, `Remove-R1PasswordDictionaryWord`,
+  `Get-R1PasswordEncryption` and `Test-R1PasswordStrengthRule`.
 
-- Session and authentication commands, covering the RadiantOne `authentication-service`:
-  - `Connect-R1Session` / `Disconnect-R1Session` / `Get-R1Session`, `Update-R1AuthToken` and
-    `Reset-R1Password`. An expired password is surfaced by `Connect-R1Session` as the password reset
-    information returned by the API, whose `resetToken` drives `Reset-R1Password`.
-  - `Test-R1AdapToken` and `Test-R1CallerPrivilege`.
-  - `Get-R1AccessToken`, `New-R1AccessToken`, `Remove-R1AccessToken`.
-  - `Get-R1FIDUser`, `New-R1FIDUser`, `Set-R1FIDUser`, `Remove-R1FIDUser`, `Set-R1FIDUserRole`.
-    `Get-R1FIDUser` follows the API's cursor pagination and returns every page.
-  - `Get-R1FIDRole`, `New-R1FIDRole`, `Set-R1FIDRole`, `Remove-R1FIDRole`.
-  - `Get-R1DirectoryManager`, `Set-R1DirectoryManager`, `Get-R1SpecialGroup`, `Set-R1SpecialGroup`.
-- Command help under `docs/collections/_commands`, and the generated `psRadiantOne-help.xml`.
-- `Invoke-R1RestMethod` accepts `SslProtocol`, passed through to `Invoke-WebRequest` for an endpoint
-  requiring a specific TLS protocol. PowerShell Core only.
+### Platform settings
 
-## Fixed
+- Configuration pairs: `Get-`/`Set-R1ChangeLogSetting`, `Get-`/`Set-R1GlobalAttributeSetting`,
+  `Get-`/`Set-R1LdapClientAccess`, `Get-`/`Set-R1LdapClientAccessMapping`,
+  `Get-`/`Set-R1RestClientAccess`, `Get-`/`Set-R1ControlPanelConfiguration`,
+  `Get-`/`Set-R1GlobalLimit`, `Get-`/`Set-R1AccessRegulationLimit`, `Get-`/`Set-R1BackendLimit`,
+  `Get-`/`Set-R1CustomLimit` and `Get-`/`Set-R1Feature`.
+- Log settings: `Get-R1LogSetting` / `Set-R1LogSetting`, addressing a component, a data source or a
+  plugin, and `Get-R1LogTimezone`.
+- Identity observability: `Get-`/`Set-R1PipelineConnectorConfig`, `Get-R1PipelineConnectorType`,
+  `Reset-R1PipelineConnector`, `Suspend-R1Pipeline`, `Resume-R1Pipeline` and
+  `Invoke-R1PipelineConnectorScript`.
+- Entry statistics: `Get-R1Operation`, `New-R1Operation`, `Stop-R1Operation`, `Resume-R1Operation`
+  and `Get-R1Statistic`.
+- Licensing: `Get-R1License`, `Set-R1License` and `Read-R1License`.
+- Deployment and dashboard readers: `Get-R1Dashboard`, `Get-R1DashboardLink`, `Get-R1ProductVersion`,
+  `Get-R1ServiceSummary`, `Get-R1WhatsNew`, `Get-R1SaasConfiguration`, `Get-R1LoginPageInfo`,
+  `Get-R1ControlPanelMessage`.
 
-- `Set-R1DirectoryManager` sends `username`, the property name a live 8.5 tenant returns, rather than
-  the `userName` the published schema documents. Both operations share one schema, so the update
-  takes the same name the retrieval returns. It also retrieves the current settings and sends them
-  back with the supplied values applied over them, so the allowed IP list is no longer cleared when
-  it is not specified, and `-username` is now optional. This command remains unexercised against a
-  live deployment.
+## Notes
 
-- `New-R1AccessToken` formats `expiresOn` with the invariant culture. ":" in a custom format string
-  is the culture's time separator, so under a culture which does not use a colon - Finnish, for one -
-  the timestamp was emitted as `2027-09-12T17.42.49.987Z` and rejected, leaving the expiry
-  unsettable. The format itself is confirmed correct against a control panel request.
+These are the behaviours worth knowing before using the module, rather than a record of changes.
 
-- `New-R1FIDRole` and `Set-R1FIDRole` send the role permissions the API actually accepts. Confirmed
-  against a control panel request captured from a live 8.5 tenant, where the spec proved wrong:
-  - `settingsPermission`, documented as a single NONE/VIEW/EDIT value, does not exist. The API takes
-    `settingsPermissions`, an object of `clientProtocolsPermission`, `clientCertificatePermission`,
-    `tuningPermission` and `tokenValidatorPermission`. A role created with the documented property
-    silently lost its settings permissions.
-  - `tuningPermissions` is absent from the spec and could not be set at all.
-  - `securityPermissions` also takes `passwordPoliciesPermission`, and `administrationPermissions`
-    also takes `auditLoggingPermission` and `featureManagementPermission`.
-- `Set-R1FIDRole` retrieves the role before updating it and sends the complete role back, so a
-  permission left unspecified keeps its current value. The endpoint resets any permission absent
-  from the request to NONE, so updating one permission previously cleared every other permission the
-  role held. Set a permission to NONE explicitly to clear it. The command now issues a GET followed
-  by a PUT.
-- `Set-R1FIDUser` accepts `-roles`, and retrieves the user before updating it so that a property
-  left unspecified keeps its current value. The control panel sends back the complete object it
-  retrieved; sending only the supplied properties risked clearing the rest, since the endpoint is a
-  PUT of the whole user. The command now issues a GET followed by a PUT.
-- `New-R1FIDUser` accepts `-roles`. The schema marks roles read-only and points at the deprecated
-  roles endpoint, but the control panel sends them when creating a user and the API returns 201, so
-  a user can be created with its roles in one call.
-
-- `Invoke-R1RestMethod` reports the HTTP status when a failed request returns no response body.
-  A null `ErrorDetails` parsed as valid JSON, so nothing populated the message and the error surfaced
-  empty, naming neither the request nor the status.
-- `Disconnect-R1Session` gains `-Force`, clearing the local session even where the token could not
-  be revoked. Revoking requires `SCOPE_AUTH_TOKEN_REVOKE`, granted by a role holding
-  `revokeTokenPermission`; a token which was not revoked is still valid, so by default the failure
-  is reported and the session left in place, keeping the revocation retryable.
-
-## Changed
-
-- A `Set-*` command issuing a PUT now retrieves the resource first and sends it back complete, with
-  the caller's values applied over it. The RadiantOne update endpoints replace rather than merge, so
-  sending only the supplied properties silently cleared everything else. This is enforced by the
-  `ReadModifyWrite` test, which fails any public command containing `-Method PUT` that does not use
-  `Merge-R1Parameter`, unless it is listed as exempt with a reason. Exempt: `Update-R1AuthToken`, a
-  bodyless action, and `Set-R1FIDUserRole`, whose body is the complete collection by definition.
-- `Set-R1SpecialGroup` takes both group DNs as optional, so either can be set without restating the
-  other.
-
-
-- `Invoke-R1RestMethod` no longer pins TLS 1.2 on PowerShell Core. `WebSslProtocol` is a flags enum,
-  so pinning `Tls12` permitted TLS 1.2 alone and excluded TLS 1.3; the connection now negotiates the
-  strongest protocol both ends support.
-- `Invoke-R1RestMethod` leaves a `SystemDefault` security protocol untouched under Windows PowerShell
-  rather than replacing it with TLS 1.2 only, and combines TLS 1.2 with the protocols already
-  permitted rather than overwriting them. The previous behaviour downgraded a correctly configured
-  process, and could strip TLS 1.3 from one that had it enabled.
-
-- Private HTTP and request-building plumbing shared by every command:
-  - `ConvertTo-R1Timestamp` - formats a datetime as the UTC timestamp the API expects, with the
-    invariant culture.
-  - `Invoke-R1RestMethod` - the module's single HTTP entry point, sending the session token as a
-    bearer token and translating RadiantOne `ClientError` responses into terminating errors.
-  - `Resolve-R1ServiceUrl` - composes request URLs for each of the seven RadiantOne service prefixes.
-  - `Get-R1Response` - returns JSON responses as objects, leaving file downloads untouched.
-  - `ConvertTo-R1JsonBody` / `ConvertTo-R1SecretBody` - array-safe request body serialisation, with
-    UTF8 byte output for bodies carrying a secret.
-  - `Get-R1TokenClaim` - decodes the claims of a RadiantOne authentication token.
-  - `Assert-R1Session` - reports an absent session rather than failing on a null base URL.
-  - `Merge-R1Parameter`, `Get-Parameter`, `Get-EscapedString`, `ConvertTo-QueryString`,
-    `ConvertTo-MultipartFormData`, `ConvertTo-InsecureString`, `Hide-SecretValue`,
-    `Get-ParentFunction`, `Get-SessionClone`.
-- Session object fields for the authentication token and its claims: `Token`, `TokenExpiry`,
-  `Privileges`, `Organization`, `Version`.
+- **Updates read before they write.** The RadiantOne update endpoints replace the resource rather
+  than merging into it: a property absent from the request is cleared, and a permission absent from a
+  role resets to NONE, with the API returning 200 either way. Every `Set-*` command issuing a PUT
+  therefore retrieves the resource first and sends it back with the supplied values applied over it,
+  so a property left unspecified keeps its current value. Two consequences: those commands issue two
+  requests, and the account needs permission to read the resource as well as to change it. A test
+  enforces this and requires a written reason for each of the few commands exempt from it.
+- **Some commands replace a whole collection.** `Set-R1FIDUserRole`, `Set-R1LdapClientAccessMapping`
+  and `Set-R1CustomLimit` take the complete collection, so anything omitted is removed. Their help
+  says so, and `Set-R1Feature` avoids the trap by retrieving every flag and changing only those named.
+- **Secrets are sent as UTF8 bytes**, not as strings, so Windows PowerShell parameter binding and
+  module logging cannot capture the plaintext.
+- **Sixteen commands have not been exercised against a live deployment** and say so in their help,
+  each with the reason: the endpoint is absent on a SaaS tenant (licensing), no account available
+  could read it (backend limits, log settings), nothing was configured to read (token validators), or
+  exercising it risked unrecoverable damage (attribute encryption, key rotation, the directory
+  manager password).
+- **`PUT /settings-service/oidc_providers` is deliberately not exposed.** It replaces the entire
+  collection of providers with the array supplied, deleting any provider left out of it.
+  `Set-R1OidcProvider` addresses a single provider instead.
