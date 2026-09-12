@@ -25,6 +25,9 @@ The current settings are retrieved before they are updated, and sent back with t
 applied over them, so the allowed IP list and the username keep their current values when not
 specified. The command therefore issues a GET followed by a PUT.
 
+Because the command retrieves the resource before updating it, the account needs permission to read
+it as well as to change it. A role granted only the update permission fails on the retrieval.
+
 The request body is sent as UTF8 bytes so that the plaintext password cannot be captured by Windows
 PowerShell parameter binding or module logging.
 

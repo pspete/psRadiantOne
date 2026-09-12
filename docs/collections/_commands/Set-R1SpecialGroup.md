@@ -24,6 +24,9 @@ The current settings are retrieved before they are updated, and sent back with t
 applied over them, so either group DN can be set without restating the other. The command therefore
 issues a GET followed by a PUT.
 
+Because the command retrieves the resource before updating it, the account needs permission to read
+it as well as to change it. A role granted only the update permission fails on the retrieval.
+
 ## EXAMPLES
 
 ### Example 1

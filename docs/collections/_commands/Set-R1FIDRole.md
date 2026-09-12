@@ -34,6 +34,9 @@ only the supplied permissions would silently clear every other permission the ro
 control panel avoids this the same way, by sending back the whole role it retrieved. One consequence
 is that the command issues two requests: a GET followed by a PUT.
 
+Because the command retrieves the resource before updating it, the account needs permission to read
+it as well as to change it. A role granted only the update permission fails on the retrieval.
+
 To clear a permission, set it to NONE explicitly.
 
 ## EXAMPLES

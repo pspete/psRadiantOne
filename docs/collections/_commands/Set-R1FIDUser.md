@@ -25,6 +25,9 @@ values applied over it. This is what the control panel does, and it means a prop
 unspecified keeps its current value rather than depending on the endpoint to merge a partial object.
 One consequence is that the command issues two requests: a GET followed by a PUT.
 
+Because the command retrieves the resource before updating it, the account needs permission to read
+it as well as to change it. A role granted only the update permission fails on the retrieval.
+
 Omit the password parameter to leave the user's existing password unchanged.
 
 Roles may be supplied here. The API schema marks roles read-only, but the control panel sends them
