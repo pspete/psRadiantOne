@@ -21,10 +21,10 @@
 - `Invoke-R1RestMethod` reports the HTTP status when a failed request returns no response body.
   A null `ErrorDetails` parsed as valid JSON, so nothing populated the message and the error surfaced
   empty, naming neither the request nor the status.
-- `Disconnect-R1Session` clears the local session even when the token cannot be revoked, and warns
-  that the token remains valid until it expires. Revoking requires `SCOPE_AUTH_TOKEN_REVOKE`, and
-  without it the command previously threw and left the session in place, still holding a live token
-  it reported as closed.
+- `Disconnect-R1Session` gains `-Force`, clearing the local session even where the token could not
+  be revoked. Revoking requires `SCOPE_AUTH_TOKEN_REVOKE`, granted by a role holding
+  `revokeTokenPermission`; a token which was not revoked is still valid, so by default the failure
+  is reported and the session left in place, keeping the revocation retryable.
 
 ## Changed
 

@@ -1,7 +1,10 @@
 # .ExternalHelp psRadiantOne-help.xml
 function Disconnect-R1Session {
 	[CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
-	param( )
+	param(
+		[parameter(Mandatory = $false)]
+		[switch]$Force
+	)
 
 	Begin {
 
@@ -24,10 +27,16 @@ function Disconnect-R1Session {
 			} catch {
 
 				#Revoking a token requires SCOPE_AUTH_TOKEN_REVOKE, granted by a role holding
-				#revokeTokenPermission. Without it the token stays valid until it expires. The local
-				#session is cleared regardless, so no later command keeps using a session the caller
-				#has asked to close.
-				Write-Warning "The authentication token could not be revoked and remains valid until $TokenExpiry. The local session has been cleared. $($PSItem.Exception.Message)"
+				#revokeTokenPermission. A token which was not revoked is still valid, so by default
+				#the session is left intact: reporting it as closed would be untrue, and discarding
+				#the token would remove any means of retrying the revocation.
+				if (-not $Force) {
+
+					throw $PSItem
+
+				}
+
+				Write-Warning "The authentication token could not be revoked and remains valid until $TokenExpiry. The local session has been cleared as -Force was specified. $($PSItem.Exception.Message)"
 
 			}
 

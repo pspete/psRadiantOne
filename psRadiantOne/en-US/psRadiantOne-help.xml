@@ -176,10 +176,22 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     <maml:description>
       <maml:para>Revokes the authentication token held in the module scope session, so that it can no longer be used to perform any operation requiring authorization, and then clears the session.</maml:para>
       <maml:para>Once run, Connect-R1Session must be used again before any other command in the module will work.</maml:para>
+      <maml:para>Revoking a token requires the SCOPE_AUTH_TOKEN_REVOKE scope, granted by a role holding revokeTokenPermission. Where the revocation fails the token remains valid until it expires, so the session is left in place and the failure reported, allowing the revocation to be retried. Specify Force to clear the local session regardless, accepting that the token stays valid and can no longer be revoked through this session.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Disconnect-R1Session</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>Clear the local session even where the token could not be revoked. Without it, a failed revocation is reported and the session left in place so that it can be retried.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
           <maml:description>
@@ -205,6 +217,18 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>Clear the local session even where the token could not be revoked. Without it, a failed revocation is reported and the session left in place so that it can be retried.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
         <maml:name>Confirm</maml:name>
         <maml:description>
@@ -261,6 +285,13 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         <dev:code>Disconnect-R1Session</dev:code>
         <dev:remarks>
           <maml:para>Revokes the current authentication token and clears the session.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Disconnect-R1Session -Force</dev:code>
+        <dev:remarks>
+          <maml:para>Clears the local session even where the token could not be revoked, warning that the token remains valid until it expires.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

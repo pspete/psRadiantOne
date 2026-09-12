@@ -85,29 +85,48 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		Context 'Revocation failure' {
 
-			It 'warns when the token cannot be revoked' {
+			BeforeEach {
 
-				#BeforeEach has already disconnected, so restore a session to act on
+				#BeforeEach at the outer scope has already disconnected, so restore a session to act on
 				$Script:psRadiantOneSession.BaseURI = 'https://radiantone.company.com'
 				$Script:psRadiantOneSession.Token = 'SomeToken'
 
 				Mock Invoke-R1RestMethod -MockWith { throw 'Forbidden' }
 
-				$Warnings = $( Disconnect-R1Session -Confirm:$false ) 3>&1
+			}
+
+			It 'reports the failure' {
+
+				{ Disconnect-R1Session -Confirm:$false } | Should -Throw
+
+			}
+
+			It 'leaves the session intact so the revocation can be retried' {
+
+				try { Disconnect-R1Session -Confirm:$false } catch { }
+
+				$Script:psRadiantOneSession.Token | Should -Be 'SomeToken'
+				$Script:psRadiantOneSession.BaseURI | Should -Be 'https://radiantone.company.com'
+
+			}
+
+			It 'does not report the failure when Force is specified' {
+
+				{ Disconnect-R1Session -Confirm:$false -Force -WarningAction SilentlyContinue } | Should -Not -Throw
+
+			}
+
+			It 'warns when Force is specified' {
+
+				$Warnings = $( Disconnect-R1Session -Confirm:$false -Force ) 3>&1
 
 				$Warnings | Should -Not -BeNullOrEmpty
 
 			}
 
-			It 'clears the local session even when revocation fails' {
+			It 'clears the local session when Force is specified' {
 
-				#BeforeEach has already disconnected, so restore a session to act on
-				$Script:psRadiantOneSession.BaseURI = 'https://radiantone.company.com'
-				$Script:psRadiantOneSession.Token = 'SomeToken'
-
-				Mock Invoke-R1RestMethod -MockWith { throw 'Forbidden' }
-
-				Disconnect-R1Session -Confirm:$false -WarningAction SilentlyContinue
+				Disconnect-R1Session -Confirm:$false -Force -WarningAction SilentlyContinue
 
 				$Script:psRadiantOneSession.Token | Should -BeNullOrEmpty
 				$Script:psRadiantOneSession.BaseURI | Should -BeNullOrEmpty
