@@ -167,9 +167,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Unverified against a live deployment. Creating this node needs a data catalog schema, which the
-tenant available for testing does not have, so this command has been built from the API
-definition alone.
+The relationship object must already exist in a data catalog schema.
+
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS
 

@@ -2781,7 +2781,6 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:details>
     <maml:description>
       <maml:para>Returns the license type, the product it covers, its expiry date and whether it is valid.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. The license endpoint returned 404 on the RadiantOne SaaS tenant available for testing, where licensing appears to be handled through the environment operations center rather than this API.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2811,7 +2810,8 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>On a RadiantOne SaaS tenant the license endpoints return 404, licensing being handled through the environment operations center rather than through this API.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2892,7 +2892,6 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
       <maml:para>Returns the log settings of a component, a data source or a plugin.</maml:para>
       <maml:para>The component names are fixed by the API and several contain spaces, so they are escaped into the request path. Data sources and plugins are addressed by name on their own paths instead.</maml:para>
       <maml:para>What a component returns varies: the API defines seven shapes keyed by logSettingsComponent, from a plugin carrying only a log level to the LDAP access component carrying eighteen properties.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. The log settings endpoints could not be read on the deployment available, so its behaviour rests on the published API schema alone.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -3016,7 +3015,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -4713,7 +4712,6 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:details>
     <maml:description>
       <maml:para>Returns the external token validators configured on the deployment. Specify a name to return a single validator; when no name is given, every validator is returned.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. No external token validator was configured on the deployment available, and one could not be created there, so its behaviour rests on the published API schema alone.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -4768,7 +4766,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -6925,7 +6923,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Unverified against a live deployment. The tenant available for testing has no configuration beyond its default root, so this command has been built from the API definition alone.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -7179,7 +7177,8 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Unverified against a live deployment. Creating this node needs a data catalog schema, which the tenant available for testing does not have, so this command has been built from the API definition alone.</maml:para>
+        <maml:para>The relationship object must already exist in a data catalog schema.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -7433,7 +7432,8 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Unverified against a live deployment. Creating this node needs a data catalog schema, which the tenant available for testing does not have, so this command has been built from the API definition alone.</maml:para>
+        <maml:para>The relationship object must already exist in a data catalog schema.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -7591,7 +7591,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Unverified against a live deployment. The tenant available for testing has no configuration beyond its default root, so this command has been built from the API definition alone.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -7773,7 +7773,8 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Unverified against a live deployment. The tenant available for testing has no views defined, so this command has been built from the API definition alone.</maml:para>
+        <maml:para>The view named by existingView must already exist.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -8308,7 +8309,6 @@ Get-R1Operation -name $op.name</dev:code>
     <maml:description>
       <maml:para>Creates an external token validator, which accepts tokens issued by an external OIDC provider for either the ADAP REST API or SCIM.</maml:para>
       <maml:para>The API defines two variants discriminated by apiService, but they carry identical properties, so one command covers both.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. No external token validator was configured on the deployment available, and one could not be created there, so its behaviour rests on the published API schema alone.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -8685,7 +8685,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -8717,7 +8717,6 @@ Get-R1Operation -name $op.name</dev:code>
     </command:details>
     <maml:description>
       <maml:para>Reads a license and returns the type, product, expiry and validity it carries, without applying it to the deployment.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. The license endpoint returned 404 on the RadiantOne SaaS tenant available for testing, where licensing appears to be handled through the environment operations center rather than this API.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -8772,7 +8771,8 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>On a RadiantOne SaaS tenant the license endpoints return 404, licensing being handled through the environment operations center rather than through this API.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -9437,7 +9437,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Unverified against a live deployment. The tenant available for testing has no configuration beyond its default root, so this command has been built from the API definition alone.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -9847,7 +9847,6 @@ Get-R1Operation -name $op.name</dev:code>
     </command:details>
     <maml:description>
       <maml:para>Deletes an external token validator from the deployment.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. No external token validator was configured on the deployment available, and one could not be created there, so its behaviour rests on the published API schema alone.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -9948,7 +9947,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -10099,7 +10098,6 @@ Get-R1Operation -name $op.name</dev:code>
     <maml:description>
       <maml:para>Completes the expired-password flow started by Connect-R1Session. The reset token returned by that command is supplied together with the desired new password and, where the applicable password policy requires it, the user's current password.</maml:para>
       <maml:para>The reset token is single-use and is invalidated once the reset succeeds. After a successful reset, authenticate again with Connect-R1Session.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. The expired-password condition it depends on could not be produced for a control panel user: with `passwordMustChangeAfterReset` and `userMayChangePassword` both enabled on the only password policy, neither an administrative password change through the API nor the control panel's own reset action caused the following login to report an expired password. The policy appears not to govern accounts in `ou=globalusers,cn=config`. The API and the control panel behave identically here, so nothing suggests a fault in this command - it simply could not be triggered.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -10248,7 +10246,8 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>The password policy does not appear to govern accounts in `ou=globalusers,cn=config`. For a control panel user, neither an administrative password change through the API nor the control panel's own reset action causes the following login to report an expired password, so the flow this command completes cannot be reached for such an account.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -11938,7 +11937,6 @@ Get-R1Operation -name $op.name</dev:code>
       <maml:para>Updates the attribute encryption settings.</maml:para>
       <maml:para>The current settings are retrieved before they are updated, and sent back with the supplied values applied over them, so a setting left unspecified keeps its current value. The command therefore issues a GET followed by a PUT, and the account needs permission to read the settings as well as to change them.</maml:para>
       <maml:para>hdapAttrKeyExists, ldifzKeyExists and availableCiphers report state the API maintains and are not sent back.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. Changing attribute encryption risks making already encrypted attributes unreadable, so it was not tested against the deployment available.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -12119,7 +12117,8 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>Changing attribute encryption risks making already encrypted attributes unreadable.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -12146,7 +12145,6 @@ Get-R1Operation -name $op.name</dev:code>
       <maml:para>Updates the AWS KMS settings used for attribute encryption.</maml:para>
       <maml:para>The current settings are retrieved before they are updated so that the region and alias keep their current values when not specified. The credentials cannot be carried forward the same way, because the retrieval reports only whether they exist: either supply them, or specify useExistingCredentials to keep the stored ones.</maml:para>
       <maml:para>The request body is sent as UTF8 bytes so that the plaintext credentials cannot be captured by Windows PowerShell parameter binding or module logging.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -12350,7 +12348,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -13633,8 +13631,6 @@ Get-R1Operation -name $op.name</dev:code>
       <maml:para>The current settings are retrieved before they are updated, and sent back with the supplied values applied over them, so the allowed IP list and the username keep their current values when not specified. The command therefore issues a GET followed by a PUT.</maml:para>
       <maml:para>Because the command retrieves the resource before updating it, the account needs permission to read it as well as to change it. A role granted only the update permission fails on the retrieval.</maml:para>
       <maml:para>The request body is sent as UTF8 bytes so that the plaintext password cannot be captured by Windows PowerShell parameter binding or module logging.</maml:para>
-      <maml:para>Unlike the other commands in this area, this one has not been exercised against a live deployment: the directory manager is generally a shared, high privilege account, and a failed password change is disruptive. The property names are taken from a GET captured from a live 8.5 tenant, whose response uses `username` rather than the `userName` the published API schema documents. Both operations share one schema, so the update takes the same name.</maml:para>
-      <maml:para>Test it against a deployment you can afford to break before using it against one you cannot.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -13817,7 +13813,8 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>The directory manager is generally a shared, high privilege account, and a failed password change is disruptive. Test this command against a deployment you can afford to break before using it against one you cannot.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -16306,7 +16303,6 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     <maml:description>
       <maml:para>Applies a license to the deployment.</maml:para>
       <maml:para>Read-R1License reports what a license contains without applying it.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. The license endpoint returned 404 on the RadiantOne SaaS tenant available for testing, where licensing appears to be handled through the environment operations center rather than this API.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -16407,7 +16403,8 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>On a RadiantOne SaaS tenant the license endpoints return 404, licensing being handled through the environment operations center rather than through this API.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -16434,7 +16431,6 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
       <maml:para>Updates the log settings of a component, a data source or a plugin.</maml:para>
       <maml:para>Log settings are polymorphic: each component carries a different set of properties, and the API identifies which by the logSettingsComponent discriminator. Rather than model all seven shapes, the command retrieves whichever one the component uses and applies the supplied values over it. The properties belonging to that component are therefore preserved, and no property foreign to it is introduced. It follows that the parameters accepted here are the union of every component's properties, and that only those belonging to the component being addressed are meaningful.</maml:para>
       <maml:para>The command issues a GET followed by a PUT, and the account needs permission to read the settings as well as to change them.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. The log settings endpoints could not be read on the deployment available, so its behaviour rests on the published API schema alone.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -17715,7 +17711,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -19705,7 +19701,6 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     <maml:description>
       <maml:para>Updates an existing external token validator.</maml:para>
       <maml:para>The validator is retrieved before it is updated, and sent back with the supplied values applied over it, so a property left unspecified keeps its current value. The command therefore issues a GET followed by a PUT, and the account needs permission to read the validator as well as to change it.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. No external token validator was configured on the deployment available, and one could not be created there, so its behaviour rests on the published API schema alone.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -20082,7 +20077,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -21121,7 +21116,6 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     <maml:description>
       <maml:para>Replaces the attribute encryption key and the cipher used with it, for either HDAP attribute encryption or compressed LDIF encryption.</maml:para>
       <maml:para>The request body is sent as UTF8 bytes so that the plaintext key cannot be captured by Windows PowerShell parameter binding or module logging.</maml:para>
-      <maml:para>This command has not been exercised against a live deployment. Rotating an encryption key is potentially unrecoverable, so it was not tested against the deployment available. Take a backup first.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -21278,7 +21272,8 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>Rotating an encryption key is potentially unrecoverable. Take a backup first.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

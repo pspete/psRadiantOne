@@ -25,14 +25,6 @@ requires it, the user's current password.
 The reset token is single-use and is invalidated once the reset succeeds. After a successful reset,
 authenticate again with Connect-R1Session.
 
-This command has not been exercised against a live deployment. The expired-password condition it
-depends on could not be produced for a control panel user: with `passwordMustChangeAfterReset` and
-`userMayChangePassword` both enabled on the only password policy, neither an administrative password
-change through the API nor the control panel's own reset action caused the following login to report
-an expired password. The policy appears not to govern accounts in `ou=globalusers,cn=config`. The
-API and the control panel behave identically here, so nothing suggests a fault in this command - it
-simply could not be triggered.
-
 ## EXAMPLES
 
 ### Example 1
@@ -139,5 +131,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Void
 
 ## NOTES
+
+The password policy does not appear to govern accounts in `ou=globalusers,cn=config`. For a control
+panel user, neither an administrative password change through the API nor the control panel's own
+reset action causes the following login to report an expired password, so the flow this command
+completes cannot be reached for such an account.
+
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS

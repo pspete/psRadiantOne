@@ -121,8 +121,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Unverified against a live deployment. The tenant available for testing has no views defined, so
-this command has been built from the API definition alone.
+The view named by existingView must already exist.
+
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS
 

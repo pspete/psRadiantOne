@@ -26,8 +26,6 @@ Get-R1TokenValidator -name <String> [<CommonParameters>]
 Returns the external token validators configured on the deployment. Specify a name to return a
 single validator; when no name is given, every validator is returned.
 
-This command has not been exercised against a live deployment. No external token validator was configured on the deployment available, and one could not be created there, so its behaviour rests on the published API schema alone.
-
 ## EXAMPLES
 
 ### Example 1
@@ -73,5 +71,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### psRadiantOne.ExternalTokenValidator
 
 ## NOTES
+
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS
