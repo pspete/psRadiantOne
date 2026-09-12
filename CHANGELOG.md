@@ -2,6 +2,21 @@
 
 ## Added
 
+- Platform settings commands, covering the remaining `settings-service` configuration:
+  `Get-`/`Set-R1ChangeLogSetting`, `Get-`/`Set-R1GlobalAttributeSetting`,
+  `Get-`/`Set-R1LdapClientAccess`, `Get-`/`Set-R1RestClientAccess`,
+  `Get-`/`Set-R1ControlPanelConfiguration`, `Get-`/`Set-R1GlobalLimit`,
+  `Get-`/`Set-R1AccessRegulationLimit`, `Get-`/`Set-R1BackendLimit`.
+- Dashboard and deployment readers: `Get-R1Dashboard`, `Get-R1DashboardLink`, `Get-R1ProductVersion`,
+  `Get-R1ServiceSummary`, `Get-R1WhatsNew`, `Get-R1SaasConfiguration`, `Get-R1LoginPageInfo`,
+  `Get-R1LogTimezone` and `Get-R1Statistic`.
+- `Get-R1Feature` / `Set-R1Feature`. The API replaces the whole flag collection on update, so
+  `Set-R1Feature` retrieves every flag and applies the requested changes over them; flags which were
+  not named keep their value, and naming a flag the deployment does not have is an error. Several
+  flags can be set in one request by piping them in.
+- `Get-R1LdapClientAccessMapping` / `Set-R1LdapClientAccessMapping`, `Get-R1ControlPanelMessage`, and
+  `Get-R1License` / `Set-R1License` / `Read-R1License`. The license endpoint returned 404 on the SaaS
+  tenant available for testing, so those three are unverified.
 - Password policy commands: `Get-R1PasswordPolicy`, `Set-R1PasswordPolicy` (33 settings),
   `Remove-R1PasswordPolicy`, `Get-R1PasswordDictionary`, `Add-R1PasswordDictionaryWord`,
   `Remove-R1PasswordDictionaryWord`, `Get-R1PasswordEncryption` and `Test-R1PasswordStrengthRule`.

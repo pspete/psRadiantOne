@@ -243,6 +243,8 @@ Describe 'Module' -Tag 'Consistency' {
 			'Update-R1AuthToken' = 'Refreshes the authentication token. An action with no request body.'
 			'Set-R1FIDUserRole'  = 'The request body is the complete list of roles by definition, so there is nothing to preserve.'
 			'Update-R1AttributeEncryptionKey' = 'Rotates the encryption key. An action whose body is the new key, not a partial update of a resource.'
+			'Set-R1LdapClientAccessMapping'   = 'The request body is the complete mapping collection by definition, so there is nothing to preserve.'
+			'Set-R1License'                   = 'Applies a license. The body is the license itself, which is the whole resource, so there is nothing to preserve.'
 		}
 
 		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse
@@ -267,9 +269,12 @@ Describe 'Module' -Tag 'Consistency' {
 					} {
 						param($Content, $Name)
 
+						#Merge-R1Parameter is the usual way to apply the caller's values over the
+						#retrieved resource. A command whose resource is a collection reads it and
+						#rebuilds the collection instead, so calling a Get-R1 command counts too.
 						#Add the command to $ReadModifyWriteExempt above, with a reason, if its PUT
 						#genuinely does not need the resource retrieving first.
-						$Content | Should -Match 'Merge-R1Parameter'
+						$Content | Should -Match '(Merge-R1Parameter|Get-R1[A-Za-z]+)'
 					}
 
 				}

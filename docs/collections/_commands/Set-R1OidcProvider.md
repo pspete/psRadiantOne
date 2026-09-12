@@ -31,6 +31,10 @@ change it.
 The client secret cannot be carried forward, because the retrieval does not return it. Omit it to
 leave the stored secret unchanged, or specify useExistingCredentials to be explicit about that.
 
+This command updates one provider. The API also exposes a bulk form, PUT /oidc_providers, which
+replaces the entire collection with the array supplied and so deletes any provider left out of
+it. That form is deliberately not exposed by this module.
+
 ## EXAMPLES
 
 ### Example 1
