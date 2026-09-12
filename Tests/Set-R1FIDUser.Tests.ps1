@@ -45,7 +45,19 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
 
 			Mock Invoke-R1RestMethod -MockWith {
-				[pscustomobject]@{ 'Prop' = 'Value' }
+				[pscustomobject]@{
+					'username'     = 'john_smith'
+					'firstName'    = 'John'
+					'lastName'     = 'Smith'
+					'entryDn'      = 'uid=john_smith,ou=globalusers,cn=config'
+					'email'        = 'john@company.com'
+					'active'       = $true
+					'roles'        = @('readonly')
+					'server'       = $null
+					'organization' = $null
+					'createdOn'    = '20260912171355.632Z'
+					'assumeRole'   = $null
+				}
 			}
 
 			Set-R1FIDUser -username john_smith -active $true -Confirm:$false
@@ -55,7 +67,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends request' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -Times 1 -Exactly -Scope It
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -eq 'PUT' } -Times 1 -Exactly -Scope It
 
 			}
 
@@ -63,7 +75,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					$URI -eq 'https://radiantone.company.com/authentication-service/users/john_smith'
+					($URI -eq 'https://radiantone.company.com/authentication-service/users/john_smith') -and ($Method -eq 'PUT')
 
 				} -Times 1 -Exactly -Scope It
 
@@ -77,7 +89,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends request body as UTF8 bytes' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Body -is [byte[]] } -Times 1 -Exactly -Scope It
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { ($Method -eq 'PUT') -and ($Body -is [byte[]]) } -Times 1 -Exactly -Scope It
 
 			}
 
@@ -85,7 +97,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					$null -eq ([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).password
+					($Method -eq 'PUT') -and ($null -eq ([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).password)
 
 				} -Times 1 -Exactly -Scope It
 
@@ -97,7 +109,64 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).password -eq 'N3wP@ss'
+					($Method -eq 'PUT') -and (([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).password -eq 'N3wP@ss')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'retrieves the existing user before updating it' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -eq 'GET' } -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'preserves properties which were not specified' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Decoded = [System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json
+					($Decoded.firstName -eq 'John') -and ($Decoded.email -eq 'john@company.com') -and
+					($Decoded.entryDn -eq 'uid=john_smith,ou=globalusers,cn=config')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'preserves existing roles when roles are not specified' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					@(([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).roles)[0] -eq 'readonly'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends roles when specified' {
+
+				Set-R1FIDUser -username john_smith -roles admin, dev -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					@(([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).roles).Count -eq 2
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'overrides only the specified property' {
+
+				Set-R1FIDUser -username john_smith -email 'new@company.com' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Decoded = [System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json
+					($Decoded.email -eq 'new@company.com') -and ($Decoded.firstName -eq 'John')
 
 				} -Times 1 -Exactly -Scope It
 

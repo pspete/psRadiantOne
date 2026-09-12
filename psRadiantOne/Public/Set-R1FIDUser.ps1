@@ -12,7 +12,7 @@ function Set-R1FIDUser {
 		[string]$username,
 
 		[parameter(
-			Mandatory = $true,
+			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
 		[bool]$active,
@@ -42,7 +42,13 @@ function Set-R1FIDUser {
 			ValueFromPipelineByPropertyName = $true
 		)]
 		[ValidateLength(0, 10000)]
-		[string]$email
+		[string]$email,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[string[]]$roles
 	)
 
 	Begin {
@@ -55,7 +61,32 @@ function Set-R1FIDUser {
 
 		$URI = Resolve-R1ServiceUrl -Service Auth -Path "users/$($username | Get-EscapedString)"
 
-		$Request = $PSBoundParameters | Get-Parameter
+		#The control panel updates a user by sending back the complete object it retrieved, including
+		#the properties the api maintains itself. Do the same, so that a property left unspecified
+		#keeps its current value instead of relying on the endpoint to merge.
+		$Existing = Get-R1FIDUser -username $username
+
+		$Template = [ordered]@{
+			username     = $username
+			firstName    = $null
+			lastName     = $null
+			entryDn      = $null
+			email        = $null
+			active       = $true
+			roles        = @()
+			server       = $null
+			organization = $null
+			createdOn    = $null
+			assumeRole   = $null
+		}
+
+		$Request = Merge-R1Parameter -Template $Template -BoundParameter ($PSBoundParameters | Get-Parameter -ParametersToRemove password) -Fallback $Existing
+
+		if ($PSBoundParameters.ContainsKey('roles')) {
+
+			$Request['roles'] = @($roles)
+
+		}
 
 		if ($PSBoundParameters.ContainsKey('password')) {
 
@@ -64,7 +95,7 @@ function Set-R1FIDUser {
 
 		}
 
-		$Body = $Request | ConvertTo-R1SecretBody
+		$Body = $Request | ConvertTo-R1SecretBody -EmptyArrayProperty roles
 
 		if ($PSCmdlet.ShouldProcess($username, 'Update FID User')) {
 

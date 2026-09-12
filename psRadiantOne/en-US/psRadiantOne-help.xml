@@ -3280,8 +3280,9 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:details>
     <maml:description>
       <maml:para>Updates an existing FID user.</maml:para>
+      <maml:para>The user is retrieved before it is updated, and the complete object is sent back with the supplied values applied over it. This is what the control panel does, and it means a property left unspecified keeps its current value rather than depending on the endpoint to merge a partial object. One consequence is that the command issues two requests: a GET followed by a PUT.</maml:para>
       <maml:para>Omit the password parameter to leave the user's existing password unchanged.</maml:para>
-      <maml:para>The roles associated with a user are read-only on the user object, and are set separately with Set-R1FIDUserRole.</maml:para>
+      <maml:para>Roles may be supplied here. The API schema marks roles read-only, but the control panel sends them on update and the API accepts them. Set-R1FIDUserRole remains available for changing only the roles.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -3298,7 +3299,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
           <maml:name>active</maml:name>
           <maml:description>
             <maml:para>Whether the user account is enabled.</maml:para>
@@ -3380,6 +3381,18 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>roles</maml:name>
+          <maml:description>
+            <maml:para>The complete list of role names the user should hold. Any role not included is removed from the user. When not specified, the roles the user already holds are preserved.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -3407,7 +3420,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
         <maml:name>active</maml:name>
         <maml:description>
           <maml:para>Whether the user account is enabled.</maml:para>
@@ -3475,6 +3488,18 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>roles</maml:name>
+        <maml:description>
+          <maml:para>The complete list of role names the user should hold. Any role not included is removed from the user. When not specified, the roles the user already holds are preserved.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>

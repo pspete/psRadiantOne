@@ -27,6 +27,10 @@
   - `tuningPermissions` is absent from the spec and could not be set at all.
   - `securityPermissions` also takes `passwordPoliciesPermission`, and `administrationPermissions`
     also takes `auditLoggingPermission` and `featureManagementPermission`.
+- `Set-R1FIDUser` accepts `-roles`, and retrieves the user before updating it so that a property
+  left unspecified keeps its current value. The control panel sends back the complete object it
+  retrieved; sending only the supplied properties risked clearing the rest, since the endpoint is a
+  PUT of the whole user. The command now issues a GET followed by a PUT.
 - `New-R1FIDUser` accepts `-roles`. The schema marks roles read-only and points at the deprecated
   roles endpoint, but the control panel sends them when creating a user and the API returns 201, so
   a user can be created with its roles in one call.

@@ -13,17 +13,22 @@ Updates a FID user.
 ## SYNTAX
 
 ```
-Set-R1FIDUser [-username] <String> [-active] <Boolean> [[-password] <SecureString>] [[-firstName] <String>]
- [[-lastName] <String>] [[-email] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-R1FIDUser [-username] <String> [[-active] <Boolean>] [[-password] <SecureString>] [[-firstName] <String>]
+ [[-lastName] <String>] [[-email] <String>] [-roles <String[]>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 Updates an existing FID user.
 
+The user is retrieved before it is updated, and the complete object is sent back with the supplied
+values applied over it. This is what the control panel does, and it means a property left
+unspecified keeps its current value rather than depending on the endpoint to merge a partial object.
+One consequence is that the command issues two requests: a GET followed by a PUT.
+
 Omit the password parameter to leave the user's existing password unchanged.
 
-The roles associated with a user are read-only on the user object, and are set separately with
-Set-R1FIDUserRole.
+Roles may be supplied here. The API schema marks roles read-only, but the control panel sends them
+on update and the API accepts them. Set-R1FIDUserRole remains available for changing only the roles.
 
 ## EXAMPLES
 
@@ -82,7 +87,7 @@ Type: Boolean
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -159,6 +164,22 @@ Aliases:
 
 Required: True
 Position: 0
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -roles
+The complete list of role names the user should hold. Any role not included is removed from the
+user. When not specified, the roles the user already holds are preserved.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
