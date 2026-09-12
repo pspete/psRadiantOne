@@ -97,6 +97,44 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'sends expiresOn in the format the control panel sends' {
+
+				New-R1AccessToken -name 'Token' -apiType REST -expiresOn ([datetime]'2027-09-12T17:42:49.987Z') -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					#ConvertFrom-Json would rehydrate the value to a [datetime], so match the raw json
+					$Body -match '"expiresOn"\s*:\s*"2027-09-12T17:42:49\.987Z"'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'formats expiresOn independently of the current culture' {
+
+				$Original = [System.Threading.Thread]::CurrentThread.CurrentCulture
+
+				try {
+
+					#Finnish uses '.' as its time separator, which would corrupt a colon in the format
+					[System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::GetCultureInfo('fi-FI')
+
+					New-R1AccessToken -name 'Token' -apiType REST -expiresOn ([datetime]'2027-09-12T17:42:49.987Z') -Confirm:$false
+
+					Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+						$Body -match '"expiresOn"\s*:\s*"2027-09-12T17:42:49\.987Z"'
+
+					} -Times 1 -Exactly -Scope It
+
+				} finally {
+
+					[System.Threading.Thread]::CurrentThread.CurrentCulture = $Original
+
+				}
+
+			}
+
 		}
 
 		Context 'Output' {

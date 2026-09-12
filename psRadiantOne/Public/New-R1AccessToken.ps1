@@ -45,7 +45,7 @@ function New-R1AccessToken {
 
 		if ($PSBoundParameters.ContainsKey('expiresOn')) {
 
-			$Request['expiresOn'] = $expiresOn.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ss.fffZ')
+			$Request['expiresOn'] = $expiresOn | ConvertTo-R1Timestamp
 
 		}
 

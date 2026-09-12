@@ -18,6 +18,11 @@
 
 ## Fixed
 
+- `New-R1AccessToken` formats `expiresOn` with the invariant culture. ":" in a custom format string
+  is the culture's time separator, so under a culture which does not use a colon - Finnish, for one -
+  the timestamp was emitted as `2027-09-12T17.42.49.987Z` and rejected, leaving the expiry
+  unsettable. The format itself is confirmed correct against a control panel request.
+
 - `New-R1FIDRole` and `Set-R1FIDRole` send the role permissions the API actually accepts. Confirmed
   against a control panel request captured from a live 8.5 tenant, where the spec proved wrong:
   - `settingsPermission`, documented as a single NONE/VIEW/EDIT value, does not exist. The API takes
@@ -59,6 +64,8 @@
   process, and could strip TLS 1.3 from one that had it enabled.
 
 - Private HTTP and request-building plumbing shared by every command:
+  - `ConvertTo-R1Timestamp` - formats a datetime as the UTC timestamp the API expects, with the
+    invariant culture.
   - `Invoke-R1RestMethod` - the module's single HTTP entry point, sending the session token as a
     bearer token and translating RadiantOne `ClientError` responses into terminating errors.
   - `Resolve-R1ServiceUrl` - composes request URLs for each of the seven RadiantOne service prefixes.
