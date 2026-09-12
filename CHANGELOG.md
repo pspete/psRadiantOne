@@ -75,6 +75,13 @@ they cover rather than split into added, changed and fixed.
   `New-R1NamingContextLink`. The two list commands follow the offset pagination of the API and return
   every page. No total is reported by the API, so the end of a collection is recognised by a page
   holding fewer nodes than were asked for.
+- Interception scripts: `Get-R1InterceptionScript`, `Import-R1InterceptionScript`,
+  `Remove-R1InterceptionScript`, `Get-R1InterceptionScriptLibrary`,
+  `Import-R1InterceptionScriptLibrary`, `Remove-R1InterceptionScriptLibrary`,
+  `Get-R1GlobalInterceptionScript` / `Set-R1GlobalInterceptionScript`,
+  `Test-R1InterceptionScriptCode` and `New-R1InterceptionScriptJar`. The two upload commands take a
+  local file path and send it as multipart form data, which works on Windows PowerShell as well as
+  PowerShell 7.
 
 ## Notes
 
