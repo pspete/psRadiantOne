@@ -50,7 +50,7 @@ Else {
 
 		<#-- Code signing is not currently implemented. This block is a placeholder for future logic and
 		     is inert until $env:sig_key / $env:PfxSecure are actually populated in the project. --#>
-		If ((-not ($ENV:APPVEYOR_PULL_REQUEST_NUMBER)) -and (($ENV:APPVEYOR_REPO_BRANCH -eq 'main') -and ($ENV:APPVEYOR_BUILD_VERSION -ge "1.0.0"))) {
+		If ((-not ($ENV:APPVEYOR_PULL_REQUEST_NUMBER)) -and (($ENV:APPVEYOR_REPO_BRANCH -eq 'main') -and ([version]$ENV:APPVEYOR_BUILD_VERSION -ge [version]"1.0.0"))) {
 
 			If (($ENV:sig_key) -and ($ENV:PfxSecure)) {
 

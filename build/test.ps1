@@ -33,12 +33,10 @@ $res = $result | ConvertTo-Pester4Result
 Write-Host 'Uploading Test Results.'
 $null = (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $(Resolve-Path .\TestResults.xml))
 
-if (-not [string]::IsNullOrWhiteSpace($env:CODECOV_TOKEN)) {
+if (($env:APPVEYOR_REPO_COMMIT_AUTHOR -eq $env:git_user_name) -and -not [string]::IsNullOrWhiteSpace($env:CODECOV_TOKEN)) {
 
 	#CODECOV_TOKEN is a secure variable and is not exposed to pull request builds - skip the upload rather than
 	#invoking the CLI with an empty -t value (which shifts every following argument and fails the command).
-	#Gating on the token alone (rather than also checking commit author) is sufficient: the token is already
-	#absent on PR/fork builds, so an author check is redundant and just adds a hardcoded name to maintain.
 
 	Write-Host 'Publishing Code Coverage'
 

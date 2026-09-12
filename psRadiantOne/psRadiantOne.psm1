@@ -52,6 +52,11 @@ Get-ChildItem $PSScriptRoot\ -Recurse -Include '*.ps1' -Exclude '*.ps1xml' |
 $Script:psRadiantOneSession = [ordered]@{
 	BaseURI            = $null
 	User               = $null
+	Token              = $null
+	TokenExpiry        = $null
+	Privileges         = $null
+	Organization       = $null
+	Version            = $null
 	WebSession         = $null
 	StartTime          = $null
 	ElapsedTime        = $null

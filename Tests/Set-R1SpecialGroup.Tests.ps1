@@ -1,0 +1,119 @@
+#InModuleScope is resolved during Pester's discovery phase, so the module must be imported here
+#rather than from BeforeAll, which does not run until the later run phase.
+
+#Get Current Directory
+$Here = Split-Path -Parent $PSCommandPath
+
+#Module Name
+$ModuleName = 'psRadiantOne'
+
+#Resolve Path to Module Directory
+$ModulePath = Resolve-Path "$Here\..\$ModuleName"
+
+#Define Path to Module Manifest
+$ManifestPath = Join-Path "$ModulePath" "$ModuleName.psd1"
+
+if ( -not (Get-Module -Name $ModuleName -All)) {
+
+	Import-Module -Name "$ManifestPath" -ArgumentList $true -Force -ErrorAction Stop
+
+}
+
+Describe $($PSCommandPath -Replace '.Tests.ps1') {
+
+	InModuleScope 'psRadiantOne' {
+
+		BeforeEach {
+
+			$psRadiantOneSession = [ordered]@{
+				BaseURI            = 'https://radiantone.company.com'
+				User               = 'uid=testuser,ou=globalusers,cn=config'
+				Token              = 'SomeToken'
+				TokenExpiry        = $null
+				Privileges         = $null
+				Organization       = $null
+				Version            = $null
+				WebSession         = New-Object Microsoft.PowerShell.Commands.WebRequestSession
+				StartTime          = $null
+				ElapsedTime        = $null
+				LastCommand        = $null
+				LastCommandTime    = $null
+				LastCommandResults = $null
+				LastError          = $null
+				LastErrorTime      = $null
+			}
+			New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
+
+			#Shape confirmed against a live 8.5 tenant
+			Mock Invoke-R1RestMethod -MockWith {
+				[pscustomobject]@{
+					'specialUsersGroupDn'   = 'cn=special users,ou=globalgroups,cn=config'
+					'administratorsGroupDn' = 'cn=directory administrators,ou=globalgroups,cn=config'
+				}
+			}
+
+			Set-R1SpecialGroup -specialUsersGroupDn 'ou=special,cn=config' -administratorsGroupDn 'ou=admins,cn=config' -Confirm:$false
+		}
+
+		Context 'Input' {
+
+			It 'sends request' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -eq 'PUT' } -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends request to expected endpoint' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($URI -eq 'https://radiantone.company.com/authentication-service/special_groups') -and ($Method -eq 'PUT')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'uses expected method' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -match 'PUT' } -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends expected request body' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Decoded = $Body | ConvertFrom-Json
+					($Decoded.specialUsersGroupDn -eq 'ou=special,cn=config') -and ($Decoded.administratorsGroupDn -eq 'ou=admins,cn=config')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'retrieves the current settings before updating them' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -eq 'GET' } -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'preserves the group dn which was not specified' {
+
+				Set-R1SpecialGroup -specialUsersGroupDn 'ou=changed,cn=config' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Decoded = $Body | ConvertFrom-Json
+					($Decoded.specialUsersGroupDn -eq 'ou=changed,cn=config') -and
+					($Decoded.administratorsGroupDn -eq 'cn=directory administrators,ou=globalgroups,cn=config')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
+	}
+
+}

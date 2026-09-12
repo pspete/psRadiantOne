@@ -230,16 +230,72 @@ Describe 'Module' -Tag 'Consistency' {
 
 	}
 
+	Context 'Read Modify Write' -Tag 'ReadModifyWrite' {
+
+		#The RadiantOne update endpoints replace the resource rather than merging into it: a property
+		#absent from the request is cleared, and a permission absent from a role is reset to NONE.
+		#A command issuing a PUT must therefore retrieve the resource first and send it back with the
+		#caller's values applied over it, which is what Merge-R1Parameter is for. Sending only the
+		#bound parameters silently destroys everything the caller did not restate.
+
+		#Commands whose PUT is not a partial update of a resource, with the reason each is exempt.
+		$ReadModifyWriteExempt = @{
+			'Update-R1AuthToken' = 'Refreshes the authentication token. An action with no request body.'
+			'Set-R1FIDUserRole'  = 'The request body is the complete list of roles by definition, so there is nothing to preserve.'
+			'Update-R1AttributeEncryptionKey' = 'Rotates the encryption key. An action whose body is the new key, not a partial update of a resource.'
+			'Set-R1LdapClientAccessMapping'   = 'The request body is the complete mapping collection by definition, so there is nothing to preserve.'
+			'Set-R1License'                   = 'Applies a license. The body is the license itself, which is the whole resource, so there is nothing to preserve.'
+			'Set-R1CustomLimit'               = 'The request body is the complete collection of custom limits by definition, so there is nothing to preserve.'
+		}
+
+		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse
+
+		Foreach ($Script in $PublicScripts) {
+
+			$Content = Get-Content -Path $Script.FullName -Raw
+
+			if ($Content -match 'Method\s+PUT') {
+
+				if ($ReadModifyWriteExempt.ContainsKey($Script.BaseName)) {
+
+					It "$($Script.Name) is exempt: $($ReadModifyWriteExempt[$Script.BaseName])" -Tag "$($Script.BaseName)" {
+						$true | Should -BeTrue
+					}
+
+				} else {
+
+					It "$($Script.Name) retrieves the resource before updating it" -Tag "$($Script.BaseName)" -TestCases @{
+						'Content' = $Content
+						'Name'    = $Script.BaseName
+					} {
+						param($Content, $Name)
+
+						#Merge-R1Parameter is the usual way to apply the caller's values over the
+						#retrieved resource. A command whose resource is a collection reads it and
+						#rebuilds the collection instead, so calling a Get-R1 command counts too.
+						#Add the command to $ReadModifyWriteExempt above, with a reason, if its PUT
+						#genuinely does not need the resource retrieving first.
+						$Content | Should -Match '(Merge-R1Parameter|Get-R1[A-Za-z]+)'
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	Context 'Secure Value Handling' -Tag 'SecureValueHandling' {
 
 		#Any function that decodes a SecureString (or otherwise obtains a plaintext secret) and sends a
-		#JSON request body via Invoke-RORestMethod must convert that body to UTF8 bytes (not a
+		#JSON request body via Invoke-R1RestMethod must convert that body to UTF8 bytes (not a
 		#String) before the call, so Windows PowerShell ParameterBinding/Module Logging cannot capture the
 		#plaintext value. See https://github.com/pspete/psPAS/issues/602
 
 		#Fill in with the actual secret-shaped field names this module's API uses - verify against real
 		#payloads, don't copy another module's list unchecked even if the platform seems related.
-		$SecretFieldNames = 'REPLACE_WITH_ACTUAL_FIELD_NAMES'
+		$SecretFieldNames = 'password', 'newPassword', 'oldPassword', 'currentPassword', 'bindReqPassword', 'clientSecret', 'secretKey', 'accessKeySecret'
 		$SecretFieldPattern = "(?i)'($($SecretFieldNames -join '|'))'"
 		$SecretDecodePattern = 'ConvertTo-InsecureString'
 
@@ -248,19 +304,19 @@ Describe 'Module' -Tag 'Consistency' {
 			$Content = Get-Content -Path $Script.FullName -Raw
 
 			$HandlesSecret = ($Content -match $SecretFieldPattern) -or ($Content -match $SecretDecodePattern)
-			$BuildsJsonBody = ($Content -match 'ConvertTo-Json') -or ($Content -match 'ConvertTo-ROJsonBody')
-			$SendsRequest = $Content -match 'Invoke-RORestMethod'
+			$BuildsJsonBody = ($Content -match 'ConvertTo-Json') -or ($Content -match 'ConvertTo-R1JsonBody')
+			$SendsRequest = $Content -match 'Invoke-R1RestMethod'
 
 			if ($HandlesSecret -and $BuildsJsonBody -and $SendsRequest) {
 
-				It "$($Script.Name) converts its request body to UTF8 bytes before calling Invoke-RORestMethod" -Tag "$($Script.BaseName)" -TestCases @{
+				It "$($Script.Name) converts its request body to UTF8 bytes before calling Invoke-R1RestMethod" -Tag "$($Script.BaseName)" -TestCases @{
 					'Content' = $Content
 				} {
 					param($Content)
 
 					#Accepts either inline UTF8 encoding, or a dedicated module-specific secret-body helper
 					#(the more mature version of this pattern once one exists for this module).
-					$Content | Should -Match '(\[System\.Text\.Encoding\]::UTF8\.GetBytes\(|ConvertTo-ROSecretBody)'
+					$Content | Should -Match '(\[System\.Text\.Encoding\]::UTF8\.GetBytes\(|ConvertTo-R1SecretBody)'
 
 				}
 
@@ -271,7 +327,7 @@ Describe 'Module' -Tag 'Consistency' {
 		#The pattern-based scan above can't see a secret that only exists in the *caller's* data (e.g. a
 		#hashtable value passed in via a parameter) rather than as literal source text in the file itself -
 		#list any scripts known to handle a secret this way as explicit named exceptions here, e.g.:
-		#'Set-ROUserSecurityQuestion.ps1' | ForEach-Object { ... }
+		#'Set-R1Example.ps1' | ForEach-Object { ... }
 
 	}
 

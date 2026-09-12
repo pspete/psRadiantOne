@@ -1,3 +1,7 @@
 .vscode/*
 CLAUDE.md
 Release/
+radiantone-openapi-*.yaml
+coverage.xml
+TestResults.xml
+codecov.exe
