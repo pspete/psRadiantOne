@@ -2482,15 +2482,19 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:details>
     <maml:description>
       <maml:para>Updates the directory manager settings, including the directory manager password and the list of IP addresses permitted to bind as the directory manager.</maml:para>
+      <maml:para>The current settings are retrieved before they are updated, and sent back with the supplied values applied over them, so the allowed IP list and the username keep their current values when not specified. The command therefore issues a GET followed by a PUT.</maml:para>
       <maml:para>The request body is sent as UTF8 bytes so that the plaintext password cannot be captured by Windows PowerShell parameter binding or module logging.</maml:para>
+      <maml:para>Unlike the other commands in this area, this one has not been exercised against a live deployment: the directory manager is generally a shared, high privilege account, and a failed password change is disruptive. The property names are taken from a GET captured from a live 8.5 tenant, whose response uses `username` rather than the `userName` the published API schema documents. Both operations share one schema, so the update takes the same name.</maml:para>
+      <maml:para>Test it against a deployment you can afford to break before using it against one you cannot.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Set-R1DirectoryManager</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
-          <maml:name>userName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
+          <maml:name>username</maml:name>
           <maml:description>
             <maml:para>The username of the directory manager, e.g. cn=Directory Manager</maml:para>
+            <maml:para>When not specified, the current username is kept.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2620,10 +2624,11 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
-        <maml:name>userName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
+        <maml:name>username</maml:name>
         <maml:description>
           <maml:para>The username of the directory manager, e.g. cn=Directory Manager</maml:para>
+          <maml:para>When not specified, the current username is kept.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2669,14 +2674,14 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Set-R1DirectoryManager -userName 'cn=Directory Manager' -password $newSecurePassword -oldPassword $currentSecurePassword</dev:code>
+        <dev:code>Set-R1DirectoryManager -username 'cn=Directory Manager' -password $newSecurePassword -oldPassword $currentSecurePassword</dev:code>
         <dev:remarks>
           <maml:para>Changes the directory manager password.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Set-R1DirectoryManager -userName 'cn=Directory Manager' -password $securePassword -allowedIps '10.0.0.1', '10.0.0.2'</dev:code>
+        <dev:code>Set-R1DirectoryManager -username 'cn=Directory Manager' -password $securePassword -allowedIps '10.0.0.1', '10.0.0.2'</dev:code>
         <dev:remarks>
           <maml:para>Restricts directory manager binds to the specified IP addresses.</maml:para>
         </dev:remarks>

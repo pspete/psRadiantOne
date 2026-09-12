@@ -13,7 +13,7 @@ Updates the directory manager settings.
 ## SYNTAX
 
 ```
-Set-R1DirectoryManager [-userName] <String> [-password] <SecureString> [[-oldPassword] <SecureString>]
+Set-R1DirectoryManager [[-username] <String>] [-password] <SecureString> [[-oldPassword] <SecureString>]
  [[-allowedIps] <String[]>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -21,21 +21,33 @@ Set-R1DirectoryManager [-userName] <String> [-password] <SecureString> [[-oldPas
 Updates the directory manager settings, including the directory manager password and the list of IP
 addresses permitted to bind as the directory manager.
 
+The current settings are retrieved before they are updated, and sent back with the supplied values
+applied over them, so the allowed IP list and the username keep their current values when not
+specified. The command therefore issues a GET followed by a PUT.
+
 The request body is sent as UTF8 bytes so that the plaintext password cannot be captured by Windows
 PowerShell parameter binding or module logging.
+
+Unlike the other commands in this area, this one has not been exercised against a live deployment:
+the directory manager is generally a shared, high privilege account, and a failed password change is
+disruptive. The property names are taken from a GET captured from a live 8.5 tenant, whose response
+uses `username` rather than the `userName` the published API schema documents. Both operations share
+one schema, so the update takes the same name.
+
+Test it against a deployment you can afford to break before using it against one you cannot.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-Set-R1DirectoryManager -userName 'cn=Directory Manager' -password $newSecurePassword -oldPassword $currentSecurePassword
+Set-R1DirectoryManager -username 'cn=Directory Manager' -password $newSecurePassword -oldPassword $currentSecurePassword
 ```
 
 Changes the directory manager password.
 
 ### Example 2
 ```powershell
-Set-R1DirectoryManager -userName 'cn=Directory Manager' -password $securePassword -allowedIps '10.0.0.1', '10.0.0.2'
+Set-R1DirectoryManager -username 'cn=Directory Manager' -password $securePassword -allowedIps '10.0.0.1', '10.0.0.2'
 ```
 
 Restricts directory manager binds to the specified IP addresses.
@@ -118,15 +130,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -userName
+### -username
 The username of the directory manager, e.g. cn=Directory Manager
+
+When not specified, the current username is kept.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 0
 Default value: None
 Accept pipeline input: True (ByPropertyName)

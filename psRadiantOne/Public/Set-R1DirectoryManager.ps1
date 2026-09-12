@@ -4,12 +4,11 @@ function Set-R1DirectoryManager {
 	[OutputType([void])]
 	param(
 		[parameter(
-			Mandatory = $true,
+			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
-		[ValidateNotNullOrEmpty()]
 		[ValidateLength(1, 1000)]
-		[string]$userName,
+		[string]$username,
 
 		[parameter(
 			Mandatory = $true,
@@ -41,7 +40,28 @@ function Set-R1DirectoryManager {
 
 		$URI = Resolve-R1ServiceUrl -Service Auth -Path 'directory_manager'
 
-		$Request = $PSBoundParameters | Get-Parameter
+		#Retrieve the current settings and send them back with the supplied values applied over them,
+		#as the other settings endpoints require. Sending only the supplied values risks clearing the
+		#allowed IP list of the directory manager account.
+		$Existing = Get-R1DirectoryManager
+
+		$Template = [ordered]@{
+			username   = $null
+			allowedIps = @()
+		}
+
+		$Request = Merge-R1Parameter -Template $Template -BoundParameter ($PSBoundParameters | Get-Parameter -ParametersToRemove password, oldPassword) -Fallback $Existing
+
+		if ($PSBoundParameters.ContainsKey('allowedIps')) {
+
+			$Request['allowedIps'] = @($allowedIps)
+
+		} else {
+
+			$Request['allowedIps'] = @($Existing.allowedIps)
+
+		}
+
 		$Request['password'] = $password | ConvertTo-InsecureString
 
 		if ($PSBoundParameters.ContainsKey('oldPassword')) {
@@ -50,15 +70,9 @@ function Set-R1DirectoryManager {
 
 		}
 
-		if ($PSBoundParameters.ContainsKey('allowedIps')) {
-
-			$Request['allowedIps'] = @($allowedIps)
-
-		}
-
 		$Body = $Request | ConvertTo-R1SecretBody -EmptyArrayProperty allowedIps
 
-		if ($PSCmdlet.ShouldProcess($userName, 'Update Directory Manager Settings')) {
+		if ($PSCmdlet.ShouldProcess($Request['username'], 'Update Directory Manager Settings')) {
 
 			$null = Invoke-R1RestMethod -Uri $URI -Method PUT -Body $Body
 

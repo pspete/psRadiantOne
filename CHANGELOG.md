@@ -18,6 +18,13 @@
 
 ## Fixed
 
+- `Set-R1DirectoryManager` sends `username`, the property name a live 8.5 tenant returns, rather than
+  the `userName` the published schema documents. Both operations share one schema, so the update
+  takes the same name the retrieval returns. It also retrieves the current settings and sends them
+  back with the supplied values applied over them, so the allowed IP list is no longer cleared when
+  it is not specified, and `-username` is now optional. This command remains unexercised against a
+  live deployment.
+
 - `New-R1AccessToken` formats `expiresOn` with the invariant culture. ":" in a custom format string
   is the culture's time separator, so under a culture which does not use a colon - Finnish, for one -
   the timestamp was emitted as `2027-09-12T17.42.49.987Z` and rejected, leaving the expiry
