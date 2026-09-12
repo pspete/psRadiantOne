@@ -299,6 +299,31 @@ function Invoke-R1RestMethod {
 
 					}
 
+					if ([string]::IsNullOrWhiteSpace($ErrorMessage)) {
+
+						#A response carrying no body leaves nothing to report, and an empty message
+						#hides which request failed and how. Fall back to the http status.
+						$Response = $PSItem.Exception.Response
+
+						if ($null -ne $Response) {
+
+							#ReasonPhrase under PowerShell Core, StatusDescription under Windows PowerShell
+							$StatusText = if ($null -ne $Response.PSObject.Properties['ReasonPhrase']) {
+								$Response.ReasonPhrase
+							} else {
+								$Response.StatusDescription
+							}
+
+							$ErrorMessage = "The API returned HTTP $([int]$Response.StatusCode) $StatusText with no error details. Request was $Method $URI"
+
+						} else {
+
+							$ErrorMessage = $PSItem.Exception.Message
+
+						}
+
+					}
+
 					#throw the error
 					$PSCmdlet.ThrowTerminatingError(
 

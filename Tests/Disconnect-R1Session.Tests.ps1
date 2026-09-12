@@ -83,6 +83,39 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Revocation failure' {
+
+			It 'warns when the token cannot be revoked' {
+
+				#BeforeEach has already disconnected, so restore a session to act on
+				$Script:psRadiantOneSession.BaseURI = 'https://radiantone.company.com'
+				$Script:psRadiantOneSession.Token = 'SomeToken'
+
+				Mock Invoke-R1RestMethod -MockWith { throw 'Forbidden' }
+
+				$Warnings = $( Disconnect-R1Session -Confirm:$false ) 3>&1
+
+				$Warnings | Should -Not -BeNullOrEmpty
+
+			}
+
+			It 'clears the local session even when revocation fails' {
+
+				#BeforeEach has already disconnected, so restore a session to act on
+				$Script:psRadiantOneSession.BaseURI = 'https://radiantone.company.com'
+				$Script:psRadiantOneSession.Token = 'SomeToken'
+
+				Mock Invoke-R1RestMethod -MockWith { throw 'Forbidden' }
+
+				Disconnect-R1Session -Confirm:$false -WarningAction SilentlyContinue
+
+				$Script:psRadiantOneSession.Token | Should -BeNullOrEmpty
+				$Script:psRadiantOneSession.BaseURI | Should -BeNullOrEmpty
+
+			}
+
+		}
+
 		Context 'Output' {
 
 			It 'clears the session token' {

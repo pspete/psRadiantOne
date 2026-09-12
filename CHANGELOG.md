@@ -16,6 +16,16 @@
 - `Invoke-R1RestMethod` accepts `SslProtocol`, passed through to `Invoke-WebRequest` for an endpoint
   requiring a specific TLS protocol. PowerShell Core only.
 
+## Fixed
+
+- `Invoke-R1RestMethod` reports the HTTP status when a failed request returns no response body.
+  A null `ErrorDetails` parsed as valid JSON, so nothing populated the message and the error surfaced
+  empty, naming neither the request nor the status.
+- `Disconnect-R1Session` clears the local session even when the token cannot be revoked, and warns
+  that the token remains valid until it expires. Revoking requires `SCOPE_AUTH_TOKEN_REVOKE`, and
+  without it the command previously threw and left the session in place, still holding a live token
+  it reported as closed.
+
 ## Changed
 
 - `Invoke-R1RestMethod` no longer pins TLS 1.2 on PowerShell Core. `WebSslProtocol` is a flags enum,
