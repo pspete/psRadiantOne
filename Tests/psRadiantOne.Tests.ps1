@@ -245,6 +245,7 @@ Describe 'Module' -Tag 'Consistency' {
 			'Update-R1AttributeEncryptionKey' = 'Rotates the encryption key. An action whose body is the new key, not a partial update of a resource.'
 			'Set-R1LdapClientAccessMapping'   = 'The request body is the complete mapping collection by definition, so there is nothing to preserve.'
 			'Set-R1License'                   = 'Applies a license. The body is the license itself, which is the whole resource, so there is nothing to preserve.'
+			'Set-R1CustomLimit'               = 'The request body is the complete collection of custom limits by definition, so there is nothing to preserve.'
 		}
 
 		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse

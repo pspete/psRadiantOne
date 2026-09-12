@@ -2,6 +2,19 @@
 
 ## Added
 
+- Log settings commands: `Get-R1LogSetting` / `Set-R1LogSetting`, addressing a component, a data
+  source or a plugin. The thirteen component names are fixed by the API and several contain spaces,
+  which are escaped into the path. Log settings are polymorphic - seven shapes keyed by
+  `logSettingsComponent` - so `Set-R1LogSetting` retrieves whichever shape the component uses and
+  applies the supplied values over it, preserving that variant's properties and introducing none
+  foreign to it. Neither has been exercised against a live deployment.
+- Identity observability commands: `Get-R1PipelineConnectorConfig` / `Set-R1PipelineConnectorConfig`,
+  `Get-R1PipelineConnectorType`, `Reset-R1PipelineConnector`, `Suspend-R1Pipeline`,
+  `Resume-R1Pipeline` and `Invoke-R1PipelineConnectorScript`.
+- Entry statistics commands: `Get-R1Operation`, `New-R1Operation`, `Stop-R1Operation` and
+  `Resume-R1Operation`. A refresh which runs long enough to be tracked carries its entry statistics
+  in the operation result once it completes.
+- `Get-R1CustomLimit` / `Set-R1CustomLimit`, which replace the whole collection of custom limits.
 - Platform settings commands, covering the remaining `settings-service` configuration:
   `Get-`/`Set-R1ChangeLogSetting`, `Get-`/`Set-R1GlobalAttributeSetting`,
   `Get-`/`Set-R1LdapClientAccess`, `Get-`/`Set-R1RestClientAccess`,
