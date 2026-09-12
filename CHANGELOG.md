@@ -86,6 +86,10 @@ they cover rather than split into added, changed and fixed.
   `Test-R1JoinCondition`, `Get-R1JoinCondition`, `Get-R1DynamicGroupFormat` and
   `Get-R1LinkedAttributeDefault`. The three Test commands return a boolean; where the API also
   reports why a value was rejected, that reason is written to the verbose stream.
+- Naming context special attributes, virtual tree and relationship tree:
+  `Get-R1NamingContextSpecialAttribute` / `Set-R1NamingContextSpecialAttribute`,
+  `Get-R1NamingContextVirtualTreeProperty` / `Set-R1NamingContextVirtualTreeProperty` and
+  `Get-R1NamingContextRelationshipTree`.
 
 ## Notes
 
