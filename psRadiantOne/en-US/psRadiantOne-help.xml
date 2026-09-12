@@ -1123,7 +1123,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="15" aliases="none">
           <maml:name>administrationPermissions</maml:name>
           <maml:description>
-            <maml:para>Hashtable of administration permissions, with userManagementPermission, entryStatisticsPermission, rolesPermission, directoryManagerPermission, controlPanelConfigPermission, accessTokensPermission, licensePermission and maintenanceModePermission keys.</maml:para>
+            <maml:para>Hashtable of administration permissions, with userManagementPermission, entryStatisticsPermission, rolesPermission, directoryManagerPermission, controlPanelConfigPermission, accessTokensPermission, licensePermission, auditLoggingPermission, featureManagementPermission, maintenanceModePermission keys.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
           <dev:type>
@@ -1205,7 +1205,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
           <maml:name>securityPermissions</maml:name>
           <maml:description>
-            <maml:para>Hashtable of security permissions, with attributeEncryptionPermission and accessControlPermission keys.</maml:para>
+            <maml:para>Hashtable of security permissions, with attributeEncryptionPermission, accessControlPermission, passwordPoliciesPermission keys.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
           <dev:type>
@@ -1230,23 +1230,6 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
           <maml:name>tasksPermission</maml:name>
           <maml:description>
             <maml:para>Permission granted over tasks. NONE, VIEW or EDIT.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">NONE</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">VIEW</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">EDIT</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="8" aliases="none">
-          <maml:name>settingsPermission</maml:name>
-          <maml:description>
-            <maml:para>Permission granted over settings. NONE, VIEW or EDIT.</maml:para>
           </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">NONE</command:parameterValue>
@@ -1299,6 +1282,30 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>settingsPermissions</maml:name>
+          <maml:description>
+            <maml:para>Hashtable of settings permissions, with clientProtocolsPermission, clientCertificatePermission, tuningPermission, tokenValidatorPermission keys.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
+          <dev:type>
+            <maml:name>Hashtable</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>tuningPermissions</maml:name>
+          <maml:description>
+            <maml:para>Hashtable of tuning permissions, with backendLimitsPermission, accessRegulationLimitsPermission, changeLogPermission, globalLimitsPermission, customLimitsPermission, globalAttributesPermission, logSettingsPermission keys.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
+          <dev:type>
+            <maml:name>Hashtable</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -1329,7 +1336,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="15" aliases="none">
         <maml:name>administrationPermissions</maml:name>
         <maml:description>
-          <maml:para>Hashtable of administration permissions, with userManagementPermission, entryStatisticsPermission, rolesPermission, directoryManagerPermission, controlPanelConfigPermission, accessTokensPermission, licensePermission and maintenanceModePermission keys.</maml:para>
+          <maml:para>Hashtable of administration permissions, with userManagementPermission, entryStatisticsPermission, rolesPermission, directoryManagerPermission, controlPanelConfigPermission, accessTokensPermission, licensePermission, auditLoggingPermission, featureManagementPermission, maintenanceModePermission keys.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
         <dev:type>
@@ -1509,23 +1516,11 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
         <maml:name>securityPermissions</maml:name>
         <maml:description>
-          <maml:para>Hashtable of security permissions, with attributeEncryptionPermission and accessControlPermission keys.</maml:para>
+          <maml:para>Hashtable of security permissions, with attributeEncryptionPermission, accessControlPermission, passwordPoliciesPermission keys.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
         <dev:type>
           <maml:name>Hashtable</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="8" aliases="none">
-        <maml:name>settingsPermission</maml:name>
-        <maml:description>
-          <maml:para>Permission granted over settings. NONE, VIEW or EDIT.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -1538,6 +1533,30 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>settingsPermissions</maml:name>
+        <maml:description>
+          <maml:para>Hashtable of settings permissions, with clientProtocolsPermission, clientCertificatePermission, tuningPermission, tokenValidatorPermission keys.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
+        <dev:type>
+          <maml:name>Hashtable</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>tuningPermissions</maml:name>
+        <maml:description>
+          <maml:para>Hashtable of tuning permissions, with backendLimitsPermission, accessRegulationLimitsPermission, changeLogPermission, globalLimitsPermission, customLimitsPermission, globalAttributesPermission, logSettingsPermission keys.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
+        <dev:type>
+          <maml:name>Hashtable</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -1620,7 +1639,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:details>
     <maml:description>
       <maml:para>Creates a FID user on the RadiantOne deployment.</maml:para>
-      <maml:para>The roles associated with a user are read-only on the user object, and are set separately with Set-R1FIDUserRole.</maml:para>
+      <maml:para>Roles may be supplied when creating a user. The API schema marks roles as read-only, but the control panel sends them on create and the API accepts them. Use Set-R1FIDUserRole to change the roles of a user which already exists.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1719,6 +1738,19 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>roles</maml:name>
+          <maml:description>
+            <maml:para>The role names to associate with the new user.</maml:para>
+            <maml:para>The API schema marks roles as read-only, but the control panel sends it when creating a user and the API accepts it, so a user can be created with its roles in a single call. Use Set-R1FIDUserRole to change the roles of an existing user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -1814,6 +1846,19 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>roles</maml:name>
+        <maml:description>
+          <maml:para>The role names to associate with the new user.</maml:para>
+          <maml:para>The API schema marks roles as read-only, but the control panel sends it when creating a user and the API accepts it, so a user can be created with its roles in a single call. Use Set-R1FIDUserRole to change the roles of an existing user.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -2757,7 +2802,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="15" aliases="none">
           <maml:name>administrationPermissions</maml:name>
           <maml:description>
-            <maml:para>Hashtable of administration permissions, with userManagementPermission, entryStatisticsPermission, rolesPermission, directoryManagerPermission, controlPanelConfigPermission, accessTokensPermission, licensePermission and maintenanceModePermission keys.</maml:para>
+            <maml:para>Hashtable of administration permissions, with userManagementPermission, entryStatisticsPermission, rolesPermission, directoryManagerPermission, controlPanelConfigPermission, accessTokensPermission, licensePermission, auditLoggingPermission, featureManagementPermission, maintenanceModePermission keys.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
           <dev:type>
@@ -2827,7 +2872,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
           <maml:name>securityPermissions</maml:name>
           <maml:description>
-            <maml:para>Hashtable of security permissions, with attributeEncryptionPermission and accessControlPermission keys.</maml:para>
+            <maml:para>Hashtable of security permissions, with attributeEncryptionPermission, accessControlPermission, passwordPoliciesPermission keys.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
           <dev:type>
@@ -2852,23 +2897,6 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
           <maml:name>tasksPermission</maml:name>
           <maml:description>
             <maml:para>Permission granted over tasks. NONE, VIEW or EDIT.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">NONE</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">VIEW</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">EDIT</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="8" aliases="none">
-          <maml:name>settingsPermission</maml:name>
-          <maml:description>
-            <maml:para>Permission granted over settings. NONE, VIEW or EDIT.</maml:para>
           </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">NONE</command:parameterValue>
@@ -2921,6 +2949,30 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>settingsPermissions</maml:name>
+          <maml:description>
+            <maml:para>Hashtable of settings permissions, with clientProtocolsPermission, clientCertificatePermission, tuningPermission, tokenValidatorPermission keys.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
+          <dev:type>
+            <maml:name>Hashtable</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>tuningPermissions</maml:name>
+          <maml:description>
+            <maml:para>Hashtable of tuning permissions, with backendLimitsPermission, accessRegulationLimitsPermission, changeLogPermission, globalLimitsPermission, customLimitsPermission, globalAttributesPermission, logSettingsPermission keys.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
+          <dev:type>
+            <maml:name>Hashtable</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -2951,7 +3003,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="15" aliases="none">
         <maml:name>administrationPermissions</maml:name>
         <maml:description>
-          <maml:para>Hashtable of administration permissions, with userManagementPermission, entryStatisticsPermission, rolesPermission, directoryManagerPermission, controlPanelConfigPermission, accessTokensPermission, licensePermission and maintenanceModePermission keys.</maml:para>
+          <maml:para>Hashtable of administration permissions, with userManagementPermission, entryStatisticsPermission, rolesPermission, directoryManagerPermission, controlPanelConfigPermission, accessTokensPermission, licensePermission, auditLoggingPermission, featureManagementPermission, maintenanceModePermission keys.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
         <dev:type>
@@ -3119,23 +3171,11 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
         <maml:name>securityPermissions</maml:name>
         <maml:description>
-          <maml:para>Hashtable of security permissions, with attributeEncryptionPermission and accessControlPermission keys.</maml:para>
+          <maml:para>Hashtable of security permissions, with attributeEncryptionPermission, accessControlPermission, passwordPoliciesPermission keys.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
         <dev:type>
           <maml:name>Hashtable</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="8" aliases="none">
-        <maml:name>settingsPermission</maml:name>
-        <maml:description>
-          <maml:para>Permission granted over settings. NONE, VIEW or EDIT.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -3148,6 +3188,30 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>settingsPermissions</maml:name>
+        <maml:description>
+          <maml:para>Hashtable of settings permissions, with clientProtocolsPermission, clientCertificatePermission, tuningPermission, tokenValidatorPermission keys.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
+        <dev:type>
+          <maml:name>Hashtable</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>tuningPermissions</maml:name>
+        <maml:description>
+          <maml:para>Hashtable of tuning permissions, with backendLimitsPermission, accessRegulationLimitsPermission, changeLogPermission, globalLimitsPermission, customLimitsPermission, globalAttributesPermission, logSettingsPermission keys.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
+        <dev:type>
+          <maml:name>Hashtable</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>

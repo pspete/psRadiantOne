@@ -92,6 +92,29 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'sends roles when specified' {
+
+				New-R1FIDUser -username apitest -password ('P@ssword' | ConvertTo-SecureString -AsPlainText -Force) -active $true -roles 'rest-api-readonlyuser' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Decoded = [System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json
+					@($Decoded.roles).Count -eq 1 -and @($Decoded.roles)[0] -eq 'rest-api-readonlyuser'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'omits roles when not specified' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$null -eq ([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).roles
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 		}
 
 	}

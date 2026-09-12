@@ -60,8 +60,13 @@ function New-R1FIDRole {
 			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
-		[ValidateSet('NONE', 'VIEW', 'EDIT')]
-		[string]$settingsPermission,
+		[hashtable]$settingsPermissions,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[hashtable]$tuningPermissions,
 
 		[parameter(
 			Mandatory = $false,

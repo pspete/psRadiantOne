@@ -43,7 +43,13 @@ function New-R1FIDUser {
 			ValueFromPipelineByPropertyName = $true
 		)]
 		[ValidateLength(0, 10000)]
-		[string]$email
+		[string]$email,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[string[]]$roles
 	)
 
 	Begin {
@@ -58,6 +64,12 @@ function New-R1FIDUser {
 
 		$Request = $PSBoundParameters | Get-Parameter
 		$Request['password'] = $password | ConvertTo-InsecureString
+
+		if ($PSBoundParameters.ContainsKey('roles')) {
+
+			$Request['roles'] = @($roles)
+
+		}
 
 		$Body = $Request | ConvertTo-R1SecretBody
 

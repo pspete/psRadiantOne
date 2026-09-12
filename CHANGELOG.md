@@ -18,6 +18,19 @@
 
 ## Fixed
 
+- `New-R1FIDRole` and `Set-R1FIDRole` send the role permissions the API actually accepts. Confirmed
+  against a control panel request captured from a live 8.5 tenant, where the spec proved wrong:
+  - `settingsPermission`, documented as a single NONE/VIEW/EDIT value, does not exist. The API takes
+    `settingsPermissions`, an object of `clientProtocolsPermission`, `clientCertificatePermission`,
+    `tuningPermission` and `tokenValidatorPermission`. A role created with the documented property
+    silently lost its settings permissions.
+  - `tuningPermissions` is absent from the spec and could not be set at all.
+  - `securityPermissions` also takes `passwordPoliciesPermission`, and `administrationPermissions`
+    also takes `auditLoggingPermission` and `featureManagementPermission`.
+- `New-R1FIDUser` accepts `-roles`. The schema marks roles read-only and points at the deprecated
+  roles endpoint, but the control panel sends them when creating a user and the API returns 201, so
+  a user can be created with its roles in one call.
+
 - `Invoke-R1RestMethod` reports the HTTP status when a failed request returns no response body.
   A null `ErrorDetails` parsed as valid JSON, so nothing populated the message and the error surfaced
   empty, naming neither the request nor the status.

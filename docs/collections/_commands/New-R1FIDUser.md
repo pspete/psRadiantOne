@@ -14,14 +14,15 @@ Creates a FID user.
 
 ```
 New-R1FIDUser [-username] <String> [-password] <SecureString> [-active] <Boolean> [[-firstName] <String>]
- [[-lastName] <String>] [[-email] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [[-lastName] <String>] [[-email] <String>] [-roles <String[]>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 Creates a FID user on the RadiantOne deployment.
 
-The roles associated with a user are read-only on the user object, and are set separately with
-Set-R1FIDUserRole.
+Roles may be supplied when creating a user. The API schema marks roles as read-only, but the control
+panel sends them on create and the API accepts them. Use Set-R1FIDUserRole to change the roles of a
+user which already exists.
 
 ## EXAMPLES
 
@@ -157,6 +158,25 @@ Aliases:
 
 Required: True
 Position: 0
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -roles
+The role names to associate with the new user.
+
+The API schema marks roles as read-only, but the control panel sends it when creating a user and
+the API accepts it, so a user can be created with its roles in a single call. Use Set-R1FIDUserRole
+to change the roles of an existing user.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False

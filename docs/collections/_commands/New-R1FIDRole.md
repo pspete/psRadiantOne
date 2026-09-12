@@ -16,11 +16,11 @@ Creates a FID role.
 New-R1FIDRole [-name] <String> [[-entryDn] <String>] [[-directoryBrowserPermission] <String>]
  [[-directoryNamespacePermissions] <Hashtable>] [[-identityManagerPermission] <String>]
  [[-securityPermissions] <Hashtable>] [[-classicControlPanelPermission] <Hashtable>]
- [[-tasksPermission] <String>] [[-settingsPermission] <String>] [[-globalSyncPermission] <String>]
- [[-observabilityPermission] <String>] [[-dashboardPermission] <String>] [[-fileManagerPermission] <String>]
- [[-revokeTokenPermission] <Boolean>] [[-dataCatalogPermissions] <Hashtable>]
- [[-administrationPermissions] <Hashtable>] [[-exportImportPermissions] <Hashtable>] [[-roleToClone] <String>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [[-tasksPermission] <String>] [-settingsPermissions <Hashtable>] [-tuningPermissions <Hashtable>]
+ [[-globalSyncPermission] <String>] [[-observabilityPermission] <String>] [[-dashboardPermission] <String>]
+ [[-fileManagerPermission] <String>] [[-revokeTokenPermission] <Boolean>]
+ [[-dataCatalogPermissions] <Hashtable>] [[-administrationPermissions] <Hashtable>]
+ [[-exportImportPermissions] <Hashtable>] [[-roleToClone] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -86,7 +86,7 @@ Accept wildcard characters: False
 ```
 
 ### -administrationPermissions
-Hashtable of administration permissions, with userManagementPermission, entryStatisticsPermission, rolesPermission, directoryManagerPermission, controlPanelConfigPermission, accessTokensPermission, licensePermission and maintenanceModePermission keys.
+Hashtable of administration permissions, with userManagementPermission, entryStatisticsPermission, rolesPermission, directoryManagerPermission, controlPanelConfigPermission, accessTokensPermission, licensePermission, auditLoggingPermission, featureManagementPermission, maintenanceModePermission keys.
 
 ```yaml
 Type: Hashtable
@@ -317,7 +317,7 @@ Accept wildcard characters: False
 ```
 
 ### -securityPermissions
-Hashtable of security permissions, with attributeEncryptionPermission and accessControlPermission keys.
+Hashtable of security permissions, with attributeEncryptionPermission, accessControlPermission, passwordPoliciesPermission keys.
 
 ```yaml
 Type: Hashtable
@@ -326,22 +326,6 @@ Aliases:
 
 Required: False
 Position: 5
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -settingsPermission
-Permission granted over settings. NONE, VIEW or EDIT.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: NONE, VIEW, EDIT
-
-Required: False
-Position: 8
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
@@ -358,6 +342,36 @@ Accepted values: NONE, VIEW, EDIT
 
 Required: False
 Position: 7
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -settingsPermissions
+Hashtable of settings permissions, with clientProtocolsPermission, clientCertificatePermission, tuningPermission, tokenValidatorPermission keys.
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -tuningPermissions
+Hashtable of tuning permissions, with backendLimitsPermission, accessRegulationLimitsPermission, changeLogPermission, globalLimitsPermission, customLimitsPermission, globalAttributesPermission, logSettingsPermission keys.
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False

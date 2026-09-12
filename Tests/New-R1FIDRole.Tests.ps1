@@ -123,6 +123,32 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'sends settingsPermissions as an object' {
+
+				New-R1FIDRole -name settings -settingsPermissions @{ clientProtocolsPermission = 'EDIT'; tokenValidatorPermission = 'VIEW' } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Decoded = $Body | ConvertFrom-Json
+					($Decoded.settingsPermissions.clientProtocolsPermission -eq 'EDIT') -and
+					($Decoded.settingsPermissions.tokenValidatorPermission -eq 'VIEW')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends tuningPermissions as an object' {
+
+				New-R1FIDRole -name tuning -tuningPermissions @{ logSettingsPermission = 'EDIT' } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($Body | ConvertFrom-Json).tuningPermissions.logSettingsPermission -eq 'EDIT'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 		}
 
 	}
