@@ -2,6 +2,13 @@
 
 ## Added
 
+- External token validator commands: `Get-R1TokenValidator`, `New-R1TokenValidator`,
+  `Set-R1TokenValidator` and `Remove-R1TokenValidator`. The API defines two variants discriminated
+  by `apiService`, but they carry identical properties, so one command covers both. The
+  `claimsMapper` object wraps a single list, which the commands take directly as
+  `-claimsExpressionList`. None have been exercised against a live deployment.
+- Audit logging commands: `Get-R1AuditLogSetting` / `Set-R1AuditLogSetting`, and `Export-R1AuditLog`,
+  which downloads the logs to a file.
 - Attribute encryption commands: `Get-R1AttributeEncryption` / `Set-R1AttributeEncryption`,
   `Get-R1AttributeEncryptionKmsSetting` / `Set-R1AttributeEncryptionKmsSetting`, and
   `Update-R1AttributeEncryptionKey`. The KMS retrieval reports only whether credentials are stored,
