@@ -175,6 +175,17 @@ they cover rather than split into added, changed and fixed.
   reaches the end, so the request is bounded by `-TimeoutSec` and returns what arrived within it.
   `New-R1CustomTask` uploads a compiled class and a properties file together.
 
+### Configuration promotion and the file manager
+
+- Promotion: `Get-R1PromotionState`, `Get-R1PromotionSetting`, `Start-R1PromotionStaging`,
+  `Get-R1PromotionStagedResource`, `Test-R1PromotionStagedResource`, `Clear-R1PromotionStaging`,
+  `Export-R1Configuration`, `Import-R1Configuration`, `Get-R1ConfigurationExportReport` and
+  `Get-R1ConfigurationImportReport`. `Import-R1Configuration -apply $false` is a dry run.
+- File manager: `Get-R1FileManagerDirectory`, `New-R1FileManagerDirectory`,
+  `Remove-R1FileManagerDirectory`, `Rename-R1FileManagerDirectory`, `Get-R1FileContent`,
+  `Set-R1FileContent`, `Import-R1File`, `Export-R1File`, `Remove-R1File` and `New-R1Jar`.
+- `Reset-R1DashboardLink`, which restores the default dashboard links.
+
 ## Notes
 
 These are the behaviours worth knowing before using the module, rather than a record of changes.
