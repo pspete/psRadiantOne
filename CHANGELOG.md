@@ -125,6 +125,17 @@ they cover rather than split into added, changed and fixed.
   The API does not return the bind password, so `Set-R1DataSource` sends null rather than the empty
   string it reads back, which the API documents as leaving the stored password alone. Supply
   `-password` to change it, or `-useExistingCredentials` to keep every stored password.
+- Data source types and plugins: `Get-R1DataSourceType`, `New-R1DataSourceType`,
+  `Set-R1DataSourceType`, `Remove-R1DataSourceType`, `Test-R1DataSourceType`,
+  `Get-R1DataSourcePlugin`, `Add-R1DataSourcePlugin`, `Remove-R1DataSourcePlugin`,
+  `Get-R1DataSourcePluginLibrary` / `Set-R1DataSourcePluginLibrary`, `Get-R1DataSourcePluginClass`,
+  `Import-R1DataSourceType`, `Get-R1DataSourceTypeImport`, `Complete-R1DataSourceTypeImport`,
+  `Remove-R1DataSourceTypeImport`, `Get-R1DataSourceTypeImportMeta`,
+  `New-R1DataSourceTypeImportMeta`, `Set-R1DataSourceTypeImportMeta`,
+  `Remove-R1DataSourceTypeImportMeta` and `Export-R1DataSourceType`.
+  Types do not all carry the same properties, so `Set-R1DataSourceType` builds its request from what
+  the API returned rather than from a fixed list. Uploading templates creates a session which is then
+  inspected, imported or discarded.
 
 ## Notes
 

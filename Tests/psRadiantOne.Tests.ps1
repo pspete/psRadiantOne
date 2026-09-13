@@ -254,6 +254,8 @@ Describe 'Module' -Tag 'Consistency' {
 			'Set-R1SchemaTableField'          = 'The request body is the complete collection of fields by definition, so there is nothing to preserve.'
 			'Add-R1DataSourceSchemaLink'      = 'Links a schema. The identifiers travel in the path and query, or the body is the complete list of schemas to link.'
 			'Remove-R1DataSourceSchemaLink'   = 'Unlinks a schema. The identifiers travel in the path and query, and there is no request body.'
+			'Set-R1DataSourcePluginLibrary'   = 'The request body is the complete collection of library references by definition, so there is nothing to preserve.'
+			'Set-R1DataSourceTypeImportMeta'  = 'The request body is the complete template definition, supplied by the caller after retrieving it.'
 		}
 
 		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse
