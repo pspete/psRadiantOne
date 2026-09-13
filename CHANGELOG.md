@@ -111,6 +111,12 @@ they cover rather than split into added, changed and fixed.
   `New-R1GeneratedSchema`, `Get-R1PublishedSchema` and `Publish-R1Schema`.
   `Set-R1SchemaFullObject` updates a schema together with its tables, fields and relationships in one
   request. `Publish-R1Schema` replaces the whole published set, so a name left out is unpublished.
+- Schema tables and relationships: `Get-R1SchemaTable`, `New-R1SchemaTable`, `Set-R1SchemaTable`,
+  `Remove-R1SchemaTable`, `Add-R1SchemaTable`, `Get-R1SchemaTableField` / `Set-R1SchemaTableField`,
+  `Get-R1SchemaRelationship`, `New-R1SchemaRelationship`, `New-R1RecursiveSchemaRelationship`,
+  `Set-R1SchemaRelationship`, `Remove-R1SchemaRelationship`, `Get-R1SchemaRelationshipTree`,
+  `Merge-R1SchemaObject` and `New-R1SchemaDerivedView`. `Add-R1SchemaTable` appends tables by name;
+  `Set-R1SchemaTableField` replaces the whole field collection.
 
 ## Notes
 
