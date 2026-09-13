@@ -259,6 +259,7 @@ Describe 'Module' -Tag 'Consistency' {
 			'Set-R1LibraryDependency'         = 'The request body is the complete collection of dependencies by definition, so there is nothing to preserve.'
 			'Set-R1JdbcDriverLibrary'         = 'The request body is the complete collection of library references by definition, so there is nothing to preserve.'
 			'Set-R1Library'                   = 'Replaces the library file itself. The body is the uploaded jar, not a partial update of a resource.'
+			'Set-R1DirectoryEntryMember'      = 'The request body is the complete membership list by definition, so there is nothing to preserve.'
 		}
 
 		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse

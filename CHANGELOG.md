@@ -150,6 +150,21 @@ they cover rather than split into added, changed and fixed.
 - Schema comparison: `Compare-R1Schema` returns the differences between a schema and its data source,
   and `Invoke-R1SchemaDiff` applies them, either updating the schema or saving the result as a new one.
 
+### Directory browser
+
+- Entries: `Get-R1DirectoryEntry`, `New-R1DirectoryEntry`, `Set-R1DirectoryEntry`,
+  `Remove-R1DirectoryEntry`, `Rename-R1DirectoryEntry`, `Move-R1DirectoryEntry` and
+  `Reset-R1DirectoryEntryPassword`. `Get-R1DirectoryEntry` both browses and searches: supply a filter
+  and a scope to search, and it follows the cursor until every page has been read.
+- Group membership: `Get-R1DirectoryEntryMember`, `Set-R1DirectoryEntryMember` and
+  `Search-R1DirectoryEntryMember`. Explicit membership by default, dynamic with `-Dynamic`.
+- Saved searches: `Get-R1DirectorySearchInfo` / `Set-R1DirectorySearchInfo`, which store the search
+  tabs and history the control panel shows rather than performing a search.
+- LDIF: `Export-R1DirectoryLdif` writes to the server, `Save-R1DirectoryLdif` downloads,
+  `Import-R1DirectoryLdif` takes a local or a server file, `Get-R1DirectoryLdifFile` and
+  `Remove-R1DirectoryLdifFile` manage what is stored.
+- `Test-R1DirectoryAuthentication` and `Close-R1DirectoryPagedSearch`.
+
 ## Notes
 
 These are the behaviours worth knowing before using the module, rather than a record of changes.
