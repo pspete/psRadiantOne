@@ -136,6 +136,19 @@ they cover rather than split into added, changed and fixed.
   Types do not all carry the same properties, so `Set-R1DataSourceType` builds its request from what
   the API returned rather than from a fixed list. Uploading templates creates a session which is then
   inspected, imported or discarded.
+- Libraries: `Get-R1Library`, `Search-R1Library`, `Import-R1Library`, `Set-R1Library`,
+  `Remove-R1Library`, `Clear-R1Library`, `Get-R1LibraryDependency` / `Set-R1LibraryDependency` and
+  `Get-R1LibraryDependent`.
+- JDBC drivers: `Get-R1JdbcDriverFile`, `Import-R1JdbcDriver`, `Remove-R1JdbcDriver` and
+  `Get-R1JdbcDriverLibrary` / `Set-R1JdbcDriverLibrary`.
+- Data migration: `Get-R1MigrationPlan`, `New-R1MigrationPlan`, `Get-R1MigrationStatus`,
+  `Get-R1MigrationLog`, `Get-R1MigrationExport`, `Export-R1MigrationData`, `Stop-R1Migration` and
+  `Clear-R1Migration`. Only `Get-R1MigrationStatus` answers when no operation is running; the others
+  report an error, so check the status first.
+- Private files: `Import-R1PrivateFile` and `Remove-R1PrivateFile`.
+- Data preview: `Get-R1LdapDataPreview`, which reads from an LDAP source without creating a schema.
+- Schema comparison: `Compare-R1Schema` returns the differences between a schema and its data source,
+  and `Invoke-R1SchemaDiff` applies them, either updating the schema or saving the result as a new one.
 
 ## Notes
 

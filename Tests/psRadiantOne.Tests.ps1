@@ -256,6 +256,9 @@ Describe 'Module' -Tag 'Consistency' {
 			'Remove-R1DataSourceSchemaLink'   = 'Unlinks a schema. The identifiers travel in the path and query, and there is no request body.'
 			'Set-R1DataSourcePluginLibrary'   = 'The request body is the complete collection of library references by definition, so there is nothing to preserve.'
 			'Set-R1DataSourceTypeImportMeta'  = 'The request body is the complete template definition, supplied by the caller after retrieving it.'
+			'Set-R1LibraryDependency'         = 'The request body is the complete collection of dependencies by definition, so there is nothing to preserve.'
+			'Set-R1JdbcDriverLibrary'         = 'The request body is the complete collection of library references by definition, so there is nothing to preserve.'
+			'Set-R1Library'                   = 'Replaces the library file itself. The body is the uploaded jar, not a partial update of a resource.'
 		}
 
 		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse
