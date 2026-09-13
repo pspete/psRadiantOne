@@ -1,4 +1,4 @@
-# Unreleased
+# 0.1
 
 First release. Everything below is new, so the entries are grouped by the area of the RadiantOne API
 they cover rather than split into added, changed and fixed.
