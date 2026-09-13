@@ -47,8 +47,8 @@ The migration endpoints report an error rather than an empty result when no oper
 active. Get-R1MigrationStatus is the one to call first: it answers whether anything is
 running.
 
-Nothing of this kind was configured on the deployment used while building the module, so the
-behaviour of this command rests on the published API definition alone.
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
 
 ## RELATED LINKS
 
