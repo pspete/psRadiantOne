@@ -104,6 +104,14 @@ they cover rather than split into added, changed and fixed.
   `Import-R1DirectorySchemaFile` and `Remove-R1DirectorySchemaFile`. Import takes either a local file,
   sent as multipart form data, or the name of a file already on the server.
 
+### Data catalog
+
+- Schemas: `Get-R1Schema`, `New-R1Schema`, `Set-R1Schema`, `Remove-R1Schema`,
+  `Get-R1SchemaFullObject` / `Set-R1SchemaFullObject`, `Get-R1SchemaAssociatedView`,
+  `New-R1GeneratedSchema`, `Get-R1PublishedSchema` and `Publish-R1Schema`.
+  `Set-R1SchemaFullObject` updates a schema together with its tables, fields and relationships in one
+  request. `Publish-R1Schema` replaces the whole published set, so a name left out is unpublished.
+
 ## Notes
 
 These are the behaviours worth knowing before using the module, rather than a record of changes.

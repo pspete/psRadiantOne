@@ -249,6 +249,8 @@ Describe 'Module' -Tag 'Consistency' {
 			'Set-R1GlobalSpecialAttribute'    = 'The request body has a single property, which is the value being set, so there is nothing to preserve.'
 			'Enable-R1NamingContext'          = 'Toggles the active state. The request body has a single property, which is the state being set.'
 			'Disable-R1NamingContext'         = 'Toggles the active state. The request body has a single property, which is the state being set.'
+			'New-R1GeneratedSchema'           = 'Generates schemas. The body is the list of schemas to generate, not a partial update of a resource.'
+			'Publish-R1Schema'                = 'The request body is the complete list of published schemas by definition, so there is nothing to preserve.'
 		}
 
 		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse
