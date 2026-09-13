@@ -24,7 +24,7 @@
     CompanyName       = 'PSPETE'
 
     # Copyright statement for this module
-    Copyright         = '(c) Pete Maan. All rights reserved.'
+    Copyright         = '(c) 2026 Pete Maan. All rights reserved.'
 
     # Description of the functionality provided by this module
     Description       = 'Enables user interaction with the API for the Radiant Logic RadiantOne platform'
