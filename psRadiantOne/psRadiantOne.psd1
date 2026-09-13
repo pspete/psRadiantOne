@@ -381,7 +381,7 @@
             ProjectUri   = 'https://github.com/pspete/psRadiantOne/'
 
             # A URL to an icon representing this module.
-            # IconUri      = 'https://raw.githubusercontent.com/pspete/psRadiantOne/main/docs/media/images/psRadiantOne-Logo-small.png'
+            IconUri      = 'https://raw.githubusercontent.com/pspete/psRadiantOne/main/docs/media/images/psRadiantOne-Logo-small.png'
 
             # ReleaseNotes of this module
             ReleaseNotes = 'https://github.com/pspete/psRadiantOne/blob/main/CHANGELOG.md'
