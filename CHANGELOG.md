@@ -92,6 +92,18 @@ they cover rather than split into added, changed and fixed.
   `Get-R1NamingContextRelationshipTree`.
 - Namespace views: `Get-R1NamespaceView` and `Remove-R1NamespaceView`.
 
+### Directory schema
+
+- Object classes: `Get-R1DirectoryObjectClass`, `New-R1DirectoryObjectClass`,
+  `Set-R1DirectoryObjectClass`, `Remove-R1DirectoryObjectClass` and `Get-R1DirectoryObjectClassParent`.
+- Attributes: `Get-R1DirectoryAttribute`, `New-R1DirectoryAttribute`, `Set-R1DirectoryAttribute`,
+  `Remove-R1DirectoryAttribute` and `Get-R1DirectoryAttributeSyntax`. `Get-R1DirectoryAttribute`
+  returns attribute names by default and full definitions when `-includeAllProperties` is specified,
+  following the form the API reports in its response.
+- Schema files: `Get-R1DirectorySchemaFile`, `Export-R1DirectorySchemaFile`,
+  `Import-R1DirectorySchemaFile` and `Remove-R1DirectorySchemaFile`. Import takes either a local file,
+  sent as multipart form data, or the name of a file already on the server.
+
 ## Notes
 
 These are the behaviours worth knowing before using the module, rather than a record of changes.

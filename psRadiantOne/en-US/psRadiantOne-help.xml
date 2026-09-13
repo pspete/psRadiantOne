@@ -928,6 +928,125 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Export-R1DirectorySchemaFile</command:name>
+      <command:verb>Export</command:verb>
+      <command:noun>R1DirectorySchemaFile</command:noun>
+      <maml:description>
+        <maml:para>Downloads a directory schema file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Downloads a schema file from the server and writes it into the given directory, keeping the name it has on the server. The file that was written is returned.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Export-R1DirectorySchemaFile</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>fileName</maml:name>
+          <maml:description>
+            <maml:para>The name of the schema file, which must end .ldif or .ldifz.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>The path of the local file to upload.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <maml:name>fileName</maml:name>
+        <maml:description>
+          <maml:para>The name of the schema file, which must end .ldif or .ldifz.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>The path of the local file to upload.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.IO.FileInfo</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Export-R1DirectorySchemaFile -fileName 'ldapschema_14.ldif' -Path 'C:\\schema'</dev:code>
+        <dev:remarks>
+          <maml:para>Downloads ldapschema_14.ldif into C:\schema.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Get-R1DirectorySchemaFile | ForEach-Object { Export-R1DirectorySchemaFile -fileName $PSItem -Path 'C:\\schema' }</dev:code>
+        <dev:remarks>
+          <maml:para>Downloads every schema file on the server.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectorySchemaFile</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Import-R1DirectorySchemaFile</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Export-R1TruststoreCertificate</command:name>
       <command:verb>Export</command:verb>
       <command:noun>R1TruststoreCertificate</command:noun>
@@ -2005,6 +2124,286 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Get-R1DirectoryAttribute</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>R1DirectoryAttribute</command:noun>
+      <maml:description>
+        <maml:para>Returns the attributes in the directory schema.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Returns the attributes of the LDAP schema, or the full definition of a single attribute when one is named.</maml:para>
+      <maml:para>The list form returns attribute names by default and full definitions when includeAllProperties is specified. Which form the server sent is reported by the response itself, so the command returns whichever it receives.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-R1DirectoryAttribute</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>attribute</maml:name>
+          <maml:description>
+            <maml:para>The name of the attribute.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-R1DirectoryAttribute</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>includeAllProperties</maml:name>
+          <maml:description>
+            <maml:para>Returns the full definition of each attribute rather than only its name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>includeSuperior</maml:name>
+          <maml:description>
+            <maml:para>Resolves superior object classes and includes their attributes in the result.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>isUserDefined</maml:name>
+          <maml:description>
+            <maml:para>Sorts the attributes by whether they are user defined.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>attributeObjectClasses</maml:name>
+          <maml:description>
+            <maml:para>Returns only the attributes belonging to the named object classes.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>attribute</maml:name>
+        <maml:description>
+          <maml:para>The name of the attribute.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>includeAllProperties</maml:name>
+        <maml:description>
+          <maml:para>Returns the full definition of each attribute rather than only its name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>includeSuperior</maml:name>
+        <maml:description>
+          <maml:para>Resolves superior object classes and includes their attributes in the result.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>isUserDefined</maml:name>
+        <maml:description>
+          <maml:para>Sorts the attributes by whether they are user defined.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>attributeObjectClasses</maml:name>
+        <maml:description>
+          <maml:para>Returns only the attributes belonging to the named object classes.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>psRadiantOne.DirectorySchemaAttribute</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Get-R1DirectoryAttribute</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the name of every attribute in the schema.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Get-R1DirectoryAttribute -includeAllProperties $true</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the full definition of every attribute.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Get-R1DirectoryAttribute -attribute 'cn'</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the full definition of the cn attribute.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
+        <dev:code>Get-R1DirectoryAttribute -attributeObjectClasses 'inetOrgPerson' -includeSuperior $true</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the attributes of inetOrgPerson, including those it inherits.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>New-R1DirectoryAttribute</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-R1DirectoryAttribute</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Remove-R1DirectoryAttribute</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryAttributeSyntax</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-R1DirectoryAttributeSyntax</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>R1DirectoryAttributeSyntax</command:noun>
+      <maml:description>
+        <maml:para>Returns the attribute syntaxes the deployment supports.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Returns the LDAP syntaxes available when defining an attribute, such as the string, integer and certificate syntaxes.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-R1DirectoryAttributeSyntax</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Get-R1DirectoryAttributeSyntax</dev:code>
+        <dev:remarks>
+          <maml:para>Returns every supported attribute syntax.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryAttribute</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-R1DirectoryAttribute</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Get-R1DirectoryManager</command:name>
       <command:verb>Get</command:verb>
       <command:noun>R1DirectoryManager</command:noun>
@@ -2056,6 +2455,267 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
       </command:example>
     </command:examples>
     <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-R1DirectoryObjectClass</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>R1DirectoryObjectClass</command:noun>
+      <maml:description>
+        <maml:para>Returns the object classes in the directory schema.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Returns the name of every object class in the LDAP schema, or the full definition of a single object class when one is named.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-R1DirectoryObjectClass</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>objectClass</maml:name>
+          <maml:description>
+            <maml:para>The name of the object class.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>objectClass</maml:name>
+        <maml:description>
+          <maml:para>The name of the object class.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>psRadiantOne.ObjectClass</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Get-R1DirectoryObjectClass</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the name of every object class in the schema.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Get-R1DirectoryObjectClass -objectClass 'inetOrgPerson'</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the full definition of inetOrgPerson.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>(Get-R1DirectoryObjectClass -objectClass 'inetOrgPerson').requiredAttrs.name</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the names of the attributes an inetOrgPerson entry must carry.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>New-R1DirectoryObjectClass</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-R1DirectoryObjectClass</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Remove-R1DirectoryObjectClass</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryObjectClassParent</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-R1DirectoryObjectClassParent</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>R1DirectoryObjectClassParent</command:noun>
+      <maml:description>
+        <maml:para>Returns the parent object classes of an object class.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Returns the object classes the named object class inherits from.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-R1DirectoryObjectClassParent</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>objectClass</maml:name>
+          <maml:description>
+            <maml:para>The name of the object class.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <maml:name>objectClass</maml:name>
+        <maml:description>
+          <maml:para>The name of the object class.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Get-R1DirectoryObjectClassParent -objectClass 'inetOrgPerson'</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the object classes inetOrgPerson inherits from.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryObjectClass</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-R1DirectorySchemaFile</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>R1DirectorySchemaFile</command:noun>
+      <maml:description>
+        <maml:para>Returns the directory schema files.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Returns the name of every schema file held on the server.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-R1DirectorySchemaFile</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Get-R1DirectorySchemaFile</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the name of every schema file.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Export-R1DirectorySchemaFile</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Import-R1DirectorySchemaFile</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Remove-R1DirectorySchemaFile</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
@@ -5817,6 +6477,252 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Import-R1DirectorySchemaFile</command:name>
+      <command:verb>Import</command:verb>
+      <command:noun>R1DirectorySchemaFile</command:noun>
+      <maml:description>
+        <maml:para>Imports a directory schema file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Imports schema from an LDIF file, either by uploading one from the local machine or by naming a file already present on the server.</maml:para>
+      <maml:para>A local file is sent as multipart form data, and isOverride controls whether existing entries are overwritten. A server file is named instead, and addBehavior controls the same thing.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Import-R1DirectorySchemaFile</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="FullName">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>The path of the local file to upload.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>isOverride</maml:name>
+          <maml:description>
+            <maml:para>Overwrites entries which already exist. Without it, importing over an existing entry fails.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Import-R1DirectorySchemaFile</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>file</maml:name>
+          <maml:description>
+            <maml:para>The name of a schema file already present on the server.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>addBehavior</maml:name>
+          <maml:description>
+            <maml:para>Whether existing entries are left alone or overwritten.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="FullName">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>The path of the local file to upload.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>isOverride</maml:name>
+        <maml:description>
+          <maml:para>Overwrites entries which already exist. Without it, importing over an existing entry fails.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>file</maml:name>
+        <maml:description>
+          <maml:para>The name of a schema file already present on the server.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>addBehavior</maml:name>
+        <maml:description>
+          <maml:para>Whether existing entries are left alone or overwritten.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Void</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Import-R1DirectorySchemaFile -Path .\\custom.ldif</dev:code>
+        <dev:remarks>
+          <maml:para>Uploads and imports a local schema file.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Import-R1DirectorySchemaFile -Path .\\custom.ldif -isOverride $true</dev:code>
+        <dev:remarks>
+          <maml:para>Uploads and imports a local schema file, overwriting entries which already exist.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Import-R1DirectorySchemaFile -file 'ldapschema_14.ldif' -addBehavior 'ADD_OR_OVERRIDE'</dev:code>
+        <dev:remarks>
+          <maml:para>Imports a schema file already on the server, overwriting entries which already exist.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectorySchemaFile</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Export-R1DirectorySchemaFile</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Import-R1InterceptionScript</command:name>
       <command:verb>Import</command:verb>
       <command:noun>R1InterceptionScript</command:noun>
@@ -7132,6 +8038,593 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
       </command:example>
     </command:examples>
     <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-R1DirectoryAttribute</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>R1DirectoryAttribute</command:noun>
+      <maml:description>
+        <maml:para>Adds an attribute to the directory schema.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Adds a new attribute to the LDAP schema.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-R1DirectoryAttribute</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>name</maml:name>
+          <maml:description>
+            <maml:para>The name of the attribute.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="10" aliases="none">
+          <maml:name>objectclass</maml:name>
+          <maml:description>
+            <maml:para>The object class the attribute belongs to.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+          <maml:name>alias</maml:name>
+          <maml:description>
+            <maml:para>Alternative names for the attribute.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+          <maml:name>oid</maml:name>
+          <maml:description>
+            <maml:para>The object identifier of the attribute.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+          <maml:name>description</maml:name>
+          <maml:description>
+            <maml:para>A description of the attribute.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
+          <maml:name>syntax</maml:name>
+          <maml:description>
+            <maml:para>The LDAP syntax of the attribute. Get-R1DirectoryAttributeSyntax lists those the deployment supports.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="6" aliases="none">
+          <maml:name>multiValued</maml:name>
+          <maml:description>
+            <maml:para>Whether the attribute may hold more than one value.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="7" aliases="none">
+          <maml:name>operational</maml:name>
+          <maml:description>
+            <maml:para>Whether the attribute is operational, and so not returned unless asked for by name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="8" aliases="none">
+          <maml:name>isRequired</maml:name>
+          <maml:description>
+            <maml:para>Whether the attribute is required.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="9" aliases="none">
+          <maml:name>isHiddenInLogs</maml:name>
+          <maml:description>
+            <maml:para>Whether the value of the attribute is hidden in the logs.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <maml:name>name</maml:name>
+        <maml:description>
+          <maml:para>The name of the attribute.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+        <maml:name>alias</maml:name>
+        <maml:description>
+          <maml:para>Alternative names for the attribute.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+        <maml:name>oid</maml:name>
+        <maml:description>
+          <maml:para>The object identifier of the attribute.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+        <maml:name>description</maml:name>
+        <maml:description>
+          <maml:para>A description of the attribute.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
+        <maml:name>syntax</maml:name>
+        <maml:description>
+          <maml:para>The LDAP syntax of the attribute. Get-R1DirectoryAttributeSyntax lists those the deployment supports.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="6" aliases="none">
+        <maml:name>multiValued</maml:name>
+        <maml:description>
+          <maml:para>Whether the attribute may hold more than one value.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="7" aliases="none">
+        <maml:name>operational</maml:name>
+        <maml:description>
+          <maml:para>Whether the attribute is operational, and so not returned unless asked for by name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="8" aliases="none">
+        <maml:name>isRequired</maml:name>
+        <maml:description>
+          <maml:para>Whether the attribute is required.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="9" aliases="none">
+        <maml:name>isHiddenInLogs</maml:name>
+        <maml:description>
+          <maml:para>Whether the value of the attribute is hidden in the logs.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="10" aliases="none">
+        <maml:name>objectclass</maml:name>
+        <maml:description>
+          <maml:para>The object class the attribute belongs to.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Void</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>New-R1DirectoryAttribute -name 'employeeShift' -syntax 'Directory String syntax'</dev:code>
+        <dev:remarks>
+          <maml:para>Adds a single valued string attribute called employeeShift.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>New-R1DirectoryAttribute -name 'employeeShift' -syntax 'Directory String syntax' -multiValued $true -alias 'shift'</dev:code>
+        <dev:remarks>
+          <maml:para>Adds a multi valued attribute with an alias.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryAttribute</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryAttributeSyntax</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-R1DirectoryObjectClass</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>R1DirectoryObjectClass</command:noun>
+      <maml:description>
+        <maml:para>Adds an object class to the directory schema.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Adds a new object class to the LDAP schema.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-R1DirectoryObjectClass</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>objectClass</maml:name>
+          <maml:description>
+            <maml:para>The name of the object class.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+          <maml:name>superClass</maml:name>
+          <maml:description>
+            <maml:para>The object class this one inherits from.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+          <maml:name>isAuxiliary</maml:name>
+          <maml:description>
+            <maml:para>Whether the object class is auxiliary rather than structural.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+          <maml:name>requiredAttrs</maml:name>
+          <maml:description>
+            <maml:para>The attributes an entry of this object class must carry.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Object[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
+          <maml:name>optionalAttrs</maml:name>
+          <maml:description>
+            <maml:para>The attributes an entry of this object class may carry.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Object[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <maml:name>objectClass</maml:name>
+        <maml:description>
+          <maml:para>The name of the object class.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+        <maml:name>superClass</maml:name>
+        <maml:description>
+          <maml:para>The object class this one inherits from.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+        <maml:name>isAuxiliary</maml:name>
+        <maml:description>
+          <maml:para>Whether the object class is auxiliary rather than structural.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+        <maml:name>requiredAttrs</maml:name>
+        <maml:description>
+          <maml:para>The attributes an entry of this object class must carry.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Object[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
+        <maml:name>optionalAttrs</maml:name>
+        <maml:description>
+          <maml:para>The attributes an entry of this object class may carry.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Object[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Void</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>New-R1DirectoryObjectClass -objectClass 'myPerson' -superClass 'person'</dev:code>
+        <dev:remarks>
+          <maml:para>Adds the object class myPerson, inheriting from person.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryObjectClass</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-R1DirectoryObjectClass</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
@@ -10422,6 +11915,396 @@ Get-R1Operation -name $op.name</dev:code>
       </command:example>
     </command:examples>
     <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Remove-R1DirectoryAttribute</command:name>
+      <command:verb>Remove</command:verb>
+      <command:noun>R1DirectoryAttribute</command:noun>
+      <maml:description>
+        <maml:para>Deletes an attribute from the directory schema.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Deletes the named attribute from the LDAP schema.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Remove-R1DirectoryAttribute</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="name">
+          <maml:name>attribute</maml:name>
+          <maml:description>
+            <maml:para>The name of the attribute.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="name">
+        <maml:name>attribute</maml:name>
+        <maml:description>
+          <maml:para>The name of the attribute.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Void</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Remove-R1DirectoryAttribute -attribute 'employeeShift'</dev:code>
+        <dev:remarks>
+          <maml:para>Deletes the employeeShift attribute, after prompting for confirmation.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryAttribute</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Remove-R1DirectoryObjectClass</command:name>
+      <command:verb>Remove</command:verb>
+      <command:noun>R1DirectoryObjectClass</command:noun>
+      <maml:description>
+        <maml:para>Deletes an object class from the directory schema.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Deletes the named object class from the LDAP schema.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Remove-R1DirectoryObjectClass</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>objectClass</maml:name>
+          <maml:description>
+            <maml:para>The name of the object class.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <maml:name>objectClass</maml:name>
+        <maml:description>
+          <maml:para>The name of the object class.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Void</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Remove-R1DirectoryObjectClass -objectClass 'myPerson'</dev:code>
+        <dev:remarks>
+          <maml:para>Deletes the object class myPerson, after prompting for confirmation.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryObjectClass</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Remove-R1DirectorySchemaFile</command:name>
+      <command:verb>Remove</command:verb>
+      <command:noun>R1DirectorySchemaFile</command:noun>
+      <maml:description>
+        <maml:para>Deletes a directory schema file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Deletes the named schema file from the server.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Remove-R1DirectorySchemaFile</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>fileName</maml:name>
+          <maml:description>
+            <maml:para>The name of the schema file, which must end .ldif or .ldifz.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <maml:name>fileName</maml:name>
+        <maml:description>
+          <maml:para>The name of the schema file, which must end .ldif or .ldifz.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Void</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Remove-R1DirectorySchemaFile -fileName 'custom.ldif'</dev:code>
+        <dev:remarks>
+          <maml:para>Deletes custom.ldif, after prompting for confirmation.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectorySchemaFile</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
@@ -15373,6 +17256,335 @@ Get-R1Operation -name $op.name</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Set-R1DirectoryAttribute</command:name>
+      <command:verb>Set</command:verb>
+      <command:noun>R1DirectoryAttribute</command:noun>
+      <maml:description>
+        <maml:para>Updates an attribute in the directory schema.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Updates the definition of an attribute in the LDAP schema.</maml:para>
+      <maml:para>The current definition is retrieved before it is updated, and sent back with the supplied values applied over it, so a property left unspecified keeps its current value. The command therefore issues a GET followed by a PUT, and the account needs permission to read the definition as well as to change it.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Set-R1DirectoryAttribute</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="name">
+          <maml:name>attribute</maml:name>
+          <maml:description>
+            <maml:para>The name of the attribute.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+          <maml:name>alias</maml:name>
+          <maml:description>
+            <maml:para>Alternative names for the attribute.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+          <maml:name>description</maml:name>
+          <maml:description>
+            <maml:para>A description of the attribute.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+          <maml:name>syntax</maml:name>
+          <maml:description>
+            <maml:para>The LDAP syntax of the attribute. Get-R1DirectoryAttributeSyntax lists those the deployment supports.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
+          <maml:name>multiValued</maml:name>
+          <maml:description>
+            <maml:para>Whether the attribute may hold more than one value.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="6" aliases="none">
+          <maml:name>operational</maml:name>
+          <maml:description>
+            <maml:para>Whether the attribute is operational, and so not returned unless asked for by name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="7" aliases="none">
+          <maml:name>isRequired</maml:name>
+          <maml:description>
+            <maml:para>Whether the attribute is required.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="8" aliases="none">
+          <maml:name>isHiddenInLogs</maml:name>
+          <maml:description>
+            <maml:para>Whether the value of the attribute is hidden in the logs.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="9" aliases="none">
+          <maml:name>objectclass</maml:name>
+          <maml:description>
+            <maml:para>The object class the attribute belongs to.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="name">
+        <maml:name>attribute</maml:name>
+        <maml:description>
+          <maml:para>The name of the attribute.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+        <maml:name>alias</maml:name>
+        <maml:description>
+          <maml:para>Alternative names for the attribute.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+        <maml:name>description</maml:name>
+        <maml:description>
+          <maml:para>A description of the attribute.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+        <maml:name>syntax</maml:name>
+        <maml:description>
+          <maml:para>The LDAP syntax of the attribute. Get-R1DirectoryAttributeSyntax lists those the deployment supports.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
+        <maml:name>multiValued</maml:name>
+        <maml:description>
+          <maml:para>Whether the attribute may hold more than one value.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="6" aliases="none">
+        <maml:name>operational</maml:name>
+        <maml:description>
+          <maml:para>Whether the attribute is operational, and so not returned unless asked for by name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="7" aliases="none">
+        <maml:name>isRequired</maml:name>
+        <maml:description>
+          <maml:para>Whether the attribute is required.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="8" aliases="none">
+        <maml:name>isHiddenInLogs</maml:name>
+        <maml:description>
+          <maml:para>Whether the value of the attribute is hidden in the logs.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="9" aliases="none">
+        <maml:name>objectclass</maml:name>
+        <maml:description>
+          <maml:para>The object class the attribute belongs to.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Void</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>The object identifier and whether the attribute is user generated are maintained by the server and cannot be changed here. They are sent back unaltered so that the update carries the complete definition.</maml:para>
+        <maml:para>A collection which is specified replaces the collection currently configured, rather than being added to it. Retrieve the current value, add to it and pass the result back to append.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Set-R1DirectoryAttribute -attribute 'employeeShift' -multiValued $true</dev:code>
+        <dev:remarks>
+          <maml:para>Makes employeeShift multi valued, leaving its other properties as they are.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryAttribute</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryAttributeSyntax</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Set-R1DirectoryManager</command:name>
       <command:verb>Set</command:verb>
       <command:noun>R1DirectoryManager</command:noun>
@@ -15588,6 +17800,239 @@ Get-R1Operation -name $op.name</dev:code>
       </command:example>
     </command:examples>
     <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Set-R1DirectoryObjectClass</command:name>
+      <command:verb>Set</command:verb>
+      <command:noun>R1DirectoryObjectClass</command:noun>
+      <maml:description>
+        <maml:para>Updates an object class in the directory schema.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Updates the definition of an object class in the LDAP schema.</maml:para>
+      <maml:para>The current definition is retrieved before it is updated, and sent back with the supplied values applied over it, so a property left unspecified keeps its current value. The command therefore issues a GET followed by a PUT, and the account needs permission to read the definition as well as to change it.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Set-R1DirectoryObjectClass</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>objectClass</maml:name>
+          <maml:description>
+            <maml:para>The name of the object class.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+          <maml:name>superClass</maml:name>
+          <maml:description>
+            <maml:para>The object class this one inherits from.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+          <maml:name>isAuxiliary</maml:name>
+          <maml:description>
+            <maml:para>Whether the object class is auxiliary rather than structural.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+          <maml:name>requiredAttrs</maml:name>
+          <maml:description>
+            <maml:para>The attributes an entry of this object class must carry.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Object[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
+          <maml:name>optionalAttrs</maml:name>
+          <maml:description>
+            <maml:para>The attributes an entry of this object class may carry.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Object[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <maml:name>objectClass</maml:name>
+        <maml:description>
+          <maml:para>The name of the object class.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+        <maml:name>superClass</maml:name>
+        <maml:description>
+          <maml:para>The object class this one inherits from.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+        <maml:name>isAuxiliary</maml:name>
+        <maml:description>
+          <maml:para>Whether the object class is auxiliary rather than structural.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+        <maml:name>requiredAttrs</maml:name>
+        <maml:description>
+          <maml:para>The attributes an entry of this object class must carry.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Object[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
+        <maml:name>optionalAttrs</maml:name>
+        <maml:description>
+          <maml:para>The attributes an entry of this object class may carry.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Object[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Void</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>The object identifier and whether the class is user defined are maintained by the server and cannot be changed here. They are sent back unaltered so that the update carries the complete definition.</maml:para>
+        <maml:para>A collection which is specified replaces the collection currently configured, rather than being added to it. Retrieve the current value, add to it and pass the result back to append.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Set-R1DirectoryObjectClass -objectClass 'myPerson' -superClass 'organizationalPerson'</dev:code>
+        <dev:remarks>
+          <maml:para>Changes the class myPerson inherits from, leaving its other properties as they are.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1DirectoryObjectClass</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-R1DirectoryObjectClass</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
