@@ -117,6 +117,14 @@ they cover rather than split into added, changed and fixed.
   `Set-R1SchemaRelationship`, `Remove-R1SchemaRelationship`, `Get-R1SchemaRelationshipTree`,
   `Merge-R1SchemaObject` and `New-R1SchemaDerivedView`. `Add-R1SchemaTable` appends tables by name;
   `Set-R1SchemaTableField` replaces the whole field collection.
+- Data sources: `Get-R1DataSource`, `New-R1DataSource`, `Set-R1DataSource`, `Remove-R1DataSource`,
+  `Copy-R1DataSource`, `Search-R1DataSource`, `Test-R1DataSourceConnection`, `Get-R1DataSourceObject`,
+  `Get-R1DataSourceTable`, `Get-R1DataSourceGroup`, `Add-R1DataSourceSchemaLink`,
+  `Remove-R1DataSourceSchemaLink`, `Import-R1DataSource` and `Export-R1DataSource`.
+  `New-R1DataSource` has a parameter set per kind of source: LDAP, database and custom.
+  The API does not return the bind password, so `Set-R1DataSource` sends null rather than the empty
+  string it reads back, which the API documents as leaving the stored password alone. Supply
+  `-password` to change it, or `-useExistingCredentials` to keep every stored password.
 
 ## Notes
 

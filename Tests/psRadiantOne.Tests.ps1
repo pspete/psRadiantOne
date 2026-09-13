@@ -252,6 +252,8 @@ Describe 'Module' -Tag 'Consistency' {
 			'New-R1GeneratedSchema'           = 'Generates schemas. The body is the list of schemas to generate, not a partial update of a resource.'
 			'Publish-R1Schema'                = 'The request body is the complete list of published schemas by definition, so there is nothing to preserve.'
 			'Set-R1SchemaTableField'          = 'The request body is the complete collection of fields by definition, so there is nothing to preserve.'
+			'Add-R1DataSourceSchemaLink'      = 'Links a schema. The identifiers travel in the path and query, or the body is the complete list of schemas to link.'
+			'Remove-R1DataSourceSchemaLink'   = 'Unlinks a schema. The identifiers travel in the path and query, and there is no request body.'
 		}
 
 		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse
