@@ -165,6 +165,16 @@ they cover rather than split into added, changed and fixed.
   `Remove-R1DirectoryLdifFile` manage what is stored.
 - `Test-R1DirectoryAuthentication` and `Close-R1DirectoryPagedSearch`.
 
+### Task management
+
+- Scheduler: `Get-R1TaskScheduler` / `Set-R1TaskScheduler`, `Start-R1TaskScheduler`,
+  `Stop-R1TaskScheduler` and `Restart-R1TaskScheduler`.
+- Tasks: `Get-R1Task`, `Set-R1Task`, `Remove-R1Task`, `Start-R1Task`, `Stop-R1Task`,
+  `New-R1CustomTask` and `Get-R1TaskLog`.
+  `Get-R1TaskLog -Tail` follows a running log, and the endpoint does not close the response when it
+  reaches the end, so the request is bounded by `-TimeoutSec` and returns what arrived within it.
+  `New-R1CustomTask` uploads a compiled class and a properties file together.
+
 ## Notes
 
 These are the behaviours worth knowing before using the module, rather than a record of changes.
