@@ -28,7 +28,7 @@ The module covers the RadiantOne v8.x API as published in the vendor's OpenAPI d
 [tests-site]: https://ci.appveyor.com/project/pspete/psRadiantOne
 [downloads]: https://img.shields.io/powershellgallery/dt/psRadiantOne.svg?color=blue
 [cf-site]: https://www.codefactor.io/repository/github/pspete/psRadiantOne
-[codefactor]: https://www.codefactor.io/repository/github/pspete/psRadiantOne/badge
+[codefactor]: https://www.codefactor.io/repository/github/pspete/psradiantone/badge?s=1093220a061c51b1db44a6f3d7fa8b9fb23d4a6f
 [codecov]: https://codecov.io/gh/pspete/psRadiantOne/branch/main/graph/badge.svg
 [codecov-link]: https://codecov.io/gh/pspete/psRadiantOne
 [license]: https://img.shields.io/github/license/pspete/psRadiantOne.svg
