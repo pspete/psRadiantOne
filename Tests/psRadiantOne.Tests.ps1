@@ -249,6 +249,16 @@ Describe 'Module' -Tag 'Consistency' {
 			'Set-R1GlobalSpecialAttribute'    = 'The request body has a single property, which is the value being set, so there is nothing to preserve.'
 			'Enable-R1NamingContext'          = 'Toggles the active state. The request body has a single property, which is the state being set.'
 			'Disable-R1NamingContext'         = 'Toggles the active state. The request body has a single property, which is the state being set.'
+			'New-R1GeneratedSchema'           = 'Generates schemas. The body is the list of schemas to generate, not a partial update of a resource.'
+			'Publish-R1Schema'                = 'The request body is the complete list of published schemas by definition, so there is nothing to preserve.'
+			'Set-R1SchemaTableField'          = 'The request body is the complete collection of fields by definition, so there is nothing to preserve.'
+			'Add-R1DataSourceSchemaLink'      = 'Links a schema. The identifiers travel in the path and query, or the body is the complete list of schemas to link.'
+			'Remove-R1DataSourceSchemaLink'   = 'Unlinks a schema. The identifiers travel in the path and query, and there is no request body.'
+			'Set-R1DataSourcePluginLibrary'   = 'The request body is the complete collection of library references by definition, so there is nothing to preserve.'
+			'Set-R1DataSourceTypeImportMeta'  = 'The request body is the complete template definition, supplied by the caller after retrieving it.'
+			'Set-R1LibraryDependency'         = 'The request body is the complete collection of dependencies by definition, so there is nothing to preserve.'
+			'Set-R1JdbcDriverLibrary'         = 'The request body is the complete collection of library references by definition, so there is nothing to preserve.'
+			'Set-R1Library'                   = 'Replaces the library file itself. The body is the uploaded jar, not a partial update of a resource.'
 		}
 
 		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse

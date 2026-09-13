@@ -104,6 +104,52 @@ they cover rather than split into added, changed and fixed.
   `Import-R1DirectorySchemaFile` and `Remove-R1DirectorySchemaFile`. Import takes either a local file,
   sent as multipart form data, or the name of a file already on the server.
 
+### Data catalog
+
+- Schemas: `Get-R1Schema`, `New-R1Schema`, `Set-R1Schema`, `Remove-R1Schema`,
+  `Get-R1SchemaFullObject` / `Set-R1SchemaFullObject`, `Get-R1SchemaAssociatedView`,
+  `New-R1GeneratedSchema`, `Get-R1PublishedSchema` and `Publish-R1Schema`.
+  `Set-R1SchemaFullObject` updates a schema together with its tables, fields and relationships in one
+  request. `Publish-R1Schema` replaces the whole published set, so a name left out is unpublished.
+- Schema tables and relationships: `Get-R1SchemaTable`, `New-R1SchemaTable`, `Set-R1SchemaTable`,
+  `Remove-R1SchemaTable`, `Add-R1SchemaTable`, `Get-R1SchemaTableField` / `Set-R1SchemaTableField`,
+  `Get-R1SchemaRelationship`, `New-R1SchemaRelationship`, `New-R1RecursiveSchemaRelationship`,
+  `Set-R1SchemaRelationship`, `Remove-R1SchemaRelationship`, `Get-R1SchemaRelationshipTree`,
+  `Merge-R1SchemaObject` and `New-R1SchemaDerivedView`. `Add-R1SchemaTable` appends tables by name;
+  `Set-R1SchemaTableField` replaces the whole field collection.
+- Data sources: `Get-R1DataSource`, `New-R1DataSource`, `Set-R1DataSource`, `Remove-R1DataSource`,
+  `Copy-R1DataSource`, `Search-R1DataSource`, `Test-R1DataSourceConnection`, `Get-R1DataSourceObject`,
+  `Get-R1DataSourceTable`, `Get-R1DataSourceGroup`, `Add-R1DataSourceSchemaLink`,
+  `Remove-R1DataSourceSchemaLink`, `Import-R1DataSource` and `Export-R1DataSource`.
+  `New-R1DataSource` has a parameter set per kind of source: LDAP, database and custom.
+  The API does not return the bind password, so `Set-R1DataSource` sends null rather than the empty
+  string it reads back, which the API documents as leaving the stored password alone. Supply
+  `-password` to change it, or `-useExistingCredentials` to keep every stored password.
+- Data source types and plugins: `Get-R1DataSourceType`, `New-R1DataSourceType`,
+  `Set-R1DataSourceType`, `Remove-R1DataSourceType`, `Test-R1DataSourceType`,
+  `Get-R1DataSourcePlugin`, `Add-R1DataSourcePlugin`, `Remove-R1DataSourcePlugin`,
+  `Get-R1DataSourcePluginLibrary` / `Set-R1DataSourcePluginLibrary`, `Get-R1DataSourcePluginClass`,
+  `Import-R1DataSourceType`, `Get-R1DataSourceTypeImport`, `Complete-R1DataSourceTypeImport`,
+  `Remove-R1DataSourceTypeImport`, `Get-R1DataSourceTypeImportMeta`,
+  `New-R1DataSourceTypeImportMeta`, `Set-R1DataSourceTypeImportMeta`,
+  `Remove-R1DataSourceTypeImportMeta` and `Export-R1DataSourceType`.
+  Types do not all carry the same properties, so `Set-R1DataSourceType` builds its request from what
+  the API returned rather than from a fixed list. Uploading templates creates a session which is then
+  inspected, imported or discarded.
+- Libraries: `Get-R1Library`, `Search-R1Library`, `Import-R1Library`, `Set-R1Library`,
+  `Remove-R1Library`, `Clear-R1Library`, `Get-R1LibraryDependency` / `Set-R1LibraryDependency` and
+  `Get-R1LibraryDependent`.
+- JDBC drivers: `Get-R1JdbcDriverFile`, `Import-R1JdbcDriver`, `Remove-R1JdbcDriver` and
+  `Get-R1JdbcDriverLibrary` / `Set-R1JdbcDriverLibrary`.
+- Data migration: `Get-R1MigrationPlan`, `New-R1MigrationPlan`, `Get-R1MigrationStatus`,
+  `Get-R1MigrationLog`, `Get-R1MigrationExport`, `Export-R1MigrationData`, `Stop-R1Migration` and
+  `Clear-R1Migration`. Only `Get-R1MigrationStatus` answers when no operation is running; the others
+  report an error, so check the status first.
+- Private files: `Import-R1PrivateFile` and `Remove-R1PrivateFile`.
+- Data preview: `Get-R1LdapDataPreview`, which reads from an LDAP source without creating a schema.
+- Schema comparison: `Compare-R1Schema` returns the differences between a schema and its data source,
+  and `Invoke-R1SchemaDiff` applies them, either updating the schema or saving the result as a new one.
+
 ## Notes
 
 These are the behaviours worth knowing before using the module, rather than a record of changes.

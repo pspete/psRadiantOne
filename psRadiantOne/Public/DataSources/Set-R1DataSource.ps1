@@ -1,0 +1,173 @@
+# .ExternalHelp psRadiantOne-help.xml
+function Set-R1DataSource {
+	[CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
+	[OutputType([void])]
+	param(
+		[parameter(
+			Mandatory = $true,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[ValidateNotNullOrEmpty()]
+		[string]$name,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[bool]$active,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[string]$description,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[string]$defaultSchema,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[string[]]$addedSchemas,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[Alias('host')]
+		[string]$hostName,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[int]$port,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[bool]$ssl,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[string]$bindDn,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[string]$baseDn,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[string]$url,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[string]$username,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[hashtable]$customProps,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[securestring]$password,
+
+		[parameter(Mandatory = $false)]
+		[switch]$useExistingCredentials
+	)
+
+	Begin {
+
+		Assert-R1Session -RequireToken
+
+	}#begin
+
+	Process {
+
+		$Path = "data_sources/$($name | Get-EscapedString)"
+
+		if ($useExistingCredentials) {
+
+			$Path = "$Path`?useExistingCredentials=true"
+
+		}
+
+		$URI = Resolve-R1ServiceUrl -Service Catalog -Path $Path
+
+		#Retrieve the data source and send it back with the supplied values applied over it, so a
+		#property left unspecified keeps its current value.
+		$Existing = Get-R1DataSource -name $name
+
+		#The shape differs by category, so the template is built from what the API returned rather
+		#than from a fixed list of properties.
+		$Template = [ordered]@{ }
+
+		foreach ($Property in $Existing.psobject.Properties) {
+
+			$Template[$Property.Name] = $Property.Value
+
+		}
+
+		$Bound = $PSBoundParameters | Get-Parameter -ParametersToRemove password, useExistingCredentials
+
+		if ($Bound.Contains('hostName')) {
+
+			$Bound['host'] = $Bound['hostName']
+			$null = $Bound.Remove('hostName')
+
+		}
+
+		foreach ($Key in $Bound.Keys) {
+
+			$Template[$Key] = $Bound[$Key]
+
+		}
+
+		if ($Template.Contains('addedSchemas')) {
+
+			$Template['addedSchemas'] = @($Template['addedSchemas'])
+
+		}
+
+		#A password read back from the API is an empty string when one is set, which the API would
+		#read as an instruction to clear it. Null tells the server to keep the stored password.
+		if ($PSBoundParameters.ContainsKey('password')) {
+
+			$Template['password'] = $password | ConvertTo-InsecureString
+
+		} elseif ($Template.Contains('password')) {
+
+			$Template['password'] = $null
+
+		}
+
+		$Body = $Template | ConvertTo-R1SecretBody
+
+		if ($PSCmdlet.ShouldProcess($name, 'Update Data Source')) {
+
+			$null = Invoke-R1RestMethod -Uri $URI -Method PUT -Body $Body
+
+		}
+
+	}#process
+
+	End { }#end
+
+}
