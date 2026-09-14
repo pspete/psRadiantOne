@@ -28,8 +28,10 @@ function Reset-R1DirectoryEntryPassword {
 
 		$URI = Resolve-R1ServiceUrl -Service Browser -Path "directory_browser/$($dn | Get-EscapedString)/reset_password"
 
-		#The request body is the password itself, as a json string
-		$Body = ConvertTo-R1SecretBody -InputObject ($password | ConvertTo-InsecureString)
+		#The request body is the password itself. The endpoint stores what it is sent without
+		#parsing it as json, so a json encoded value would be stored with its quote characters and
+		#the password the caller supplied would never authenticate.
+		$Body = ConvertTo-R1SecretBody -InputObject ($password | ConvertTo-InsecureString) -Raw
 
 		if ($PSCmdlet.ShouldProcess($dn, 'Reset Password')) {
 

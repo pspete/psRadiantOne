@@ -134,6 +134,80 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Redirection' {
+
+			#The API answers a create with 201 Created and a Location header naming an internal
+			#http host. Without this, PowerShell rejects the response of a request which has
+			#already succeeded.
+			It 'permits the insecure redirect target the api returns from a create' -Skip:(-not $Script:AllowInsecureRedirectSupported) {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/directory-browser-service' -Method POST -Body '{}'
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					$AllowInsecureRedirect -eq $true
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'does not send AllowInsecureRedirect where the parameter does not exist' -Skip:($Script:AllowInsecureRedirectSupported) {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					-not $PSBoundParameters.ContainsKey('AllowInsecureRedirect')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			#PowerShell would otherwise carry the bearer token to the redirect target, which the
+			#api names as a plain http host.
+			It 'never preserves authorization across a redirect' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					-not $PSBoundParameters.ContainsKey('PreserveAuthorizationOnRedirect')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
+		Context 'Version' {
+
+			It 'records the deployment version reported in the response header' {
+
+				Mock Invoke-WebRequest -MockWith {
+					[pscustomobject]@{
+						'StatusCode' = 999
+						'Headers'    = @{ 'x-radiantone-iddm-version' = @('8.5.3') }
+					}
+				}
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.Version | Should -Be '8.5.3'
+
+			}
+
+			It 'leaves the recorded version alone when a response does not report one' {
+
+				$Script:psRadiantOneSession.Version = '8.5.3'
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.Version | Should -Be '8.5.3'
+
+			}
+
+		}
+
 		Context 'LastCommandResults' {
 
 			BeforeEach {

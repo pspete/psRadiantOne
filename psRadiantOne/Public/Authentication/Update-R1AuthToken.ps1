@@ -30,6 +30,8 @@ function Update-R1AuthToken {
 			$Script:psRadiantOneSession.TokenExpiry = $Claims.Expiry
 			$Script:psRadiantOneSession.Privileges = $Claims.Privileges
 
+			Set-R1WebSessionToken
+
 		}
 
 	}#process

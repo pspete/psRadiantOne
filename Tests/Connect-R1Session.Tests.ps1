@@ -55,6 +55,55 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			$response = Connect-R1Session -BaseURI 'https://radiantone.company.com' -Credential $Credential
 		}
 
+		Context 'WebSession' {
+
+			BeforeEach {
+
+				#Stand in for Invoke-R1RestMethod populating the module scope WebSession from the
+				#login request, whose Authorization header is the Basic credential.
+				Mock Invoke-R1RestMethod -MockWith {
+					$Script:psRadiantOneSession.WebSession = [Microsoft.PowerShell.Commands.WebRequestSession]::new()
+					$Script:psRadiantOneSession.WebSession.Headers['Authorization'] = 'Basic dGVzdHVzZXI6UEBzc3dvcmQ='
+					[pscustomobject]@{ 'authenticated' = $true; 'token' = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVpZD10ZXN0dXNlcixvdT1nbG9iYWx1c2Vycyxjbj1jb25maWciLCJleHAiOjE4OTM0NTYwMDAsInByaXZpbGVnZXMiOlsiUk9MRV9DT05GSUdfUkVBRCIsIlJPTEVfQ09ORklHX1dSSVRFIl0sIm9yZ2FuaXphdGlvbiI6IlRlc3QgT3JnIiwic2VydmVyIjoiaHR0cHM6Ly9jcC50ZXN0LmNvbSJ9.signature' }
+				}
+
+				$Credential = New-Object System.Management.Automation.PSCredential('testuser', ('P@ssword' | ConvertTo-SecureString -AsPlainText -Force))
+				$null = Connect-R1Session -BaseURI 'https://radiantone.company.com' -Credential $Credential
+
+			}
+
+			It 'requests a websession for the caller to send their own requests with' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					-not ([string]::IsNullOrEmpty($SessionVariable))
+
+				} -Scope It
+
+			}
+
+			It 'makes the websession available in the session object' {
+
+				(Get-R1Session).WebSession | Should -Not -BeNullOrEmpty
+
+			}
+
+			#A websession keeps the Authorization header of the request which created it, and the
+			#login request authenticates with Basic.
+			It 'does not leave the basic credential in the websession' {
+
+				(Get-R1Session).WebSession.Headers['Authorization'] | Should -Not -Match '^Basic'
+
+			}
+
+			It 'carries the bearer token in the websession' {
+
+				(Get-R1Session).WebSession.Headers['Authorization'] | Should -Be 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVpZD10ZXN0dXNlcixvdT1nbG9iYWx1c2Vycyxjbj1jb25maWciLCJleHAiOjE4OTM0NTYwMDAsInByaXZpbGVnZXMiOlsiUk9MRV9DT05GSUdfUkVBRCIsIlJPTEVfQ09ORklHX1dSSVRFIl0sIm9yZ2FuaXphdGlvbiI6IlRlc3QgT3JnIiwic2VydmVyIjoiaHR0cHM6Ly9jcC50ZXN0LmNvbSJ9.signature'
+
+			}
+
+		}
+
 		Context 'Input' {
 
 			It 'sends request' {
