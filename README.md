@@ -145,8 +145,8 @@ PS C:\> Save-R1DirectoryLdif -sourceDn 'ou=people,o=companydirectory' -scope SUB
 
 # Import runs as a task, which is returned
 PS C:\> $Task = Import-R1DirectoryLdif -filename 'people.ldif'
-PS C:\> Get-R1Task -id $Task.taskId
-PS C:\> Get-R1TaskLog -id $Task.taskId
+PS C:\> Get-R1Task -id $Task.id
+PS C:\> Get-R1TaskLog -id $Task.id
 ```
 
 The export is written by the server in its own time, so the file does not appear in `Get-R1DirectoryLdifFile` the instant the command returns.

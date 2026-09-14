@@ -118,8 +118,8 @@ still running when -TimeoutSec elapses, thirty seconds by default, ends the requ
 timeout error and returns nothing: the log read so far is not kept. A scheduled task which
 runs indefinitely can therefore only ever time out.
 
-The id of a task started by another command is on the object that command returns, for example
-the taskId of an ldif import.
+The id of a task started by another command is on the object that command returns: an ldif
+import returns the task itself, so its id is in the id property.
 
 ## RELATED LINKS
 
