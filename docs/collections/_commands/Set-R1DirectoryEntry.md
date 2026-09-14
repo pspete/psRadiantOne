@@ -121,8 +121,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+A DELETE modification with no values removes the attribute entirely. An ADD modification appends
+to the values the attribute already holds, rather than replacing them.
 
 ## RELATED LINKS
 
