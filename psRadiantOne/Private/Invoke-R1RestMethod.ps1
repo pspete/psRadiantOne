@@ -60,6 +60,10 @@ function Invoke-R1RestMethod {
 	Bypass certificate validation for the request. Applies to deployments presenting a self-signed
 	certificate.
 
+	.PARAMETER SecretResponse
+	The content of the response is itself a secret, and is withheld from the LastCommandResults
+	property of the session object rather than recorded there.
+
 	.PARAMETER SslProtocol
 	Force the request to use a specific TLS protocol, e.g. 'Tls12', or 'Tls12,Tls13' to allow either.
 	PowerShell Core only; ignored under Windows PowerShell, whose Invoke-WebRequest has no such
@@ -123,7 +127,10 @@ function Invoke-R1RestMethod {
 		[switch]$SkipCertificateCheck,
 
 		[Parameter(Mandatory = $false)]
-		[string]$SslProtocol
+		[string]$SslProtocol,
+
+		[Parameter(Mandatory = $false)]
+		[switch]$SecretResponse
 	)
 
 	Begin {
@@ -131,6 +138,9 @@ function Invoke-R1RestMethod {
 		#Set defaults for all function calls
 		$ProgressPreference = 'SilentlyContinue'
 		$PSBoundParameters.Add('UseBasicParsing', $true)
+
+		#Belongs to this function, not to the web request it sends
+		$null = $PSBoundParameters.Remove('SecretResponse')
 
 		#Send the session token as a bearer token unless the caller supplied its own Authorization header
 		if (-not ($PSBoundParameters.ContainsKey('Headers'))) {
@@ -360,7 +370,7 @@ function Invoke-R1RestMethod {
 
 			#Add Command Data to module scope session variable
 			$Script:psRadiantOneSession.LastCommand = Get-ParentFunction | Select-Object -ExpandProperty CommandData
-			$Script:psRadiantOneSession.LastCommandResults = $APIResponse
+			$Script:psRadiantOneSession.LastCommandResults = ConvertTo-R1SessionResult -Response $APIResponse -SecretResponse:$SecretResponse
 			$Script:psRadiantOneSession.LastCommandTime = Get-Date
 
 			#Every response reports the deployment version in a header, so the session records it
