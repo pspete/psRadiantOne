@@ -45,7 +45,13 @@ Function Hide-SecretValue {
 			'bindReqPassword',
 			'clientSecret',
 			'secretKey',
-			'accessKeySecret'
+			'accessKeySecret',
+
+			#Returned by the API rather than sent to it: the login and token refresh responses, and
+			#the password reset information of an expired account
+			'token',
+			'resetToken',
+			'refreshToken'
 		)
 	)
 

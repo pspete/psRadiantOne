@@ -53,7 +53,9 @@ function New-R1AccessToken {
 
 		if ($PSCmdlet.ShouldProcess($name, 'Create Access Token')) {
 
-			Invoke-R1RestMethod -Uri $URI -Method POST -Body $Body
+			#The response is the access token itself, so it is withheld from the session object
+			#rather than recorded as the result of the last command.
+			Invoke-R1RestMethod -Uri $URI -Method POST -Body $Body -SecretResponse
 
 		}
 

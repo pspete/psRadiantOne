@@ -134,6 +134,75 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'LastCommandResults' {
+
+			BeforeEach {
+
+				Mock Invoke-WebRequest -MockWith {
+					[pscustomobject]@{
+						'StatusCode'        = 999
+						'StatusDescription' = 'Testing'
+						'Headers'           = @{ 'x-trace-id' = @('abc123') }
+						'Content'           = '{"authenticated":true,"token":"a.real.token"}'
+					}
+				}
+
+			}
+
+			It 'records what the api answered' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.LastCommandResults.StatusCode | Should -Be 999
+				$Script:psRadiantOneSession.LastCommandResults.StatusDescription | Should -Be 'Testing'
+				$Script:psRadiantOneSession.LastCommandResults.Headers | Should -Not -BeNullOrEmpty
+
+			}
+
+			#A login or token refresh response is a bearer token, and the session object is printed
+			#by Get-R1Session.
+			It 'masks a token in the recorded content' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.LastCommandResults.Content | Should -Not -Match 'a\.real\.token'
+				$Script:psRadiantOneSession.LastCommandResults.Content | Should -Match '\*\*\*\*\*\*'
+
+			}
+
+			It 'keeps the rest of the content readable' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.LastCommandResults.Content | Should -Match '"authenticated":true'
+
+			}
+
+			#Hide-SecretValue matches a named property, so it cannot mask a body which is itself
+			#the secret.
+			It 'withholds the content of a response which is itself a secret' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/authentication-service/access_tokens' -Method POST -SecretResponse
+
+				$Script:psRadiantOneSession.LastCommandResults.Content | Should -Be '******'
+				$Script:psRadiantOneSession.LastCommandResults.StatusCode | Should -Be 999
+
+			}
+
+			It 'does not send SecretResponse to the web request' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET -SecretResponse
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					-not $PSBoundParameters.ContainsKey('SecretResponse')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
 		Context 'Request' {
 
 			It 'sends the session token as a bearer token' {
