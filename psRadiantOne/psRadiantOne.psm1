@@ -48,6 +48,10 @@ Get-ChildItem $PSScriptRoot\ -Recurse -Include '*.ps1' -Exclude '*.ps1xml' |
 
 	}
 
+# AllowInsecureRedirect arrived in PowerShell 7.4. Resolved once at import rather than on every
+# request; Invoke-R1RestMethod sends the parameter only where it exists.
+$Script:AllowInsecureRedirectSupported = (Get-Command Invoke-WebRequest).Parameters.ContainsKey('AllowInsecureRedirect')
+
 # Script scope session object for session data
 $Script:psRadiantOneSession = [ordered]@{
 	BaseURI            = $null
