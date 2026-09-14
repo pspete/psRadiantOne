@@ -150,6 +150,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+The server writes the export to a file of its own before returning it, under a generated name,
+and does not remove it afterwards. It is listed by Get-R1DirectoryLdifFile and removed with
+Remove-R1DirectoryLdifFile.
+
 ## RELATED LINKS
 
 [Export-R1DirectoryLdif](Export-R1DirectoryLdif)

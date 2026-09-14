@@ -149,7 +149,11 @@ function Invoke-R1RestMethod {
 
 		}
 
+		#The WebSession carries the token once a session has been established, and is sent with every
+		#request, so the header is added only when there is no WebSession to carry it. A caller who
+		#supplies their own Authorization header keeps it either way.
 		if ((-not ($PSBoundParameters['Headers'].ContainsKey('Authorization'))) -and
+			($null -eq $Script:psRadiantOneSession.WebSession) -and
 			(-not ([string]::IsNullOrEmpty($Script:psRadiantOneSession.Token)))) {
 
 			$PSBoundParameters['Headers'].Add('Authorization', "Bearer $($Script:psRadiantOneSession.Token)")

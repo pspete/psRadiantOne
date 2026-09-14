@@ -279,13 +279,45 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		Context 'Request' {
 
-			It 'sends the session token as a bearer token' {
+			It 'sends the session token as a bearer token when no websession carries it' {
 
 				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
 
 				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
 
 					$Headers['Authorization'] -eq 'Bearer SomeToken'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			#The websession is sent with every request and holds the token already, so repeating it
+			#in a header of its own achieves nothing.
+			It 'does not repeat the token in a header when a websession carries it' {
+
+				$Script:psRadiantOneSession.WebSession = [Microsoft.PowerShell.Commands.WebRequestSession]::new()
+				$Script:psRadiantOneSession.WebSession.Headers['Authorization'] = 'Bearer SomeToken'
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					-not $Headers.ContainsKey('Authorization')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'keeps an authorization header supplied by the caller when a websession exists' {
+
+				$Script:psRadiantOneSession.WebSession = [Microsoft.PowerShell.Commands.WebRequestSession]::new()
+				$Script:psRadiantOneSession.WebSession.Headers['Authorization'] = 'Bearer SomeToken'
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET -Headers @{ Authorization = 'Basic c29tZXRoaW5n' }
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					$Headers['Authorization'] -eq 'Basic c29tZXRoaW5n'
 
 				} -Times 1 -Exactly -Scope It
 
