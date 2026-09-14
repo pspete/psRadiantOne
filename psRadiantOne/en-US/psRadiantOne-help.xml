@@ -12887,7 +12887,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>-Tail follows a running log and does not return until the task ends. Use the default set to download the log as it stands.</maml:para>
+        <maml:para>The tail endpoint does not close the response of its own accord, so -Tail returns when -TimeoutSec elapses, thirty seconds by default, with whatever arrived in that time.</maml:para>
         <maml:para>The id of a task started by another command is on the object that command returns, for example the taskId of an ldif import.</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -18943,7 +18943,7 @@ New-R1DataSourceTypeImportMeta -importId 'imp1' -DataSourceType $Definition</dev
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
           <maml:name>rdn</maml:name>
           <maml:description>
-            <maml:para>The RDN of the entry.</maml:para>
+            <maml:para>The RDN of the entry. The API names the new entry by its dn, so this is not a way to create a child of the dn given.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -19004,7 +19004,7 @@ New-R1DataSourceTypeImportMeta -importId 'imp1' -DataSourceType $Definition</dev
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
         <maml:name>rdn</maml:name>
         <maml:description>
-          <maml:para>The RDN of the entry.</maml:para>
+          <maml:para>The RDN of the entry. The API names the new entry by its dn, so this is not a way to create a child of the dn given.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>

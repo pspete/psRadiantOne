@@ -69,7 +69,8 @@ Accept wildcard characters: False
 ```
 
 ### -rdn
-The RDN of the entry.
+The RDN of the entry. The API names the new entry by its dn, so this is not a way to create a
+child of the dn given.
 
 ```yaml
 Type: String
