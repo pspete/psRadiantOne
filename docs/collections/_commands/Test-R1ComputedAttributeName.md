@@ -69,9 +69,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 Where the API reports why a value is invalid, the reason is written to the verbose stream.
 Run with -Verbose to see it.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Test-R1LdapFilter](Test-R1LdapFilter)
