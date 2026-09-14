@@ -1237,7 +1237,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>Get-R1DirectoryEntry follows a paged search to its end, leaving no open cursor behind it. This command applies to a search which the caller pages itself.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -3030,7 +3030,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>The export runs asynchronously. The file does not appear in the output of Get-R1DirectoryLdifFile until the server has finished writing it.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -6452,7 +6452,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -6984,7 +6984,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -12887,7 +12887,8 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>-Tail follows a running log and does not return until the task ends. Use the default set to download the log as it stands.</maml:para>
+        <maml:para>The id of a task started by another command is on the object that command returns, for example the taskId of an ldif import.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -13863,7 +13864,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>psRadiantOne.LaunchedTask</maml:name>
+          <maml:name>psRadiantOne.Task</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -13872,7 +13873,8 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>The import runs as a task on the server. The task is returned, so its state can be followed with Get-R1Task, and its log read with Get-R1TaskLog.</maml:para>
+        <maml:para>Where the task cannot be retrieved the import is already running, so its id is reported in a warning and the launch response returned in place of the task.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -15916,7 +15918,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -19058,7 +19060,7 @@ New-R1DataSourceTypeImportMeta -importId 'imp1' -DataSourceType $Definition</dev
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>The dn is the dn of the entry to create. Supplying the dn of the parent entry with an rdn does not create a child: the API attempts to create the dn given, and fails because it already exists.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -25646,7 +25648,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>An entry which has children is not removed unless -deleteSubNodes is specified. Without it the API refuses the request and the entry is left in place.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -25783,7 +25785,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -28915,7 +28917,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -29362,7 +29364,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -30261,7 +30263,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -35216,7 +35218,7 @@ Set-R1DataSourceTypeImportMeta -importId 'imp1' -name 'My Custom' -DataSourceTyp
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>A DELETE modification with no values removes the attribute entirely. An ADD modification appends to the values the attribute already holds, rather than replacing them.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -35415,7 +35417,7 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
     <maml:alertSet>
       <maml:alert>
         <maml:para>The list supplied replaces the membership, so a member left out is removed. Retrieve the current membership with Get-R1DirectoryEntryMember and pass back the whole of it to add one.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>Member values are not validated. A dn which does not exist is accepted and stored.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -47210,7 +47212,6 @@ Get-R1PromotionState</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>Where the API reports why a value is invalid, the reason is written to the verbose stream. Run with -Verbose to see it.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -47546,7 +47547,7 @@ Test-R1DataSourceConnection -DataSource $Definition</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -47863,7 +47864,6 @@ Test-R1DataSourceConnection -DataSource $Definition</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>Where the API reports why a value is invalid, the reason is written to the verbose stream. Run with -Verbose to see it.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

@@ -113,8 +113,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+-Tail follows a running log and does not return until the task ends. Use the default set to
+download the log as it stands.
+
+The id of a task started by another command is on the object that command returns, for example
+the taskId of an ldif import.
 
 ## RELATED LINKS
 

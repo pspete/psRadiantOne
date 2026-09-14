@@ -1,3 +1,21 @@
+# Unreleased
+
+## Fixed
+
+- Commands which create an object no longer fail on PowerShell 7.4 and later.
+- `Reset-R1DirectoryEntryPassword` sets a usable password. A password set by an earlier version
+  cannot be authenticated with and must be set again.
+
+## Changed
+
+- `Import-R1DirectoryLdif` returns the task the import runs as, rather than its id alone.
+- `Connect-R1Session` populates the `WebSession`, `Version` and `ElapsedTime` session properties.
+- Secrets in a response are masked in the `LastCommandResults` session property.
+
+## Documentation
+
+- Seventeen commands verified against a live deployment no longer carry the untested caveat.
+
 # 0.1
 
 First release. Everything below is new, so the entries are grouped by the area of the RadiantOne API
