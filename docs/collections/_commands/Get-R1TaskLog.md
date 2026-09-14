@@ -44,14 +44,14 @@ Returns the log the task has written so far.
 Get-R1TaskLog -id 'e4ef6b3e' -Tail
 ```
 
-Follows the log for thirty seconds and returns what arrived.
+Follows the log until the task ends, giving up after thirty seconds.
 
 ### Example 3
 ```powershell
 Get-R1TaskLog -id 'e4ef6b3e' -Tail -TimeoutSec 5
 ```
 
-Follows the log for five seconds.
+Follows the log until the task ends, giving up after five seconds.
 
 ## PARAMETERS
 
@@ -113,8 +113,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-The tail endpoint does not close the response of its own accord, so -Tail returns when
--TimeoutSec elapses, thirty seconds by default, with whatever arrived in that time.
+-Tail returns when the server closes the response, which it does when the task ends. A task
+still running when -TimeoutSec elapses, thirty seconds by default, ends the request with a
+timeout error and returns nothing: the log read so far is not kept. A scheduled task which
+runs indefinitely can therefore only ever time out.
 
 The id of a task started by another command is on the object that command returns, for example
 the taskId of an ldif import.

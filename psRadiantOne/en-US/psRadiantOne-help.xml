@@ -12887,7 +12887,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>The tail endpoint does not close the response of its own accord, so -Tail returns when -TimeoutSec elapses, thirty seconds by default, with whatever arrived in that time.</maml:para>
+        <maml:para>-Tail returns when the server closes the response, which it does when the task ends. A task still running when -TimeoutSec elapses, thirty seconds by default, ends the request with a timeout error and returns nothing: the log read so far is not kept. A scheduled task which runs indefinitely can therefore only ever time out.</maml:para>
         <maml:para>The id of a task started by another command is on the object that command returns, for example the taskId of an ldif import.</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -12903,14 +12903,14 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>Get-R1TaskLog -id 'e4ef6b3e' -Tail</dev:code>
         <dev:remarks>
-          <maml:para>Follows the log for thirty seconds and returns what arrived.</maml:para>
+          <maml:para>Follows the log until the task ends, giving up after thirty seconds.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 3 --------------------------</maml:title>
         <dev:code>Get-R1TaskLog -id 'e4ef6b3e' -Tail -TimeoutSec 5</dev:code>
         <dev:remarks>
-          <maml:para>Follows the log for five seconds.</maml:para>
+          <maml:para>Follows the log until the task ends, giving up after five seconds.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
