@@ -112,8 +112,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+An entry which has children is not removed unless -deleteSubNodes is specified. Without it the
+API refuses the request and the entry is left in place.
 
 ## RELATED LINKS
 

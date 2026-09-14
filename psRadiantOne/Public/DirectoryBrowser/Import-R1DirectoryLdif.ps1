@@ -1,7 +1,7 @@
 # .ExternalHelp psRadiantOne-help.xml
 function Import-R1DirectoryLdif {
 	[CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium', DefaultParameterSetName = 'Local')]
-	[OutputType('psRadiantOne.LaunchedTask')]
+	[OutputType('psRadiantOne.Task', 'psRadiantOne.LaunchedTask')]
 	param(
 		[parameter(
 			Mandatory = $true,
@@ -79,7 +79,21 @@ function Import-R1DirectoryLdif {
 
 			if ($null -ne $Result) {
 
-				$Result | Add-CustomType -Type psRadiantOne.LaunchedTask
+				#The import runs as a task, and the launch response carries nothing but its id.
+				#Return the task itself, so the caller has its state without a second call.
+				try {
+
+					Get-R1Task -id $Result.taskId -ErrorAction Stop
+
+				} catch {
+
+					#The import has already started. Report the id rather than fail over a task
+					#which cannot yet be read.
+					Write-Warning "Import started as task $($Result.taskId), which could not be retrieved. $($PSItem.Exception.Message)"
+
+					$Result | Add-CustomType -Type psRadiantOne.LaunchedTask
+
+				}
 
 			}
 

@@ -20,10 +20,22 @@ function ConvertTo-R1SecretBody {
 	.PARAMETER EmptyArrayProperty
 	Names of properties which must serialise as an empty array rather than an empty string.
 
+	.PARAMETER Raw
+	Encode the input as it stands, without serialising it to JSON first.
+
+	For the endpoints which store the request body verbatim rather than parsing it, a JSON encoded
+	string would be stored complete with its quote characters. Those endpoints take the plaintext
+	value alone as the body.
+
 	.EXAMPLE
 	$Body | ConvertTo-R1SecretBody
 
 	Serialises $Body and returns the request body as a UTF8 byte array.
+
+	.EXAMPLE
+	ConvertTo-R1SecretBody -InputObject $Plaintext -Raw
+
+	Returns the plaintext as a UTF8 byte array, unquoted.
 
 	.OUTPUTS
 	System.Byte[]
@@ -42,15 +54,26 @@ function ConvertTo-R1SecretBody {
 		[int]$Depth = 10,
 
 		[parameter(Mandatory = $false)]
-		[string[]]$EmptyArrayProperty
+		[string[]]$EmptyArrayProperty,
+
+		[parameter(Mandatory = $false)]
+		[switch]$Raw
 	)
 
 	Process {
 
-		$Json = ConvertTo-R1JsonBody -Body $InputObject -Depth $Depth -EmptyArrayProperty $EmptyArrayProperty
+		$Content = if ($Raw) {
+
+			"$InputObject"
+
+		} else {
+
+			ConvertTo-R1JsonBody -Body $InputObject -Depth $Depth -EmptyArrayProperty $EmptyArrayProperty
+
+		}
 
 		#Leading comma keeps the result a byte[] rather than being unrolled to object[] by the pipeline
-		, [System.Text.Encoding]::UTF8.GetBytes($Json)
+		, [System.Text.Encoding]::UTF8.GetBytes($Content)
 
 	}
 

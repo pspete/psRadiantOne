@@ -64,12 +64,14 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'sends the password as a bare json string' {
+			#The endpoint stores the body verbatim, so a json encoded password would be stored with
+			#its quote characters and would never authenticate.
+			It 'sends the password as the unquoted body' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
 					$Decoded = [System.Text.Encoding]::UTF8.GetString($Body)
-					$Decoded -eq '"mynewpassword123"'
+					$Decoded -eq 'mynewpassword123'
 
 				} -Times 1 -Exactly -Scope It
 

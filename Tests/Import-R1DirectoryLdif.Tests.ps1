@@ -46,6 +46,8 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			Mock Invoke-R1RestMethod -MockWith { [pscustomobject]@{ 'taskId' = 'task1' } }
 
+			Mock Get-R1Task -MockWith { [pscustomobject]@{ 'id' = 'task1'; 'status' = 'RUNNING' } | Add-CustomType -Type psRadiantOne.Task }
+
 			$UploadFile = Join-Path $TestDrive 'import.ldif'
 			Set-Content -Path $UploadFile -Value 'dn: o=example' -Encoding Ascii
 
@@ -94,7 +96,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				$response = Import-R1DirectoryLdif -Path $UploadFile -Confirm:$false
 
-				$response.psobject.TypeNames[0] | Should -Be 'psRadiantOne.LaunchedTask'
+				$response.psobject.TypeNames[0] | Should -Be 'psRadiantOne.Task'
 
 			}
 
@@ -123,6 +125,31 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 					($ContentType -eq 'application/json') -and (($Body | ConvertFrom-Json).filename -eq 'onserver.ldif')
 
 				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
+		Context 'Task' {
+
+			It 'looks up the task the import started' {
+
+				$null = Import-R1DirectoryLdif -filename 'onserver.ldif' -Confirm:$false
+
+				Should -Invoke -CommandName Get-R1Task -ParameterFilter { $id -eq 'task1' } -Times 1 -Exactly -Scope It
+
+			}
+
+			#The import is already running by this point, so a task which cannot be read must not
+			#fail the command.
+			It 'reports the launched task when the task cannot be retrieved' {
+
+				Mock Get-R1Task -MockWith { throw 'Task not found' }
+
+				$response = Import-R1DirectoryLdif -filename 'onserver.ldif' -Confirm:$false -WarningAction SilentlyContinue
+
+				$response.psobject.TypeNames[0] | Should -Be 'psRadiantOne.LaunchedTask'
+				$response.taskId | Should -Be 'task1'
 
 			}
 

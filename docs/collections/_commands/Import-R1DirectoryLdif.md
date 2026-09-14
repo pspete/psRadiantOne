@@ -129,12 +129,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### psRadiantOne.LaunchedTask
+### psRadiantOne.Task
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+The import runs as a task on the server. The task is returned, so its state can be followed with
+Get-R1Task, and its log read with Get-R1TaskLog.
+
+Where the task cannot be retrieved the import is already running, so its id is reported in a
+warning and the launch response returned in place of the task.
 
 ## RELATED LINKS
 
