@@ -363,6 +363,16 @@ function Invoke-R1RestMethod {
 			$Script:psRadiantOneSession.LastCommandResults = $APIResponse
 			$Script:psRadiantOneSession.LastCommandTime = Get-Date
 
+			#Every response reports the deployment version in a header, so the session records it
+			#without a request of its own.
+			$ReportedVersion = @($APIResponse.Headers.'x-radiantone-iddm-version')[0]
+
+			if (-not ([string]::IsNullOrEmpty($ReportedVersion))) {
+
+				$Script:psRadiantOneSession.Version = $ReportedVersion
+
+			}
+
 			#If Session Variable passed as argument
 			If ($PSCmdlet.ParameterSetName -eq 'SessionVariable') {
 

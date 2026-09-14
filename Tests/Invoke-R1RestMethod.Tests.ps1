@@ -179,6 +179,35 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Version' {
+
+			It 'records the deployment version reported in the response header' {
+
+				Mock Invoke-WebRequest -MockWith {
+					[pscustomobject]@{
+						'StatusCode' = 999
+						'Headers'    = @{ 'x-radiantone-iddm-version' = @('8.5.3') }
+					}
+				}
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.Version | Should -Be '8.5.3'
+
+			}
+
+			It 'leaves the recorded version alone when a response does not report one' {
+
+				$Script:psRadiantOneSession.Version = '8.5.3'
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.Version | Should -Be '8.5.3'
+
+			}
+
+		}
+
 		Context 'Request' {
 
 			It 'sends the session token as a bearer token' {

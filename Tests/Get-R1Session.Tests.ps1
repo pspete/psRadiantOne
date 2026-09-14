@@ -48,6 +48,25 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Elapsed Time' {
+
+			It 'reports how long the session has been open' {
+
+				$psRadiantOneSession['StartTime'] = (Get-Date).AddMinutes(-5)
+				New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
+
+				(Get-R1Session).ElapsedTime | Should -Match '^00:0[45]:'
+
+			}
+
+			It 'reports no elapsed time when no session has been started' {
+
+				(Get-R1Session).ElapsedTime | Should -BeNullOrEmpty
+
+			}
+
+		}
+
 		Context 'Output' {
 
 			It 'provides output' {
