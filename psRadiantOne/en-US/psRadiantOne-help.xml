@@ -30263,7 +30263,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>The server writes the export to a file of its own before returning it, under a generated name, and does not remove it afterwards. It is listed by Get-R1DirectoryLdifFile and removed with Remove-R1DirectoryLdifFile.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
