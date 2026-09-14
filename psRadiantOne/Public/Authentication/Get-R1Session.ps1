@@ -18,7 +18,10 @@ function Get-R1Session {
 
 		}
 
-		$Session | Add-CustomType -Type psRadiantOne.Session
+		#Returned as an object rather than the dictionary it is held as, so that its keys are
+		#properties: Select-Object and the format view both read properties, and on a dictionary
+		#would find only Keys, Values and Count.
+		[pscustomobject]$Session | Add-CustomType -Type psRadiantOne.Session
 
 	}#process
 
