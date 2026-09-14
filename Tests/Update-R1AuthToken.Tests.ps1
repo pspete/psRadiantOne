@@ -51,6 +51,23 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			Update-R1AuthToken -Confirm:$false
 		}
 
+		Context 'WebSession' {
+
+			#The websession is there for the caller to send their own requests with, so it must
+			#never be left holding a token the module has stopped using.
+			It 'updates the websession with the renewed token' {
+
+				$Script:psRadiantOneSession.WebSession = [Microsoft.PowerShell.Commands.WebRequestSession]::new()
+				$Script:psRadiantOneSession.WebSession.Headers['Authorization'] = 'Bearer AnOlderToken'
+
+				Update-R1AuthToken -Confirm:$false
+
+				$Script:psRadiantOneSession.WebSession.Headers['Authorization'] | Should -Be 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVpZD10ZXN0dXNlcixvdT1nbG9iYWx1c2Vycyxjbj1jb25maWciLCJleHAiOjE4OTM0NTYwMDAsInByaXZpbGVnZXMiOlsiUk9MRV9DT05GSUdfUkVBRCIsIlJPTEVfQ09ORklHX1dSSVRFIl0sIm9yZ2FuaXphdGlvbiI6IlRlc3QgT3JnIiwic2VydmVyIjoiaHR0cHM6Ly9jcC50ZXN0LmNvbSJ9.signature'
+
+			}
+
+		}
+
 		Context 'Input' {
 
 			It 'sends request' {
