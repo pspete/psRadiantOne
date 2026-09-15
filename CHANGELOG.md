@@ -13,12 +13,14 @@
   read it back, which made every later read of any data source fail.
 - `Set-R1DataSource` keeps the stored password of an LDAP or database data source. Sending null was
   read as no password at all, leaving the data source unable to connect after any update which did
-  not supply `-password`. Every update now states what becomes of the password: `-password` sets a
-  new one and `-useExistingCredentials` keeps the stored one. They cannot be combined, and a call
-  which gives neither is refused.
+  not supply `-password`.
 
 ## Changed
 
+- **`Set-R1DataSource` now requires either `-password` or `-useExistingCredentials`.** They are
+  mutually exclusive, and a call giving neither is refused rather than the stored password being
+  kept on its behalf. Every existing call which updates a data source without setting a password
+  needs `-useExistingCredentials` adding to it.
 - `Import-R1DirectoryLdif` returns the task the import runs as, rather than its id alone.
 - `Connect-R1Session` populates the `WebSession`, `Version` and `ElapsedTime` session properties.
 - Secrets in a response are masked in the `LastCommandResults` session property.
