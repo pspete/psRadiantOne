@@ -12,7 +12,7 @@
     RootModule        = 'psRadiantOne.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.1.3'
+    ModuleVersion     = '0.2.29'
 
     # ID used to uniquely identify this module
     GUID              = 'c7008020-b69c-48ae-9959-974642f61fe4'
