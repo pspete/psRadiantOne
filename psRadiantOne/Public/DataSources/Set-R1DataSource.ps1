@@ -101,16 +101,6 @@ function Set-R1DataSource {
 
 	Process {
 
-		$Path = "data_sources/$($name | Get-EscapedString)"
-
-		if ($useExistingCredentials) {
-
-			$Path = "$Path`?useExistingCredentials=true"
-
-		}
-
-		$URI = Resolve-R1ServiceUrl -Service Catalog -Path $Path
-
 		#Retrieve the data source and send it back with the supplied values applied over it, so a
 		#property left unspecified keeps its current value.
 		$Existing = Get-R1DataSource -name $name
@@ -140,23 +130,45 @@ function Set-R1DataSource {
 
 		}
 
-		if ($Template.Contains('addedSchemas')) {
+		#A single schema name has to reach the API as a collection, but a null one must stay null.
+		#Wrapping null produces a collection holding nothing, which the API stores and can then
+		#never read back: one such record makes every later read of the collection fail.
+		if ($null -ne $Template['addedSchemas']) {
 
 			$Template['addedSchemas'] = @($Template['addedSchemas'])
 
 		}
 
 		#A password read back from the API is an empty string when one is set, which the API would
-		#read as an instruction to clear it. Null tells the server to keep the stored password.
+		#read as an instruction to clear it. Null is only understood as leave it alone for the fields
+		#of a custom data source, so the query parameter is what keeps an LDAP or database password.
+		$KeepStoredCredentials = $useExistingCredentials.IsPresent
+
 		if ($PSBoundParameters.ContainsKey('password')) {
 
 			$Template['password'] = $password | ConvertTo-InsecureString
 
-		} elseif ($Template.Contains('password')) {
+		} else {
 
-			$Template['password'] = $null
+			$KeepStoredCredentials = $true
+
+			if ($Template.Contains('password')) {
+
+				$Template['password'] = $null
+
+			}
 
 		}
+
+		$Path = "data_sources/$($name | Get-EscapedString)"
+
+		if ($KeepStoredCredentials) {
+
+			$Path = "$Path`?useExistingCredentials=true"
+
+		}
+
+		$URI = Resolve-R1ServiceUrl -Service Catalog -Path $Path
 
 		$Body = $Template | ConvertTo-R1SecretBody
 

@@ -160,6 +160,36 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Schemas' {
+
+			It 'sends a single schema name as a collection' {
+
+				New-R1DataSource -name 'opendj' -type 'Generic LDAP' -hostName 'ldap.example.com' -port 389 -bindDn 'cn=DirectoryManager' -addedSchemas 'default' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					$Raw -match '"addedSchemas"\s*:\s*\[\s*"default"\s*\]'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'never sends a collection holding nothing' {
+
+				New-R1DataSource -name 'opendj' -type 'Generic LDAP' -hostName 'ldap.example.com' -port 389 -bindDn 'cn=DirectoryManager' -addedSchemas $null -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					$Raw -notmatch '\[\s*null\s*\]'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
 		Context 'Password' {
 
 			It 'sends a supplied password' {

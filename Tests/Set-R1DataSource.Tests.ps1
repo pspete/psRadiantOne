@@ -76,7 +76,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($Method -eq 'PUT') -and ($URI -eq 'https://radiantone.company.com/data-catalog-service/data_sources/opendj')
+					($Method -eq 'PUT') -and ($URI -like 'https://radiantone.company.com/data-catalog-service/data_sources/opendj?*')
 
 				} -Times 1 -Exactly -Scope It
 
@@ -146,6 +146,32 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'asks the server to keep the stored password when none was supplied' {
+
+				Set-R1DataSource -name 'opendj' -description 'Updated' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($Method -eq 'PUT') -and ($URI -cmatch 'useExistingCredentials=true')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'does not ask the server to keep the stored password when one was supplied' {
+
+				$Secret = 'newSecret' | ConvertTo-SecureString -AsPlainText -Force
+
+				Set-R1DataSource -name 'opendj' -password $Secret -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($Method -eq 'PUT') -and ($URI -notmatch 'useExistingCredentials')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'asks the server to keep the stored credentials when told to' {
 
 				Set-R1DataSource -name 'opendj' -useExistingCredentials -Confirm:$false
@@ -165,6 +191,46 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
 					($Method -eq 'PUT') -and ($Body -is [byte[]])
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
+		Context 'Schemas' {
+
+			It 'sends a single schema name as a collection' {
+
+				Set-R1DataSource -name 'opendj' -addedSchemas 'default' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					$Raw -match '"addedSchemas"\s*:\s*\[\s*"default"\s*\]'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends null rather than a collection holding nothing when the api returns no schemas' {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					[pscustomobject]@{
+						'name'         = 'opendj'
+						'category'     = 'ldap'
+						'addedSchemas' = $null
+					}
+				}
+
+				Set-R1DataSource -name 'opendj' -description 'Updated' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					($Raw -match '"addedSchemas"\s*:\s*null') -and ($Raw -notmatch '\[\s*null\s*\]')
 
 				} -Times 1 -Exactly -Scope It
 

@@ -326,11 +326,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 The API does not return the bind password: a data source that has one reads back an empty string,
 and one that has none reads back null. Sending that empty string back would be read as an
-instruction to clear the password, so this command sends null instead, which the API documents as
-leaving the stored password alone. Supply -password only to change it.
+instruction to clear the password.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+Null means leave it alone only for the password fields of a custom data source. For an LDAP or
+database data source it is read as no password at all, which leaves the data source unable to
+connect, so an update which was given no -password asks the server to restore every stored
+password instead. Supply -password only to change it.
+
+-useExistingCredentials therefore changes nothing unless -password is also supplied, where it
+makes the server keep the stored password and ignore the one given.
 
 ## RELATED LINKS
 

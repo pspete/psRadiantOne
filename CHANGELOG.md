@@ -8,6 +8,12 @@
 - `Get-R1TaskLog` returns the last lines of a log rather than timing out and returning nothing.
   `-Tail` and `-TimeoutSec` are replaced by `-numberOfLines`, which the API expects and the command
   never sent. The whole log is returned as one line per string, as a tail already was.
+- `Set-R1DataSource` and `New-R1DataSource` no longer send a collection holding nothing when a
+  data source has no linked schemas or failovers. The API stored such a record and could then never
+  read it back, which made every later read of any data source fail.
+- `Set-R1DataSource` keeps the stored password of an LDAP or database data source. Sending null was
+  read as no password at all, leaving the data source unable to connect after any update which did
+  not supply `-password`.
 
 ## Changed
 

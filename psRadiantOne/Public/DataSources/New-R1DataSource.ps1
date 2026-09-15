@@ -234,7 +234,7 @@ function New-R1DataSource {
 
 		foreach ($Collection in 'addedSchemas', 'failovers') {
 
-			if ($Request.Contains($Collection)) {
+			if ($null -ne $Request[$Collection]) {
 
 				$Request[$Collection] = @($Request[$Collection])
 
