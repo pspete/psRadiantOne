@@ -14,14 +14,8 @@ function Get-R1TaskLog {
 			Mandatory = $true,
 			ParameterSetName = 'Tail'
 		)]
-		[switch]$Tail,
-
-		[parameter(
-			Mandatory = $false,
-			ParameterSetName = 'Tail'
-		)]
-		[ValidateRange(1, 3600)]
-		[int]$TimeoutSec = 30
+		[ValidateRange(1, 2000)]
+		[int]$numberOfLines
 	)
 
 	Begin {
@@ -32,25 +26,38 @@ function Get-R1TaskLog {
 
 	Process {
 
-		if ($Tail) {
+		if ($PSCmdlet.ParameterSetName -eq 'Tail') {
 
-			$URI = Resolve-R1ServiceUrl -Service SysAdmin -Path "tasks/$($id | Get-EscapedString)/logs/tail"
+			#Told how many lines to return, the endpoint returns them and closes. Asked without
+			#numberOfLines it follows the log and never closes, which is why the parameter is
+			#mandatory rather than defaulted.
+			$Query = $PSBoundParameters | Get-Parameter -ParametersToKeep numberOfLines | ConvertTo-QueryString
 
-			#The tail endpoint follows a running log and does not close the response on its own, so
-			#the request is bounded by a timeout rather than waiting for the server to finish.
-			$Result = Invoke-R1RestMethod -Uri $URI -Method GET -TimeoutSec $TimeoutSec
+			$Path = "tasks/$($id | Get-EscapedString)/logs/tail`?$Query"
 
 		} else {
 
-			$URI = Resolve-R1ServiceUrl -Service SysAdmin -Path "tasks/$($id | Get-EscapedString)/logs"
-
-			$Result = Invoke-R1RestMethod -Uri $URI -Method GET
+			$Path = "tasks/$($id | Get-EscapedString)/logs"
 
 		}
 
+		$URI = Resolve-R1ServiceUrl -Service SysAdmin -Path $Path
+
+		$Result = Invoke-R1RestMethod -Uri $URI -Method GET
+
 		if ($null -ne $Result) {
 
-			$Result
+			if ($Result -is [string]) {
+
+				#The two endpoints disagree: a tail answers with an array of lines, a download with
+				#the whole log as one string. Return lines either way.
+				$Result.TrimEnd("`r", "`n") -split '\r?\n'
+
+			} else {
+
+				$Result
+
+			}
 
 		}
 

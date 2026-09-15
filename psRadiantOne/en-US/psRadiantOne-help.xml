@@ -12784,8 +12784,8 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Returns the log a task has written. With -Tail the log is followed as it is written instead.</maml:para>
-      <maml:para>The tail endpoint does not close the response when it reaches the end of the log: it stays open waiting for more. The command therefore bounds the request with a timeout and returns what arrived within it. Without -Tail no timeout is applied, because the log download completes on its own.</maml:para>
+      <maml:para>Returns the log a task has written. Given a number of lines, only the last of them are returned.</maml:para>
+      <maml:para>The whole log is returned when no number of lines is given.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -12803,27 +12803,16 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Tail</maml:name>
+          <maml:name>numberOfLines</maml:name>
           <maml:description>
-            <maml:para>Follows the log as it is written rather than returning what has already been recorded.</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>TimeoutSec</maml:name>
-          <maml:description>
-            <maml:para>How long to follow the log for before returning.</maml:para>
+            <maml:para>The number of lines to return from the end of the log, between 1 and 2000.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
             <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>30</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -12841,28 +12830,16 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Tail</maml:name>
+        <maml:name>numberOfLines</maml:name>
         <maml:description>
-          <maml:para>Follows the log as it is written rather than returning what has already been recorded.</maml:para>
-        </maml:description>
-        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>TimeoutSec</maml:name>
-        <maml:description>
-          <maml:para>How long to follow the log for before returning.</maml:para>
+          <maml:para>The number of lines to return from the end of the log, between 1 and 2000.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
           <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>30</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -12887,8 +12864,9 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>-Tail returns when the server closes the response, which it does when the task ends. A task still running when -TimeoutSec elapses, thirty seconds by default, ends the request with a timeout error and returns nothing: the log read so far is not kept. A scheduled task which runs indefinitely can therefore only ever time out.</maml:para>
-        <maml:para>The id of a task started by another command is on the object that command returns: an ldif import returns the task itself, so its id is in the id property.</maml:para>
+        <maml:para>Asking for a number of lines returns the last of them as the log stands, rather than following it. The API takes a value between 1 and 2000, and every request carries one: asked without it the endpoint follows the log and never closes the response.</maml:para>
+        <maml:para>The log is returned as one line per string. The API sends the tail as lines and the whole log as a single string, so the whole log is split before it is returned.</maml:para>
+        <maml:para>The id of a task started by another command is on the object that command returns: an ldif import returns the task itself, so its id is in the id property. The task object also carries its log in a logs property, so Get-R1Task alone is often enough.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -12901,16 +12879,9 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Get-R1TaskLog -id 'e4ef6b3e' -Tail</dev:code>
+        <dev:code>Get-R1TaskLog -id 'e4ef6b3e' -numberOfLines 15</dev:code>
         <dev:remarks>
-          <maml:para>Follows the log until the task ends, giving up after thirty seconds.</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
-        <dev:code>Get-R1TaskLog -id 'e4ef6b3e' -Tail -TimeoutSec 5</dev:code>
-        <dev:remarks>
-          <maml:para>Follows the log until the task ends, giving up after five seconds.</maml:para>
+          <maml:para>Returns the last fifteen lines of the log.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

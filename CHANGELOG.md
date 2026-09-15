@@ -5,6 +5,9 @@
 - Commands which create an object no longer fail on PowerShell 7.4 and later.
 - `Reset-R1DirectoryEntryPassword` sets a usable password. A password set by an earlier version
   cannot be authenticated with and must be set again.
+- `Get-R1TaskLog` returns the last lines of a log rather than timing out and returning nothing.
+  `-Tail` and `-TimeoutSec` are replaced by `-numberOfLines`, which the API expects and the command
+  never sent. The whole log is returned as one line per string, as a tail already was.
 
 ## Changed
 
