@@ -82,7 +82,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 Both parameters are optional, but at least one must be given: with neither, the API answers
-"At least one of dataSourceFilter and objectFilter must be provided".
+"At least one of dataSourceFilter and objectFilter must be provided". An empty string counts as
+not given.
+
+Each filter matches the names which contain it, case-insensitively. Neither is a wildcard: an
+asterisk matches only a name which holds an asterisk. No filter returns everything, so use
+Get-R1DataSource for the full list of data sources.
+
+Without -objectFilter no objects are searched and each data source comes back with an empty
+objects collection. Without -dataSourceFilter every data source is searched.
 
 ## RELATED LINKS
 
