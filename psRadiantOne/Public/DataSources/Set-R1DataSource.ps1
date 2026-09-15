@@ -84,12 +84,16 @@ function Set-R1DataSource {
 		[hashtable]$customProps,
 
 		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
+			Mandatory = $true,
+			ValueFromPipelineByPropertyName = $true,
+			ParameterSetName = 'NewPassword'
 		)]
 		[securestring]$password,
 
-		[parameter(Mandatory = $false)]
+		[parameter(
+			Mandatory = $true,
+			ParameterSetName = 'ExistingCredentials'
+		)]
 		[switch]$useExistingCredentials
 	)
 
@@ -142,27 +146,19 @@ function Set-R1DataSource {
 		#A password read back from the API is an empty string when one is set, which the API would
 		#read as an instruction to clear it. Null is only understood as leave it alone for the fields
 		#of a custom data source, so the query parameter is what keeps an LDAP or database password.
-		$KeepStoredCredentials = $useExistingCredentials.IsPresent
-
-		if ($PSBoundParameters.ContainsKey('password')) {
+		if ($PSCmdlet.ParameterSetName -eq 'NewPassword') {
 
 			$Template['password'] = $password | ConvertTo-InsecureString
 
-		} else {
+		} elseif ($Template.Contains('password')) {
 
-			$KeepStoredCredentials = $true
-
-			if ($Template.Contains('password')) {
-
-				$Template['password'] = $null
-
-			}
+			$Template['password'] = $null
 
 		}
 
 		$Path = "data_sources/$($name | Get-EscapedString)"
 
-		if ($KeepStoredCredentials) {
+		if ($PSCmdlet.ParameterSetName -eq 'ExistingCredentials') {
 
 			$Path = "$Path`?useExistingCredentials=true"
 

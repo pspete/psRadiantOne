@@ -12,11 +12,20 @@ Updates a data source.
 
 ## SYNTAX
 
+### ExistingCredentials
 ```
 Set-R1DataSource [-name] <String> [[-active] <Boolean>] [[-description] <String>] [[-defaultSchema] <String>]
  [[-addedSchemas] <String[]>] [[-hostName] <String>] [[-port] <Int32>] [[-ssl] <Boolean>] [[-bindDn] <String>]
  [[-baseDn] <String>] [[-url] <String>] [[-username] <String>] [[-customProps] <Hashtable>]
- [[-password] <SecureString>] [-useExistingCredentials] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-useExistingCredentials] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### NewPassword
+```
+Set-R1DataSource [-name] <String> [[-active] <Boolean>] [[-description] <String>] [[-defaultSchema] <String>]
+ [[-addedSchemas] <String[]>] [[-hostName] <String>] [[-port] <Int32>] [[-ssl] <Boolean>] [[-bindDn] <String>]
+ [[-baseDn] <String>] [[-url] <String>] [[-username] <String>] [[-customProps] <Hashtable>]
+ [-password] <SecureString> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -34,10 +43,10 @@ PowerShell parameter binding or module logging.
 
 ### Example 1
 ```powershell
-Set-R1DataSource -name 'opendj' -description 'Corporate directory'
+Set-R1DataSource -name 'opendj' -description 'Corporate directory' -useExistingCredentials
 ```
 
-Changes the description, leaving every other property as it is.
+Changes the description, leaving every other property as it is and keeping the stored password.
 
 ### Example 2
 ```powershell
@@ -255,10 +264,10 @@ The password used to authenticate. Supply it only to set or change it.
 
 ```yaml
 Type: SecureString
-Parameter Sets: (All)
+Parameter Sets: NewPassword
 Aliases:
 
-Required: False
+Required: True
 Position: 14
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -266,14 +275,15 @@ Accept wildcard characters: False
 ```
 
 ### -useExistingCredentials
-Tells the server to keep every stored password, whatever the request body carries.
+Tells the server to keep every stored password. Supply it on any update which is not setting a new
+password.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: (All)
+Parameter Sets: ExistingCredentials
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: False
 Accept pipeline input: False
@@ -330,11 +340,11 @@ instruction to clear the password.
 
 Null means leave it alone only for the password fields of a custom data source. For an LDAP or
 database data source it is read as no password at all, which leaves the data source unable to
-connect, so an update which was given no -password asks the server to restore every stored
-password instead. Supply -password only to change it.
+connect.
 
--useExistingCredentials therefore changes nothing unless -password is also supplied, where it
-makes the server keep the stored password and ignore the one given.
+Every update therefore has to say what becomes of the password, and the two ways of saying it
+cannot be combined: -password sets a new one, and -useExistingCredentials keeps the stored one.
+A call which gives neither is refused rather than guessed at.
 
 This command has not been exercised against a live deployment, so its behaviour rests on the
 published API definition alone.

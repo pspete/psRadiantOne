@@ -13,7 +13,9 @@
   read it back, which made every later read of any data source fail.
 - `Set-R1DataSource` keeps the stored password of an LDAP or database data source. Sending null was
   read as no password at all, leaving the data source unable to connect after any update which did
-  not supply `-password`.
+  not supply `-password`. Every update now states what becomes of the password: `-password` sets a
+  new one and `-useExistingCredentials` keeps the stored one. They cannot be combined, and a call
+  which gives neither is refused.
 
 ## Changed
 

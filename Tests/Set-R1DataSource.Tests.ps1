@@ -68,7 +68,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			BeforeEach {
 
-				Set-R1DataSource -name 'opendj' -description 'Updated' -Confirm:$false
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
 
 			}
 
@@ -118,7 +118,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends a null password rather than the empty string the api returned' {
 
-				Set-R1DataSource -name 'opendj' -description 'Updated' -Confirm:$false
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
@@ -146,15 +146,19 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'asks the server to keep the stored password when none was supplied' {
+			It 'refuses a call which says nothing about the password' {
 
-				Set-R1DataSource -name 'opendj' -description 'Updated' -Confirm:$false
+				{ Set-R1DataSource -name 'opendj' -description 'Updated' -Confirm:$false -ErrorAction Stop } |
+					Should -Throw -ErrorId 'AmbiguousParameterSet,Set-R1DataSource'
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+			}
 
-					($Method -eq 'PUT') -and ($URI -cmatch 'useExistingCredentials=true')
+			It 'refuses a call which supplies a password and asks to keep the stored one' {
 
-				} -Times 1 -Exactly -Scope It
+				$Secret = 'newSecret' | ConvertTo-SecureString -AsPlainText -Force
+
+				{ Set-R1DataSource -name 'opendj' -password $Secret -useExistingCredentials -Confirm:$false -ErrorAction Stop } |
+					Should -Throw -ErrorId 'AmbiguousParameterSet,Set-R1DataSource'
 
 			}
 
@@ -186,7 +190,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends the body as bytes so the password cannot be captured' {
 
-				Set-R1DataSource -name 'opendj' -Confirm:$false
+				Set-R1DataSource -name 'opendj' -useExistingCredentials -Confirm:$false
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
@@ -202,7 +206,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends a single schema name as a collection' {
 
-				Set-R1DataSource -name 'opendj' -addedSchemas 'default' -Confirm:$false
+				Set-R1DataSource -name 'opendj' -addedSchemas 'default' -useExistingCredentials -Confirm:$false
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
@@ -224,7 +228,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 					}
 				}
 
-				Set-R1DataSource -name 'opendj' -description 'Updated' -Confirm:$false
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
