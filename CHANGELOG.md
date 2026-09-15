@@ -1,4 +1,4 @@
-# Unreleased
+# 0.2
 
 ## Fixed
 
@@ -16,10 +16,6 @@
 - Secrets in a response are masked in the `LastCommandResults` session property.
 - `Get-R1Session` returns an object rather than a dictionary, so `Select-Object` reads its
   properties, and prints without the token, the websession and the last response.
-
-## Documentation
-
-- Seventeen commands verified against a live deployment no longer carry the untested caveat.
 
 # 0.1
 
