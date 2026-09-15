@@ -81,8 +81,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+Both parameters are optional, but at least one must be given: with neither, the API answers
+"At least one of dataSourceFilter and objectFilter must be provided".
 
 ## RELATED LINKS
 

@@ -88,9 +88,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 Testing an existing data source without -useExistingCredentials sends whatever password the
 definition carries, which is an empty string when it came from Get-R1DataSource.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1DataSource](Get-R1DataSource)
