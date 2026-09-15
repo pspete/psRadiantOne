@@ -336,6 +336,9 @@ password instead. Supply -password only to change it.
 -useExistingCredentials therefore changes nothing unless -password is also supplied, where it
 makes the server keep the stored password and ignore the one given.
 
+This command has not been exercised against a live deployment, so its behaviour rests on the
+published API definition alone.
+
 ## RELATED LINKS
 
 [Get-R1DataSource](Get-R1DataSource)
