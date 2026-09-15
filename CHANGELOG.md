@@ -1,3 +1,21 @@
+# Unreleased
+
+## Changed
+
+- **`Set-R1DataSource` now requires either `-password` or `-useExistingCredentials`.** They are
+  mutually exclusive, and a call giving neither is refused rather than the stored password being
+  kept on its behalf. Every existing call which updates a data source without setting a password
+  needs `-useExistingCredentials` adding to it.
+
+## Fixed
+
+- `Set-R1DataSource` and `New-R1DataSource` no longer send a collection holding nothing when a
+  data source has no linked schemas or failovers. The API stored such a record and could then never
+  read it back, which made every later read of any data source fail.
+- `Set-R1DataSource` keeps the stored password of an LDAP or database data source. Sending null was
+  read as no password at all, leaving the data source unable to connect after any update which did
+  not supply `-password`.
+
 # 0.2
 
 ## Fixed
@@ -8,19 +26,9 @@
 - `Get-R1TaskLog` returns the last lines of a log rather than timing out and returning nothing.
   `-Tail` and `-TimeoutSec` are replaced by `-numberOfLines`, which the API expects and the command
   never sent. The whole log is returned as one line per string, as a tail already was.
-- `Set-R1DataSource` and `New-R1DataSource` no longer send a collection holding nothing when a
-  data source has no linked schemas or failovers. The API stored such a record and could then never
-  read it back, which made every later read of any data source fail.
-- `Set-R1DataSource` keeps the stored password of an LDAP or database data source. Sending null was
-  read as no password at all, leaving the data source unable to connect after any update which did
-  not supply `-password`.
 
 ## Changed
 
-- **`Set-R1DataSource` now requires either `-password` or `-useExistingCredentials`.** They are
-  mutually exclusive, and a call giving neither is refused rather than the stored password being
-  kept on its behalf. Every existing call which updates a data source without setting a password
-  needs `-useExistingCredentials` adding to it.
 - `Import-R1DirectoryLdif` returns the task the import runs as, rather than its id alone.
 - `Connect-R1Session` populates the `WebSession`, `Version` and `ElapsedTime` session properties.
 - Secrets in a response are masked in the `LastCommandResults` session property.
