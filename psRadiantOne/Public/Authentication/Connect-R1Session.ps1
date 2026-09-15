@@ -46,10 +46,13 @@ function Connect-R1Session {
 
 		}
 
+		#SessionVariable makes the WebSession of the login request available in the module scope
+		#session, for a caller who wants to send their own requests with Invoke-WebRequest.
 		$RequestParameters = @{
-			URI     = $URI
-			Method  = 'POST'
-			Headers = @{ Authorization = "Basic $BasicAuth" }
+			URI             = $URI
+			Method          = 'POST'
+			Headers         = @{ Authorization = "Basic $BasicAuth" }
+			SessionVariable = 'R1WebSession'
 		}
 
 		if ($SkipCertificateCheck) {
@@ -66,6 +69,7 @@ function Connect-R1Session {
 
 			#Leave no partial session behind if the login attempt failed
 			$Script:psRadiantOneSession.BaseURI = $null
+			$Script:psRadiantOneSession.WebSession = $null
 
 			#Name the url which was called; a base url pointing at the control panel ui rather than
 			#the api endpoint is otherwise indistinguishable from a credential problem
@@ -87,6 +91,15 @@ function Connect-R1Session {
 			$BasicAuth = $null
 			$RequestParameters['Headers'] = $null
 
+			#A WebSession keeps the Authorization header of the request which created it, and this
+			#one authenticated with Basic. Drop it, so the session does not hold the credential;
+			#the bearer token replaces it below once the login is known to have succeeded.
+			if ($null -ne $Script:psRadiantOneSession.WebSession) {
+
+				$null = $Script:psRadiantOneSession.WebSession.Headers.Remove('Authorization')
+
+			}
+
 		}
 
 		if ($Result.authenticated -eq $true) {
@@ -99,6 +112,8 @@ function Connect-R1Session {
 			$Script:psRadiantOneSession.Privileges = $Claims.Privileges
 			$Script:psRadiantOneSession.Organization = $Claims.Organization
 			$Script:psRadiantOneSession.StartTime = Get-Date
+
+			Set-R1WebSessionToken
 
 		} else {
 

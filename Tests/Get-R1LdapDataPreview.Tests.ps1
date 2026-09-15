@@ -56,7 +56,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends request to expected endpoint' {
 
-				$null = Get-R1LdapDataPreview -DataSource $DataSource
+				$null = Get-R1LdapDataPreview -dataSourceName 'advworks'
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
@@ -68,15 +68,41 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends the body as bytes so a password cannot be captured' {
 
-				$null = Get-R1LdapDataPreview -DataSource $DataSource
+				$null = Get-R1LdapDataPreview -dataSourceName 'advworks'
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Body -is [byte[]] } -Times 1 -Exactly -Scope It
 
 			}
 
+			#Two body shapes share this endpoint and the api picks between them on this property.
+			It 'names the data source and the body shape it is sending' {
+
+				$null = Get-R1LdapDataPreview -dataSourceName 'advworks'
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Decoded = [System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json
+					($Decoded.existingDataSource -eq $true) -and ($Decoded.dataSourceName -eq 'advworks')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'takes the data source name from a data source on the pipeline' {
+
+				$null = ([pscustomobject]@{ name = 'advworks' } | Get-R1LdapDataPreview)
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).dataSourceName -eq 'advworks'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'has expected typename' {
 
-				$response = Get-R1LdapDataPreview -DataSource $DataSource
+				$response = Get-R1LdapDataPreview -dataSourceName 'advworks'
 
 				@($response)[0].psobject.TypeNames[0] | Should -Be 'psRadiantOne.PreviewBaseDnResponse'
 
@@ -88,7 +114,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends request to the base dn endpoint, escaped' {
 
-				$null = Get-R1LdapDataPreview -DataSource $DataSource -baseDn 'o=example'
+				$null = Get-R1LdapDataPreview -dataSourceName 'advworks' -baseDn 'o=example'
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 

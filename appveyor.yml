@@ -1,5 +1,5 @@
 # version format
-version: 0.1.{build}
+version: 0.2.{build}
 
 environment:
   # Plain (non-secret) config - edit these per new project:

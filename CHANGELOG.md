@@ -1,3 +1,22 @@
+# 0.2
+
+## Fixed
+
+- Commands which create an object no longer fail on PowerShell 7.4 and later.
+- `Reset-R1DirectoryEntryPassword` sets a usable password. A password set by an earlier version
+  cannot be authenticated with and must be set again.
+- `Get-R1TaskLog` returns the last lines of a log rather than timing out and returning nothing.
+  `-Tail` and `-TimeoutSec` are replaced by `-numberOfLines`, which the API expects and the command
+  never sent. The whole log is returned as one line per string, as a tail already was.
+
+## Changed
+
+- `Import-R1DirectoryLdif` returns the task the import runs as, rather than its id alone.
+- `Connect-R1Session` populates the `WebSession`, `Version` and `ElapsedTime` session properties.
+- Secrets in a response are masked in the `LastCommandResults` session property.
+- `Get-R1Session` returns an object rather than a dictionary, so `Select-Object` reads its
+  properties, and prints without the token, the websession and the last response.
+
 # 0.1
 
 First release. Everything below is new, so the entries are grouped by the area of the RadiantOne API

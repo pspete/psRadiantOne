@@ -91,8 +91,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+Get-R1DirectoryEntry follows a paged search to its end, leaving no open cursor behind it. This
+command applies to a search which the caller pages itself.
 
 ## RELATED LINKS
 

@@ -13,42 +13,45 @@ Previews the data an LDAP data source holds.
 ## SYNTAX
 
 ```
-Get-R1LdapDataPreview [-DataSource] <Object> [[-baseDn] <String>] [<CommonParameters>]
+Get-R1LdapDataPreview [-dataSourceName] <String> [[-baseDn] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Reads directly from an LDAP data source and returns what is there, without creating a schema.
-The data source is given either as the name of an existing one or as the connection details for
-a new one. Without a base DN the root is returned; with one, its children are.
-
-The request body is sent as UTF8 bytes so that a password in the connection details cannot be
-captured by Windows PowerShell parameter binding or module logging.
+Reads directly from an existing LDAP data source and returns what is there, without creating a
+schema. Without a base DN the root is returned; with one, its children are.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-Get-R1LdapDataPreview -DataSource ([pscustomobject]@{ existingDataSource = $true; dataSourceName = 'opendj' })
+Get-R1LdapDataPreview -dataSourceName 'companydirectory'
 ```
 
-Returns the root of an existing data source.
+Returns the root of the companydirectory data source.
 
 ### Example 2
 ```powershell
-Get-R1LdapDataPreview -DataSource $Definition -baseDn 'o=example'
+Get-R1LdapDataPreview -dataSourceName 'companydirectory' -baseDn 'o=companydirectory'
 ```
 
 Returns the entries beneath a base DN.
 
+### Example 3
+```powershell
+Get-R1DataSource -name 'companydirectory' | Get-R1LdapDataPreview
+```
+
+Takes the data source name from the pipeline.
+
 ## PARAMETERS
 
-### -DataSource
-The LDAP data source to read from: either an existing one named, or the connection details for a new one.
+### -dataSourceName
+The name of the LDAP data source to read from.
 
 ```yaml
-Type: Object
+Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: name
 
 Required: True
 Position: 1
@@ -85,8 +88,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+Only an LDAP data source can be previewed. Naming a database one is refused with
+"Invalid data source, must be an LDAP data source".
 
 ## RELATED LINKS
 

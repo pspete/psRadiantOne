@@ -137,8 +137,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 The list supplied replaces the membership, so a member left out is removed. Retrieve the current
 membership with Get-R1DirectoryEntryMember and pass back the whole of it to add one.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+Member values are not validated. A dn which does not exist is accepted and stored.
 
 ## RELATED LINKS
 

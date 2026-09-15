@@ -15,19 +15,19 @@ function Get-R1DataSourceTable {
 			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
-		[string]$catalog,
+		[string]$catalogName,
 
 		[parameter(
 			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
-		[string]$schemaPattern,
+		[string]$schemaName,
 
 		[parameter(
 			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
-		[string]$tableNamePattern
+		[string]$tablePattern
 	)
 
 	Begin {
@@ -40,7 +40,14 @@ function Get-R1DataSourceTable {
 
 		$URI = Resolve-R1ServiceUrl -Service Catalog -Path 'data_sources/utils/database_tables'
 
-		$Body = $PSBoundParameters | Get-Parameter | ConvertTo-R1JsonBody
+		$Request = $PSBoundParameters | Get-Parameter
+
+		#The request body is one of two shapes and existingDataSource is the discriminator the API
+		#picks between them with. Without it the request is rejected as unconvertible, whatever else
+		#it carries. This command names an existing data source, never a new connection.
+		$Request['existingDataSource'] = $true
+
+		$Body = $Request | ConvertTo-R1JsonBody
 
 		$Result = Invoke-R1RestMethod -Uri $URI -Method POST -Body $Body
 

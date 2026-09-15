@@ -51,6 +51,18 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		Context 'Input' {
 
+			#The response is the access token itself, which is a long lived credential, so it must
+			#not be recorded as the result of the last command.
+			It 'withholds the response from the session object' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$SecretResponse -eq $true
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'sends request' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -Times 1 -Exactly -Scope It

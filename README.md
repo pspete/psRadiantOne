@@ -56,30 +56,34 @@ PS C:\> Connect-R1Session -BaseURI 'https://sometenant.example.radiantlogic.io/a
 ```powershell
 PS C:\> Get-R1Session
 
-Name                           Value
-----                           -----
-BaseURI                        https://sometenant.example.radiantlogic.io/api
-User                           some.user@somedomain.com
-Token                          eyPhbSciPiJEUzT1NEIsInR5cCI6IkpXYZ...
-TokenExpiry                    13/09/2026 23:23:07
-Privileges                     {SCOPE_USER_READ, SCOPE_USER_WRITE, ...}
-Organization                   sometenant
-Version                        8.5.0
-WebSession                     Microsoft.PowerShell.Commands.WebRequestSession
-StartTime                      13/09/2026 22:58:13
-ElapsedTime                    00:25:30
-LastCommand                    System.Management.Automation.InvocationInfo
-LastCommandTime                13/09/2026 23:23:07
-LastCommandResults             {"success":true,"Result":{"SomeResult"}}
+BaseURI         : https://sometenant.example.radiantlogic.io/api
+User            : some.user@somedomain.com
+Organization    : sometenant
+Version         : 8.5.3
+StartTime       : 13/09/2026 22:58:13
+ElapsedTime     : 00:25:30
+TokenExpiry     : 13/09/2026 23:58:13
+LastCommandTime : 13/09/2026 23:23:07
 ```
 
-It exposes the base URL, the authenticated user, the token and its expiry, the privileges the token carries, and details of the last command issued and the last error encountered. The object is a copy: changing it does not alter the session other commands use.
-
-The privileges the token grants are worth checking when a command fails with an authorization error:
+The token, the WebSession carrying it, the result of the last command and the last error are on the object but are not printed, so the session can be shown and pasted without exposing the token. Ask for them by name:
 
 ```powershell
+# The privileges the token grants are worth checking when a command fails with an authorization error
 PS C:\> (Get-R1Session).Privileges
+
+# Everything the session holds
+PS C:\> Get-R1Session | Select-Object -Property *
 ```
+
+The WebSession carries the token, so it can be handed to `Invoke-WebRequest` for a call the module has no command for:
+
+```powershell
+PS C:\> $Session = Get-R1Session
+PS C:\> Invoke-WebRequest -Uri "$($Session.BaseURI)/some-service/some_endpoint" -WebSession $Session.WebSession
+```
+
+The object is a copy: changing it does not alter the session other commands use.
 
 `Update-R1AuthToken` renews the token, and `Disconnect-R1Session` revokes it and clears the session.
 
@@ -93,8 +97,59 @@ PS C:\> Get-R1NamingContext
 PS C:\> Get-R1DirectoryEntry -dn 'o=vds'
 
 # Search it - supply a filter and a scope, and every page is followed
-PS C:\> Get-R1DirectoryEntry -dn 'o=vds' -filter '(objectClass=inetOrgPerson)' -scope SUBTREE
+PS C:\> Get-R1DirectoryEntry -dn 'o=vds' -filter '(objectClass=inetOrgPerson)' -scope SUB
 ```
+
+### Directory Entries
+
+```powershell
+# Create an entry. The dn is the dn of the new entry, not of its parent
+PS C:\> New-R1DirectoryEntry -dn 'uid=jbloggs,ou=people,o=companydirectory' -attributes @(
+    @{ name = 'objectClass'; values = @('top', 'person', 'organizationalperson', 'inetorgperson') }
+    @{ name = 'uid'; values = @('jbloggs') }
+    @{ name = 'cn'; values = @('Joe Bloggs') }
+    @{ name = 'sn'; values = @('Bloggs') }
+)
+
+# Modify it. REPLACE overwrites, ADD appends to the values already there, and DELETE with no
+# values removes the attribute
+PS C:\> Set-R1DirectoryEntry -dn 'uid=jbloggs,ou=people,o=companydirectory' -modifications @(
+    @{ modifyType = 'REPLACE'; attributes = @(@{ name = 'l'; values = @('Chester') }) }
+    @{ modifyType = 'ADD'; attributes = @(@{ name = 'mobile'; values = @('+44 7700 900000') }) }
+    @{ modifyType = 'DELETE'; attributes = @(@{ name = 'employeeType'; values = @() }) }
+)
+
+# Set a password, and check it
+PS C:\> Reset-R1DirectoryEntryPassword -dn 'uid=jbloggs,ou=people,o=companydirectory' -password $Password
+PS C:\> Test-R1DirectoryAuthentication -dn 'uid=jbloggs,ou=people,o=companydirectory' -password $Password
+
+# Group membership
+PS C:\> Get-R1DirectoryEntryMember -dn 'cn=admins,ou=groups,o=companydirectory'
+PS C:\> Set-R1DirectoryEntryMember -dn 'cn=admins,ou=groups,o=companydirectory' -members @(
+    'uid=jbloggs,ou=people,o=companydirectory'
+)
+
+# Rename, move, and remove. An entry with children needs -deleteSubNodes
+PS C:\> Rename-R1DirectoryEntry -dn 'uid=jbloggs,ou=people,o=companydirectory' -newRdn 'uid=joe.bloggs'
+PS C:\> Move-R1DirectoryEntry -dn 'uid=joe.bloggs,ou=people,o=companydirectory' -newParentDn 'ou=leavers,o=companydirectory'
+PS C:\> Remove-R1DirectoryEntry -dn 'uid=joe.bloggs,ou=leavers,o=companydirectory'
+```
+
+### Import & Export
+
+```powershell
+# Export a subtree to a file on the server, then download one
+PS C:\> Export-R1DirectoryLdif -sourceDn 'ou=people,o=companydirectory' -scope SUB -fileName 'people.ldif'
+PS C:\> Get-R1DirectoryLdifFile
+PS C:\> Save-R1DirectoryLdif -sourceDn 'ou=people,o=companydirectory' -scope SUB -fileName 'people.ldif' -Path 'C:\Exports'
+
+# Import runs as a task, which is returned
+PS C:\> $Task = Import-R1DirectoryLdif -filename 'people.ldif'
+PS C:\> Get-R1Task -id $Task.id
+PS C:\> Get-R1TaskLog -id $Task.id
+```
+
+The export is written by the server in its own time, so the file does not appear in `Get-R1DirectoryLdifFile` the instant the command returns.
 
 ### Data Sources & Schemas
 

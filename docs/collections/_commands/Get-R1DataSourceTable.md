@@ -13,8 +13,8 @@ Returns the tables of a database data source.
 ## SYNTAX
 
 ```
-Get-R1DataSourceTable [-dataSourceName] <String> [[-catalog] <String>] [[-schemaPattern] <String>]
- [[-tableNamePattern] <String>] [<CommonParameters>]
+Get-R1DataSourceTable [-dataSourceName] <String> [[-catalogName] <String>] [[-schemaName] <String>]
+ [[-tablePattern] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,7 +31,7 @@ Returns every table of the advworks data source.
 
 ### Example 2
 ```powershell
-Get-R1DataSourceTable -dataSourceName 'advworks' -schemaPattern 'APP' -tableNamePattern 'CUST%'
+Get-R1DataSourceTable -dataSourceName 'advworks' -schemaName 'APP' -tablePattern 'CUST%'
 ```
 
 Returns tables in the APP schema whose name starts with CUST.
@@ -53,7 +53,7 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -catalog
+### -catalogName
 The database catalog to list tables from.
 
 ```yaml
@@ -68,7 +68,7 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -schemaPattern
+### -schemaName
 The database schema to list tables from.
 
 ```yaml
@@ -83,7 +83,7 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -tableNamePattern
+### -tablePattern
 A pattern limiting which table names are returned.
 
 ```yaml
@@ -111,8 +111,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+Only a database data source can be listed. Naming an LDAP one is refused with
+"Unable to establish connection to the database".
 
 ## RELATED LINKS
 

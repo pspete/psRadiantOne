@@ -1237,7 +1237,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>Get-R1DirectoryEntry follows a paged search to its end, leaving no open cursor behind it. This command applies to a search which the caller pages itself.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2650,7 +2650,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -3030,7 +3030,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>The export runs asynchronously. The file does not appear in the output of Get-R1DirectoryLdifFile until the server has finished writing it.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -3153,7 +3153,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -4247,7 +4247,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -4338,7 +4338,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -5385,7 +5385,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
-          <maml:name>catalog</maml:name>
+          <maml:name>catalogName</maml:name>
           <maml:description>
             <maml:para>The database catalog to list tables from.</maml:para>
           </maml:description>
@@ -5397,7 +5397,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
-          <maml:name>schemaPattern</maml:name>
+          <maml:name>schemaName</maml:name>
           <maml:description>
             <maml:para>The database schema to list tables from.</maml:para>
           </maml:description>
@@ -5409,7 +5409,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
-          <maml:name>tableNamePattern</maml:name>
+          <maml:name>tablePattern</maml:name>
           <maml:description>
             <maml:para>A pattern limiting which table names are returned.</maml:para>
           </maml:description>
@@ -5436,7 +5436,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
-        <maml:name>catalog</maml:name>
+        <maml:name>catalogName</maml:name>
         <maml:description>
           <maml:para>The database catalog to list tables from.</maml:para>
         </maml:description>
@@ -5448,7 +5448,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
-        <maml:name>schemaPattern</maml:name>
+        <maml:name>schemaName</maml:name>
         <maml:description>
           <maml:para>The database schema to list tables from.</maml:para>
         </maml:description>
@@ -5460,7 +5460,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
-        <maml:name>tableNamePattern</maml:name>
+        <maml:name>tablePattern</maml:name>
         <maml:description>
           <maml:para>A pattern limiting which table names are returned.</maml:para>
         </maml:description>
@@ -5494,7 +5494,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>Only a database data source can be listed. Naming an LDAP one is refused with "Unable to establish connection to the database".</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -5507,7 +5507,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Get-R1DataSourceTable -dataSourceName 'advworks' -schemaPattern 'APP' -tableNamePattern 'CUST%'</dev:code>
+        <dev:code>Get-R1DataSourceTable -dataSourceName 'advworks' -schemaName 'APP' -tablePattern 'CUST%'</dev:code>
         <dev:remarks>
           <maml:para>Returns tables in the APP schema whose name starts with CUST.</maml:para>
         </dev:remarks>
@@ -6452,7 +6452,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -6984,7 +6984,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -7386,7 +7386,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -7481,7 +7481,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -8038,7 +8038,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -8262,7 +8262,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -8406,20 +8406,19 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Reads directly from an LDAP data source and returns what is there, without creating a schema. The data source is given either as the name of an existing one or as the connection details for a new one. Without a base DN the root is returned; with one, its children are.</maml:para>
-      <maml:para>The request body is sent as UTF8 bytes so that a password in the connection details cannot be captured by Windows PowerShell parameter binding or module logging.</maml:para>
+      <maml:para>Reads directly from an existing LDAP data source and returns what is there, without creating a schema. Without a base DN the root is returned; with one, its children are.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-R1LdapDataPreview</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
-          <maml:name>DataSource</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="name">
+          <maml:name>dataSourceName</maml:name>
           <maml:description>
-            <maml:para>The LDAP data source to read from: either an existing one named, or the connection details for a new one.</maml:para>
+            <maml:para>The name of the LDAP data source to read from.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
-            <maml:name>Object</maml:name>
+            <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -8439,14 +8438,14 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
-        <maml:name>DataSource</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="name">
+        <maml:name>dataSourceName</maml:name>
         <maml:description>
-          <maml:para>The LDAP data source to read from: either an existing one named, or the connection details for a new one.</maml:para>
+          <maml:para>The name of the LDAP data source to read from.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
-          <maml:name>Object</maml:name>
+          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -8486,22 +8485,29 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>Only an LDAP data source can be previewed. Naming a database one is refused with "Invalid data source, must be an LDAP data source".</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Get-R1LdapDataPreview -DataSource ([pscustomobject]@{ existingDataSource = $true; dataSourceName = 'opendj' })</dev:code>
+        <dev:code>Get-R1LdapDataPreview -dataSourceName 'companydirectory'</dev:code>
         <dev:remarks>
-          <maml:para>Returns the root of an existing data source.</maml:para>
+          <maml:para>Returns the root of the companydirectory data source.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Get-R1LdapDataPreview -DataSource $Definition -baseDn 'o=example'</dev:code>
+        <dev:code>Get-R1LdapDataPreview -dataSourceName 'companydirectory' -baseDn 'o=companydirectory'</dev:code>
         <dev:remarks>
           <maml:para>Returns the entries beneath a base DN.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Get-R1DataSource -name 'companydirectory' | Get-R1LdapDataPreview</dev:code>
+        <dev:remarks>
+          <maml:para>Takes the data source name from the pipeline.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -9560,7 +9566,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -11302,7 +11308,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -11435,7 +11441,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -12784,8 +12790,8 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Returns the log a task has written. With -Tail the log is followed as it is written instead.</maml:para>
-      <maml:para>The tail endpoint does not close the response when it reaches the end of the log: it stays open waiting for more. The command therefore bounds the request with a timeout and returns what arrived within it. Without -Tail no timeout is applied, because the log download completes on its own.</maml:para>
+      <maml:para>Returns the log a task has written. Given a number of lines, only the last of them are returned.</maml:para>
+      <maml:para>The whole log is returned when no number of lines is given.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -12803,27 +12809,16 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Tail</maml:name>
+          <maml:name>numberOfLines</maml:name>
           <maml:description>
-            <maml:para>Follows the log as it is written rather than returning what has already been recorded.</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>TimeoutSec</maml:name>
-          <maml:description>
-            <maml:para>How long to follow the log for before returning.</maml:para>
+            <maml:para>The number of lines to return from the end of the log, between 1 and 2000.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
             <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>30</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -12841,28 +12836,16 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Tail</maml:name>
+        <maml:name>numberOfLines</maml:name>
         <maml:description>
-          <maml:para>Follows the log as it is written rather than returning what has already been recorded.</maml:para>
-        </maml:description>
-        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>TimeoutSec</maml:name>
-        <maml:description>
-          <maml:para>How long to follow the log for before returning.</maml:para>
+          <maml:para>The number of lines to return from the end of the log, between 1 and 2000.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
           <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>30</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -12887,7 +12870,9 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>Asking for a number of lines returns the last of them as the log stands, rather than following it. The API takes a value between 1 and 2000, and every request carries one: asked without it the endpoint follows the log and never closes the response.</maml:para>
+        <maml:para>The log is returned as one line per string. The API sends the tail as lines and the whole log as a single string, so the whole log is split before it is returned.</maml:para>
+        <maml:para>The id of a task started by another command is on the object that command returns: an ldif import returns the task itself, so its id is in the id property. The task object also carries its log in a logs property, so Get-R1Task alone is often enough.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -12900,16 +12885,9 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Get-R1TaskLog -id 'e4ef6b3e' -Tail</dev:code>
+        <dev:code>Get-R1TaskLog -id 'e4ef6b3e' -numberOfLines 15</dev:code>
         <dev:remarks>
-          <maml:para>Follows the log for thirty seconds and returns what arrived.</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
-        <dev:code>Get-R1TaskLog -id 'e4ef6b3e' -Tail -TimeoutSec 5</dev:code>
-        <dev:remarks>
-          <maml:para>Follows the log for five seconds.</maml:para>
+          <maml:para>Returns the last fifteen lines of the log.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -13063,7 +13041,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -13863,7 +13841,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>psRadiantOne.LaunchedTask</maml:name>
+          <maml:name>psRadiantOne.Task</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -13872,7 +13850,8 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>The import runs as a task on the server. The task is returned, so its state can be followed with Get-R1Task, and its log read with Get-R1TaskLog.</maml:para>
+        <maml:para>Where the task cannot be retrieved the import is already running, so its id is reported in a warning and the launch response returned in place of the task.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -15916,7 +15895,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -18941,7 +18920,7 @@ New-R1DataSourceTypeImportMeta -importId 'imp1' -DataSourceType $Definition</dev
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
           <maml:name>rdn</maml:name>
           <maml:description>
-            <maml:para>The RDN of the entry.</maml:para>
+            <maml:para>The RDN of the entry. The API names the new entry by its dn, so this is not a way to create a child of the dn given.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -19002,7 +18981,7 @@ New-R1DataSourceTypeImportMeta -importId 'imp1' -DataSourceType $Definition</dev
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
         <maml:name>rdn</maml:name>
         <maml:description>
-          <maml:para>The RDN of the entry.</maml:para>
+          <maml:para>The RDN of the entry. The API names the new entry by its dn, so this is not a way to create a child of the dn given.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -19058,7 +19037,7 @@ New-R1DataSourceTypeImportMeta -importId 'imp1' -DataSourceType $Definition</dev
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>The dn is the dn of the entry to create. Supplying the dn of the parent entry with an rdn does not create a child: the API attempts to create the dn given, and fails because it already exists.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -25646,7 +25625,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>An entry which has children is not removed unless -deleteSubNodes is specified. Without it the API refuses the request and the entry is left in place.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -25783,7 +25762,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -28915,7 +28894,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -29362,7 +29341,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -30261,7 +30240,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>The server writes the export to a file of its own before returning it, under a generated name, and does not remove it afterwards. It is listed by Get-R1DirectoryLdifFile and removed with Remove-R1DirectoryLdifFile.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -30369,7 +30348,9 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>Both parameters are optional, but at least one must be given: with neither, the API answers "At least one of dataSourceFilter and objectFilter must be provided". An empty string counts as not given.</maml:para>
+        <maml:para>Each filter matches the names which contain it, case-insensitively. Neither is a wildcard: an asterisk matches only a name which holds an asterisk. No filter returns everything, so use Get-R1DataSource for the full list of data sources.</maml:para>
+        <maml:para>Without -objectFilter no objects are searched and each data source comes back with an empty objects collection. Without -dataSourceFilter every data source is searched.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -30607,7 +30588,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -35216,7 +35197,7 @@ Set-R1DataSourceTypeImportMeta -importId 'imp1' -name 'My Custom' -DataSourceTyp
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>A DELETE modification with no values removes the attribute entirely. An ADD modification appends to the values the attribute already holds, rather than replacing them.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -35415,7 +35396,7 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
     <maml:alertSet>
       <maml:alert>
         <maml:para>The list supplied replaces the membership, so a member left out is removed. Retrieve the current membership with Get-R1DirectoryEntryMember and pass back the whole of it to add one.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>Member values are not validated. A dn which does not exist is accepted and stored.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -47210,7 +47191,6 @@ Get-R1PromotionState</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>Where the API reports why a value is invalid, the reason is written to the verbose stream. Run with -Verbose to see it.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -47330,7 +47310,6 @@ Get-R1PromotionState</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>Testing an existing data source without -useExistingCredentials sends whatever password the definition carries, which is an empty string when it came from Get-R1DataSource.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -47546,7 +47525,7 @@ Test-R1DataSourceConnection -DataSource $Definition</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -47863,7 +47842,6 @@ Test-R1DataSourceConnection -DataSource $Definition</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>Where the API reports why a value is invalid, the reason is written to the verbose stream. Run with -Verbose to see it.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

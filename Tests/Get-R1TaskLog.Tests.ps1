@@ -44,7 +44,9 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			}
 			New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
 
-			Mock Invoke-R1RestMethod -MockWith { @('line one', 'line two') }
+			#The download endpoint answers with the whole log as one string, the tail endpoint with
+			#an array of lines, whatever the definition says they share.
+			Mock Invoke-R1RestMethod -MockWith { "line one`nline two`n" }
 
 		}
 
@@ -62,11 +64,20 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'returns every line' {
+			It 'returns the log as lines rather than one string' {
 
 				$response = Get-R1TaskLog -id 'e4ef6b3e'
 
 				@($response).Count | Should -Be 2
+				$response[0] | Should -Be 'line one'
+
+			}
+
+			It 'does not return a trailing empty line' {
+
+				$response = Get-R1TaskLog -id 'e4ef6b3e'
+
+				$response[-1] | Should -Be 'line two'
 
 			}
 
@@ -82,31 +93,46 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		Context 'Tail' {
 
-			It 'sends request to the tail endpoint' {
+			#Asked without numberOfLines the endpoint follows the log and never closes the response,
+			#so the parameter is mandatory and selects this set on its own.
+			BeforeEach {
 
-				$null = Get-R1TaskLog -id 'e4ef6b3e' -Tail
+				Mock Invoke-R1RestMethod -MockWith { @('line one', 'line two') }
+
+			}
+
+			It 'returns the lines the api sent, untouched' {
+
+				$response = Get-R1TaskLog -id 'e4ef6b3e' -numberOfLines 2
+
+				@($response).Count | Should -Be 2
+				$response[0] | Should -Be 'line one'
+
+			}
+
+			It 'sends request to the tail endpoint, asking for the number of lines' {
+
+				$null = Get-R1TaskLog -id 'e4ef6b3e' -numberOfLines 500
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($URI -eq 'https://radiantone.company.com/system-administration-service/tasks/e4ef6b3e/logs/tail')
+					($URI -eq 'https://radiantone.company.com/system-administration-service/tasks/e4ef6b3e/logs/tail?numberOfLines=500')
 
 				} -Times 1 -Exactly -Scope It
 
 			}
 
-			It 'bounds the request with a timeout, because the endpoint does not close on its own' {
+			It 'does not set a timeout' {
 
-				$null = Get-R1TaskLog -id 'e4ef6b3e' -Tail
+				$null = Get-R1TaskLog -id 'e4ef6b3e' -numberOfLines 15
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $TimeoutSec -eq 30 } -Times 1 -Exactly -Scope It
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { -not $PSBoundParameters.ContainsKey('TimeoutSec') } -Times 1 -Exactly -Scope It
 
 			}
 
-			It 'uses the specified timeout' {
+			It 'rejects a line count outside the range the api accepts' {
 
-				$null = Get-R1TaskLog -id 'e4ef6b3e' -Tail -TimeoutSec 5
-
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $TimeoutSec -eq 5 } -Times 1 -Exactly -Scope It
+				{ Get-R1TaskLog -id 'e4ef6b3e' -numberOfLines 2001 } | Should -Throw
 
 			}
 

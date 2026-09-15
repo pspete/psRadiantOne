@@ -134,15 +134,190 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Redirection' {
+
+			#The API answers a create with 201 Created and a Location header naming an internal
+			#http host. Without this, PowerShell rejects the response of a request which has
+			#already succeeded.
+			It 'permits the insecure redirect target the api returns from a create' -Skip:(-not $Script:AllowInsecureRedirectSupported) {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/directory-browser-service' -Method POST -Body '{}'
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					$AllowInsecureRedirect -eq $true
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'does not send AllowInsecureRedirect where the parameter does not exist' -Skip:($Script:AllowInsecureRedirectSupported) {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					-not $PSBoundParameters.ContainsKey('AllowInsecureRedirect')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			#PowerShell would otherwise carry the bearer token to the redirect target, which the
+			#api names as a plain http host.
+			It 'never preserves authorization across a redirect' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					-not $PSBoundParameters.ContainsKey('PreserveAuthorizationOnRedirect')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
+		Context 'Version' {
+
+			It 'records the deployment version reported in the response header' {
+
+				Mock Invoke-WebRequest -MockWith {
+					[pscustomobject]@{
+						'StatusCode' = 999
+						'Headers'    = @{ 'x-radiantone-iddm-version' = @('8.5.3') }
+					}
+				}
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.Version | Should -Be '8.5.3'
+
+			}
+
+			It 'leaves the recorded version alone when a response does not report one' {
+
+				$Script:psRadiantOneSession.Version = '8.5.3'
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.Version | Should -Be '8.5.3'
+
+			}
+
+		}
+
+		Context 'LastCommandResults' {
+
+			BeforeEach {
+
+				Mock Invoke-WebRequest -MockWith {
+					[pscustomobject]@{
+						'StatusCode'        = 999
+						'StatusDescription' = 'Testing'
+						'Headers'           = @{ 'x-trace-id' = @('abc123') }
+						'Content'           = '{"authenticated":true,"token":"a.real.token"}'
+					}
+				}
+
+			}
+
+			It 'records what the api answered' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.LastCommandResults.StatusCode | Should -Be 999
+				$Script:psRadiantOneSession.LastCommandResults.StatusDescription | Should -Be 'Testing'
+				$Script:psRadiantOneSession.LastCommandResults.Headers | Should -Not -BeNullOrEmpty
+
+			}
+
+			#A login or token refresh response is a bearer token, and the session object is printed
+			#by Get-R1Session.
+			It 'masks a token in the recorded content' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.LastCommandResults.Content | Should -Not -Match 'a\.real\.token'
+				$Script:psRadiantOneSession.LastCommandResults.Content | Should -Match '\*\*\*\*\*\*'
+
+			}
+
+			It 'keeps the rest of the content readable' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				$Script:psRadiantOneSession.LastCommandResults.Content | Should -Match '"authenticated":true'
+
+			}
+
+			#Hide-SecretValue matches a named property, so it cannot mask a body which is itself
+			#the secret.
+			It 'withholds the content of a response which is itself a secret' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/authentication-service/access_tokens' -Method POST -SecretResponse
+
+				$Script:psRadiantOneSession.LastCommandResults.Content | Should -Be '******'
+				$Script:psRadiantOneSession.LastCommandResults.StatusCode | Should -Be 999
+
+			}
+
+			It 'does not send SecretResponse to the web request' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET -SecretResponse
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					-not $PSBoundParameters.ContainsKey('SecretResponse')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
 		Context 'Request' {
 
-			It 'sends the session token as a bearer token' {
+			It 'sends the session token as a bearer token when no websession carries it' {
 
 				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
 
 				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
 
 					$Headers['Authorization'] -eq 'Bearer SomeToken'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			#The websession is sent with every request and holds the token already, so repeating it
+			#in a header of its own achieves nothing.
+			It 'does not repeat the token in a header when a websession carries it' {
+
+				$Script:psRadiantOneSession.WebSession = [Microsoft.PowerShell.Commands.WebRequestSession]::new()
+				$Script:psRadiantOneSession.WebSession.Headers['Authorization'] = 'Bearer SomeToken'
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					-not $Headers.ContainsKey('Authorization')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'keeps an authorization header supplied by the caller when a websession exists' {
+
+				$Script:psRadiantOneSession.WebSession = [Microsoft.PowerShell.Commands.WebRequestSession]::new()
+				$Script:psRadiantOneSession.WebSession.Headers['Authorization'] = 'Bearer SomeToken'
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET -Headers @{ Authorization = 'Basic c29tZXRoaW5n' }
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					$Headers['Authorization'] -eq 'Basic c29tZXRoaW5n'
 
 				} -Times 1 -Exactly -Scope It
 

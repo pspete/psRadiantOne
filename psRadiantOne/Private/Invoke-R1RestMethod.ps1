@@ -60,6 +60,10 @@ function Invoke-R1RestMethod {
 	Bypass certificate validation for the request. Applies to deployments presenting a self-signed
 	certificate.
 
+	.PARAMETER SecretResponse
+	The content of the response is itself a secret, and is withheld from the LastCommandResults
+	property of the session object rather than recorded there.
+
 	.PARAMETER SslProtocol
 	Force the request to use a specific TLS protocol, e.g. 'Tls12', or 'Tls12,Tls13' to allow either.
 	PowerShell Core only; ignored under Windows PowerShell, whose Invoke-WebRequest has no such
@@ -123,7 +127,10 @@ function Invoke-R1RestMethod {
 		[switch]$SkipCertificateCheck,
 
 		[Parameter(Mandatory = $false)]
-		[string]$SslProtocol
+		[string]$SslProtocol,
+
+		[Parameter(Mandatory = $false)]
+		[switch]$SecretResponse
 	)
 
 	Begin {
@@ -132,6 +139,9 @@ function Invoke-R1RestMethod {
 		$ProgressPreference = 'SilentlyContinue'
 		$PSBoundParameters.Add('UseBasicParsing', $true)
 
+		#Belongs to this function, not to the web request it sends
+		$null = $PSBoundParameters.Remove('SecretResponse')
+
 		#Send the session token as a bearer token unless the caller supplied its own Authorization header
 		if (-not ($PSBoundParameters.ContainsKey('Headers'))) {
 
@@ -139,7 +149,11 @@ function Invoke-R1RestMethod {
 
 		}
 
+		#The WebSession carries the token once a session has been established, and is sent with every
+		#request, so the header is added only when there is no WebSession to carry it. A caller who
+		#supplies their own Authorization header keeps it either way.
 		if ((-not ($PSBoundParameters['Headers'].ContainsKey('Authorization'))) -and
+			($null -eq $Script:psRadiantOneSession.WebSession) -and
 			(-not ([string]::IsNullOrEmpty($Script:psRadiantOneSession.Token)))) {
 
 			$PSBoundParameters['Headers'].Add('Authorization', "Bearer $($Script:psRadiantOneSession.Token)")
@@ -173,6 +187,20 @@ function Invoke-R1RestMethod {
 			#and WebSslProtocol is a flags enum, so pinning 'Tls12' would set TLS 1.2 as the only
 			#permitted protocol and exclude TLS 1.3. A caller needing a specific protocol passes
 			#SslProtocol, which reaches Invoke-WebRequest unaltered.
+
+			#The API answers a create with 201 Created and a Location header naming an internal
+			#plain http host. PowerShell validates that header for an https to http downgrade
+			#before it considers whether the status code is redirectable at all, so the call
+			#throws over a request the server has already completed. Permitting the downgrade
+			#does not make the module follow anything here: 201 is not a redirect status, so the
+			#201 response is returned. The Authorization header is stripped on a cross host
+			#redirect unless PreserveAuthorizationOnRedirect is specified, which it is not.
+			#Windows PowerShell makes no such check and has no such parameter.
+			if ($Script:AllowInsecureRedirectSupported) {
+
+				$PSBoundParameters.Add('AllowInsecureRedirect', $true)
+
+			}
 
 		} else {
 
@@ -346,8 +374,18 @@ function Invoke-R1RestMethod {
 
 			#Add Command Data to module scope session variable
 			$Script:psRadiantOneSession.LastCommand = Get-ParentFunction | Select-Object -ExpandProperty CommandData
-			$Script:psRadiantOneSession.LastCommandResults = $APIResponse
+			$Script:psRadiantOneSession.LastCommandResults = ConvertTo-R1SessionResult -Response $APIResponse -SecretResponse:$SecretResponse
 			$Script:psRadiantOneSession.LastCommandTime = Get-Date
+
+			#Every response reports the deployment version in a header, so the session records it
+			#without a request of its own.
+			$ReportedVersion = @($APIResponse.Headers.'x-radiantone-iddm-version')[0]
+
+			if (-not ([string]::IsNullOrEmpty($ReportedVersion))) {
+
+				$Script:psRadiantOneSession.Version = $ReportedVersion
+
+			}
 
 			#If Session Variable passed as argument
 			If ($PSCmdlet.ParameterSetName -eq 'SessionVariable') {
