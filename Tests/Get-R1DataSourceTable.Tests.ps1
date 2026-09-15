@@ -48,7 +48,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 				@([pscustomobject]@{ 'name' = 'APP.CUSTOMERS'; 'schema' = 'APP' })
 			}
 
-			$response = Get-R1DataSourceTable -dataSourceName 'advworks' -schemaPattern 'APP'
+			$response = Get-R1DataSourceTable -dataSourceName 'advworks' -schemaName 'APP'
 
 		}
 
@@ -69,7 +69,19 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
 					$Decoded = $Body | ConvertFrom-Json
-					($Decoded.dataSourceName -eq 'advworks') -and ($Decoded.schemaPattern -eq 'APP')
+					($Decoded.dataSourceName -eq 'advworks') -and ($Decoded.schemaName -eq 'APP')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			#Two body shapes share this endpoint and the api picks between them on this property.
+			#Without it the request is rejected whatever else it carries.
+			It 'names the body shape it is sending' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($Body | ConvertFrom-Json).existingDataSource -eq $true
 
 				} -Times 1 -Exactly -Scope It
 

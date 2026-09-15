@@ -5385,7 +5385,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
-          <maml:name>catalog</maml:name>
+          <maml:name>catalogName</maml:name>
           <maml:description>
             <maml:para>The database catalog to list tables from.</maml:para>
           </maml:description>
@@ -5397,7 +5397,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
-          <maml:name>schemaPattern</maml:name>
+          <maml:name>schemaName</maml:name>
           <maml:description>
             <maml:para>The database schema to list tables from.</maml:para>
           </maml:description>
@@ -5409,7 +5409,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
-          <maml:name>tableNamePattern</maml:name>
+          <maml:name>tablePattern</maml:name>
           <maml:description>
             <maml:para>A pattern limiting which table names are returned.</maml:para>
           </maml:description>
@@ -5436,7 +5436,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
-        <maml:name>catalog</maml:name>
+        <maml:name>catalogName</maml:name>
         <maml:description>
           <maml:para>The database catalog to list tables from.</maml:para>
         </maml:description>
@@ -5448,7 +5448,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
-        <maml:name>schemaPattern</maml:name>
+        <maml:name>schemaName</maml:name>
         <maml:description>
           <maml:para>The database schema to list tables from.</maml:para>
         </maml:description>
@@ -5460,7 +5460,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
-        <maml:name>tableNamePattern</maml:name>
+        <maml:name>tablePattern</maml:name>
         <maml:description>
           <maml:para>A pattern limiting which table names are returned.</maml:para>
         </maml:description>
@@ -5494,7 +5494,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>Only a database data source can be listed. Naming an LDAP one is refused with "Unable to establish connection to the database".</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -5507,7 +5507,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Get-R1DataSourceTable -dataSourceName 'advworks' -schemaPattern 'APP' -tableNamePattern 'CUST%'</dev:code>
+        <dev:code>Get-R1DataSourceTable -dataSourceName 'advworks' -schemaName 'APP' -tablePattern 'CUST%'</dev:code>
         <dev:remarks>
           <maml:para>Returns tables in the APP schema whose name starts with CUST.</maml:para>
         </dev:remarks>
@@ -8406,20 +8406,19 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Reads directly from an LDAP data source and returns what is there, without creating a schema. The data source is given either as the name of an existing one or as the connection details for a new one. Without a base DN the root is returned; with one, its children are.</maml:para>
-      <maml:para>The request body is sent as UTF8 bytes so that a password in the connection details cannot be captured by Windows PowerShell parameter binding or module logging.</maml:para>
+      <maml:para>Reads directly from an existing LDAP data source and returns what is there, without creating a schema. Without a base DN the root is returned; with one, its children are.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-R1LdapDataPreview</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
-          <maml:name>DataSource</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="name">
+          <maml:name>dataSourceName</maml:name>
           <maml:description>
-            <maml:para>The LDAP data source to read from: either an existing one named, or the connection details for a new one.</maml:para>
+            <maml:para>The name of the LDAP data source to read from.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
-            <maml:name>Object</maml:name>
+            <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -8439,14 +8438,14 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
-        <maml:name>DataSource</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="name">
+        <maml:name>dataSourceName</maml:name>
         <maml:description>
-          <maml:para>The LDAP data source to read from: either an existing one named, or the connection details for a new one.</maml:para>
+          <maml:para>The name of the LDAP data source to read from.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
-          <maml:name>Object</maml:name>
+          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -8486,22 +8485,29 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>Only an LDAP data source can be previewed. Naming a database one is refused with "Invalid data source, must be an LDAP data source".</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Get-R1LdapDataPreview -DataSource ([pscustomobject]@{ existingDataSource = $true; dataSourceName = 'opendj' })</dev:code>
+        <dev:code>Get-R1LdapDataPreview -dataSourceName 'companydirectory'</dev:code>
         <dev:remarks>
-          <maml:para>Returns the root of an existing data source.</maml:para>
+          <maml:para>Returns the root of the companydirectory data source.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Get-R1LdapDataPreview -DataSource $Definition -baseDn 'o=example'</dev:code>
+        <dev:code>Get-R1LdapDataPreview -dataSourceName 'companydirectory' -baseDn 'o=companydirectory'</dev:code>
         <dev:remarks>
           <maml:para>Returns the entries beneath a base DN.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Get-R1DataSource -name 'companydirectory' | Get-R1LdapDataPreview</dev:code>
+        <dev:remarks>
+          <maml:para>Takes the data source name from the pipeline.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

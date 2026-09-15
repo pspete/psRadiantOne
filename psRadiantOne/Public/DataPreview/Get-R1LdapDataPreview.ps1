@@ -8,8 +8,9 @@ function Get-R1LdapDataPreview {
 			ValueFromPipeline = $true,
 			ValueFromPipelineByPropertyName = $true
 		)]
-		[ValidateNotNull()]
-		[object]$DataSource,
+		[ValidateNotNullOrEmpty()]
+		[Alias('name')]
+		[string]$dataSourceName,
 
 		[parameter(
 			Mandatory = $false,
@@ -36,7 +37,12 @@ function Get-R1LdapDataPreview {
 
 		$URI = Resolve-R1ServiceUrl -Service Catalog -Path $Path
 
-		$Body = $DataSource | ConvertTo-R1SecretBody
+		#The request body is one of two shapes and existingDataSource is the discriminator the API
+		#picks between them with. Without it the request is rejected as unconvertible.
+		$Body = [ordered]@{
+			existingDataSource = $true
+			dataSourceName     = $dataSourceName
+		} | ConvertTo-R1SecretBody
 
 		$Result = Invoke-R1RestMethod -Uri $URI -Method POST -Body $Body
 
