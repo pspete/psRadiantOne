@@ -44,7 +44,11 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			}
 			New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
 
-			Mock Invoke-R1RestMethod -MockWith { 'zip-content' }
+			Mock Save-R1Download -MockWith {
+				$File = Join-Path -Path $(if ($Path) { $Path } else { $TestDrive }) -ChildPath $DefaultName
+				[System.IO.File]::WriteAllBytes($File, [byte[]](80, 75, 3, 4, 200, 0))
+				Get-Item -LiteralPath $File
+			}
 
 			$response = Export-R1DataSource -dataSources 'opendj' -Path $TestDrive
 
@@ -54,7 +58,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends request to expected endpoint' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
 
 					($URI -match '^https://radiantone.company.com/data-catalog-service/data_sources/export\?dataSources=') -and ($Method -eq 'GET')
 
@@ -66,7 +70,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				$null = Export-R1DataSource -dataSources 'opendj', 'advworks' -Path $TestDrive
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
 
 					$URI -match 'advworks'
 
@@ -78,6 +82,16 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		Context 'Output' {
 
+			It 'downloads to the specified path' {
+
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
+
+					($Path -eq $TestDrive) -and ($DefaultName -eq 'datasources.zip')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'writes the archive into the specified directory' {
 
 				Test-Path -Path (Join-Path $TestDrive 'datasources.zip') | Should -BeTrue
@@ -87,6 +101,22 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			It 'returns the file' {
 
 				$response | Should -BeOfType [System.IO.FileInfo]
+
+			}
+
+		}
+
+		Context 'Default path' {
+
+			It 'leaves the location to the download when no path is given' {
+
+				$null = Export-R1DataSource -dataSources 'opendj'
+
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
+
+					[string]::IsNullOrEmpty($Path)
+
+				} -Times 1 -Exactly -Scope It
 
 			}
 

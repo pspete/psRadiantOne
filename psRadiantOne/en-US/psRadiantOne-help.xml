@@ -2588,17 +2588,18 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>The path of the local file to upload, or the directory to write the export into.</maml:para>
+            <maml:para>The directory to save the file into, or the full path of the file.</maml:para>
+            <maml:para>Given a directory, the file is saved under the name the API sends it with. Given a full path, it is saved under the name that path ends in. When not given, the file is saved to the current user's Downloads directory, under the name the API sends it with.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>The current user's Downloads directory</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -2615,17 +2616,18 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>The path of the local file to upload, or the directory to write the export into.</maml:para>
+          <maml:para>The directory to save the file into, or the full path of the file.</maml:para>
+          <maml:para>Given a directory, the file is saved under the name the API sends it with. Given a full path, it is saved under the name that path ends in. When not given, the file is saved to the current user's Downloads directory, under the name the API sends it with.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>The current user's Downloads directory</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -2650,7 +2652,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2707,17 +2709,18 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>The path of the local file to upload, or the directory to write the export into.</maml:para>
+            <maml:para>The directory to save the file into, or the full path of the file.</maml:para>
+            <maml:para>Given a directory, the file is saved under the name the API sends it with. Given a full path, it is saved under the name that path ends in. When not given, the file is saved to the current user's Downloads directory, under the name the API sends it with.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>The current user's Downloads directory</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -2734,17 +2737,18 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>The path of the local file to upload, or the directory to write the export into.</maml:para>
+          <maml:para>The directory to save the file into, or the full path of the file.</maml:para>
+          <maml:para>Given a directory, the file is saved under the name the API sends it with. Given a full path, it is saved under the name that path ends in. When not given, the file is saved to the current user's Downloads directory, under the name the API sends it with.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>The current user's Downloads directory</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -3091,17 +3095,18 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>The path of the local file to upload.</maml:para>
+            <maml:para>The directory to save the file into, or the full path of the file.</maml:para>
+            <maml:para>Given a directory, the file is saved under the name the API sends it with. Given a full path, it is saved under the name that path ends in. When not given, the file is saved to the current user's Downloads directory, under the name the API sends it with.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>The current user's Downloads directory</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -3118,17 +3123,18 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>The path of the local file to upload.</maml:para>
+          <maml:para>The directory to save the file into, or the full path of the file.</maml:para>
+          <maml:para>Given a directory, the file is saved under the name the API sends it with. Given a full path, it is saved under the name that path ends in. When not given, the file is saved to the current user's Downloads directory, under the name the API sends it with.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>The current user's Downloads directory</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -3210,17 +3216,18 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>The path of the local file to upload, or the directory to write the download into.</maml:para>
+            <maml:para>The directory to save the file into, or the full path of the file.</maml:para>
+            <maml:para>Given a directory, the file is saved under the name the API sends it with. Given a full path, it is saved under the name that path ends in. When not given, the file is saved to the current user's Downloads directory, under the name the API sends it with.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>The current user's Downloads directory</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -3237,17 +3244,18 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>The path of the local file to upload, or the directory to write the download into.</maml:para>
+          <maml:para>The directory to save the file into, or the full path of the file.</maml:para>
+          <maml:para>Given a directory, the file is saved under the name the API sends it with. Given a full path, it is saved under the name that path ends in. When not given, the file is saved to the current user's Downloads directory, under the name the API sends it with.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>The current user's Downloads directory</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -30082,17 +30090,18 @@ Get-R1Operation -name $op.name</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>The path of the local file to upload, or the directory to write the export into.</maml:para>
+            <maml:para>The directory to save the file into, or the full path of the file.</maml:para>
+            <maml:para>Given a directory, the file is saved under the name the API sends it with. Given a full path, it is saved under the name that path ends in. When not given, the file is saved to the current user's Downloads directory, under the name the API sends it with.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>The current user's Downloads directory</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
           <maml:name>targetDn</maml:name>
@@ -30169,17 +30178,18 @@ Get-R1Operation -name $op.name</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>The path of the local file to upload, or the directory to write the export into.</maml:para>
+          <maml:para>The directory to save the file into, or the full path of the file.</maml:para>
+          <maml:para>Given a directory, the file is saved under the name the API sends it with. Given a full path, it is saved under the name that path ends in. When not given, the file is saved to the current user's Downloads directory, under the name the API sends it with.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>The current user's Downloads directory</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
         <maml:name>targetDn</maml:name>

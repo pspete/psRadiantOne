@@ -277,6 +277,58 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Download' {
+
+			BeforeEach {
+
+				Mock Invoke-WebRequest -MockWith {
+					[pscustomobject]@{
+						'StatusCode' = 200
+						'Headers'    = @{ 'Content-Disposition' = 'attachment; filename=export.zip' }
+						'Content'    = [byte[]](80, 75, 3, 4)
+					}
+				}
+
+			}
+
+			It 'asks for the response when writing to a file' {
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET -OutFile (Join-Path $TestDrive 'export.zip')
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					$PassThru -eq $true
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'returns the response rather than its content' {
+
+				$Result = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET -OutFile (Join-Path $TestDrive 'export.zip')
+
+				$Result.Headers['Content-Disposition'] | Should -Be 'attachment; filename=export.zip'
+
+			}
+
+			It 'does not ask for the response otherwise' {
+
+				Mock Invoke-WebRequest -MockWith {
+					[pscustomobject]@{ 'StatusCode' = 999 }
+				}
+
+				$null = Invoke-R1RestMethod -Uri 'https://radiantone.company.com/settings-service' -Method GET
+
+				Should -Invoke -CommandName Invoke-WebRequest -ParameterFilter {
+
+					-not $PassThru
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
 		Context 'Request' {
 
 			It 'sends the session token as a bearer token when no websession carries it' {

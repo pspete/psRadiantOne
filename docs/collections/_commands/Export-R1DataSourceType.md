@@ -13,7 +13,7 @@ Exports data source type templates.
 ## SYNTAX
 
 ```
-Export-R1DataSourceType [-templates] <String[]> [-Path] <String> [<CommonParameters>]
+Export-R1DataSourceType [-templates] <String[]> [[-Path] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -54,16 +54,20 @@ Accept wildcard characters: False
 ```
 
 ### -Path
-The path of the local file to upload, or the directory to write the export into.
+The directory to save the file into, or the full path of the file.
+
+Given a directory, the file is saved under the name the API sends it with. Given a full path, it
+is saved under the name that path ends in. When not given, the file is saved to the current
+user's Downloads directory, under the name the API sends it with.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 2
-Default value: None
+Default value: The current user's Downloads directory
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```

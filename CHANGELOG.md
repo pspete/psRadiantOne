@@ -6,9 +6,16 @@
   mutually exclusive, and a call giving neither is refused rather than the stored password being
   kept on its behalf. Every existing call which updates a data source without setting a password
   needs `-useExistingCredentials` adding to it.
+- `Export-R1DataSource`, `Export-R1DataSourceType`, `Export-R1DirectorySchemaFile`, `Export-R1File` and
+  `Save-R1DirectoryLdif` save a download under the name the API sends it with. `-Path` is now optional
+  and takes either a directory or the full path of a file, whose name is used instead. Without it the
+  file is saved to the current user's Downloads directory.
 
 ## Fixed
 
+- `Export-R1DataSource`, `Export-R1DataSourceType`, `Export-R1DirectorySchemaFile`, `Export-R1File`
+  and `Save-R1DirectoryLdif` write a binary download intact. It had been written out as a list of
+  decimal numbers, one for each byte, so an exported archive could not be opened.
 - `Set-R1DataSource` sends an update in the shape the control panel sends. A null list of linked
   schemas had been sent as a collection holding nothing, which the API stored and could then never
   read back, so every later read of any data source failed. Schema fields read back as null are now
