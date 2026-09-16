@@ -134,12 +134,36 @@ function Set-R1DataSource {
 
 		}
 
-		#A single schema name has to reach the API as a collection, but a null one must stay null.
-		#Wrapping null produces a collection holding nothing, which the API stores and can then
+		#A schema field the API reads back as null is left out of the update, as the control panel
+		#leaves it out. A null addedSchemas sent as a collection is one the API stores and can then
 		#never read back: one such record makes every later read of the collection fail.
-		if ($null -ne $Template['addedSchemas']) {
+		foreach ($Property in 'defaultSchema', 'addedSchemas') {
+
+			if ($Template.Contains($Property) -and $null -eq $Template[$Property]) {
+
+				$Template.Remove($Property)
+
+			}
+
+		}
+
+		#A single schema name has to reach the API as a collection.
+		if ($Template.Contains('addedSchemas')) {
 
 			$Template['addedSchemas'] = @($Template['addedSchemas'])
+
+		}
+
+		#Where the API reads these back as null, the control panel sends a default in their place.
+		$Defaults = @{ groupId = 'None'; sdcMappings = @{ }; kerberosProfile = '' }
+
+		foreach ($Property in $Defaults.Keys) {
+
+			if ($Template.Contains($Property) -and $null -eq $Template[$Property]) {
+
+				$Template[$Property] = $Defaults[$Property]
+
+			}
 
 		}
 

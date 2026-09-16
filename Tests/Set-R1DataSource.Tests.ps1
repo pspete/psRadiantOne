@@ -218,13 +218,14 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'sends null rather than a collection holding nothing when the api returns no schemas' {
+			It 'leaves out schema fields the api returns as null' {
 
 				Mock Invoke-R1RestMethod -MockWith {
 					[pscustomobject]@{
-						'name'         = 'opendj'
-						'category'     = 'ldap'
-						'addedSchemas' = $null
+						'name'          = 'opendj'
+						'category'      = 'ldap'
+						'defaultSchema' = $null
+						'addedSchemas'  = $null
 					}
 				}
 
@@ -234,7 +235,70 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 					if ($Method -ne 'PUT') { return $false }
 					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
-					($Raw -match '"addedSchemas"\s*:\s*null') -and ($Raw -notmatch '\[\s*null\s*\]')
+					($Raw -notmatch '"addedSchemas"') -and ($Raw -notmatch '"defaultSchema"')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends the schemas the api returned' {
+
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					($Raw -match '"addedSchemas"\s*:\s*\[\s*"default"\s*\]') -and ($Raw -match '"defaultSchema"\s*:\s*"default"')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
+		Context 'Defaults' {
+
+			It 'sends the defaults the control panel sends in place of null' {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					[pscustomobject]@{
+						'name'            = 'opendj'
+						'category'        = 'ldap'
+						'groupId'         = $null
+						'sdcMappings'     = $null
+						'kerberosProfile' = $null
+					}
+				}
+
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					($Raw -match '"groupId"\s*:\s*"None"') -and ($Raw -match '"sdcMappings"\s*:\s*\{\s*\}') -and ($Raw -match '"kerberosProfile"\s*:\s*""')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'does not add a property the api did not return' {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					[pscustomobject]@{
+						'name'     = 'northwind'
+						'category' = 'database'
+					}
+				}
+
+				Set-R1DataSource -name 'northwind' -description 'Updated' -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					($Raw -notmatch '"kerberosProfile"') -and ($Raw -notmatch '"groupId"') -and ($Raw -notmatch '"sdcMappings"')
 
 				} -Times 1 -Exactly -Scope It
 
