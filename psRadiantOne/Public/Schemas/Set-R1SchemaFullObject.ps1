@@ -70,15 +70,22 @@ function Set-R1SchemaFullObject {
 			dataSourceName   = $null
 			baseDn           = $null
 			publishToServer  = $false
+			objects          = $null
 			tablesWithFields = @()
 			relationships    = @()
 		}
 
 		$Request = Merge-R1Parameter -Template $Template -BoundParameter ($PSBoundParameters | Get-Parameter -ParametersToRemove schemaName) -Fallback $Existing
 
+		#A null collection stays null. Wrapped, it becomes a collection holding nothing, which the API
+		#can store and then never read back.
 		foreach ($Collection in 'tablesWithFields', 'relationships') {
 
-			$Request[$Collection] = @($Request[$Collection])
+			if ($null -ne $Request[$Collection]) {
+
+				$Request[$Collection] = @($Request[$Collection])
+
+			}
 
 		}
 

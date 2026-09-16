@@ -21,6 +21,8 @@
   read back, so every later read of any data source failed. Schema fields read back as null are now
   left out, and a null `groupId`, `sdcMappings` or `kerberosProfile` is sent as the control panel's
   default.
+- `Set-R1SchemaFullObject` sends back the schema's `objects`, which it had left out of the update,
+  and no longer sends a collection holding nothing when the API returns no tables or relationships.
 - `New-R1DataSource` no longer sends a collection holding nothing when given no linked schemas or
   failovers.
 - `Set-R1DataSource` keeps the stored password of an LDAP or database data source. Sending null was
