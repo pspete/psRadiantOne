@@ -114,6 +114,26 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'does not send a collection holding nothing when the api returns no meta' {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					[pscustomobject]@{
+						'name'            = 'csv'
+						'backendCategory' = 'database'
+						'meta'            = $null
+					}
+				}
+
+				Set-R1DataSourceType -name 'csv' -icon '/cone.svg' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($Method -eq 'PUT') -and ($Body -match '"name"\s*:\s*"csv"') -and ($Body -notmatch '\[\s*null\s*\]')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 		}
 
 	}

@@ -261,7 +261,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+The API rejects a create which carries only some of the validator's properties, answering "Cannot
+convert request body to required type" and creating nothing. The control panel sends every one of
+-name, -enabled, -oidcProvider, -oidcDiscoveryUrl, -jsonWebKeySetUri, -jwtValidationClock,
+-scopeClaimName, -expectedAudience, -apiService, -expectedScope and -claimsExpressionList.
+
+Which of them the API insists on has not been established.
 
 ## RELATED LINKS

@@ -87,9 +87,20 @@ function Set-R1DataSource {
 			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
+		[ValidateNotNull()]
+		[hashtable]$sdcMappings,
+
+		[parameter(
+			Mandatory = $true,
+			ValueFromPipelineByPropertyName = $true,
+			ParameterSetName = 'NewPassword'
+		)]
 		[securestring]$password,
 
-		[parameter(Mandatory = $false)]
+		[parameter(
+			Mandatory = $true,
+			ParameterSetName = 'ExistingCredentials'
+		)]
 		[switch]$useExistingCredentials
 	)
 
@@ -100,16 +111,6 @@ function Set-R1DataSource {
 	}#begin
 
 	Process {
-
-		$Path = "data_sources/$($name | Get-EscapedString)"
-
-		if ($useExistingCredentials) {
-
-			$Path = "$Path`?useExistingCredentials=true"
-
-		}
-
-		$URI = Resolve-R1ServiceUrl -Service Catalog -Path $Path
 
 		#Retrieve the data source and send it back with the supplied values applied over it, so a
 		#property left unspecified keeps its current value.
@@ -140,15 +141,39 @@ function Set-R1DataSource {
 
 		}
 
+		#A schema field the API reads back as null is left out of the update, as the control panel
+		#leaves it out. A null addedSchemas sent as a collection is one the API stores and can then
+		#never read back: one such record makes every later read of the collection fail.
+		foreach ($Property in 'defaultSchema', 'addedSchemas') {
+
+			if ($Template.Contains($Property) -and $null -eq $Template[$Property]) {
+
+				$Template.Remove($Property)
+
+			}
+
+		}
+
+		#A single schema name has to reach the API as a collection.
 		if ($Template.Contains('addedSchemas')) {
 
 			$Template['addedSchemas'] = @($Template['addedSchemas'])
 
 		}
 
+		#The connector mappings are the one property the API will not take null for, so where it reads
+		#one back the empty map the control panel sends goes instead. Every other property is left as
+		#it was read, so an update carries back what it was given.
+		if ($Template.Contains('sdcMappings') -and $null -eq $Template['sdcMappings']) {
+
+			$Template['sdcMappings'] = @{ }
+
+		}
+
 		#A password read back from the API is an empty string when one is set, which the API would
-		#read as an instruction to clear it. Null tells the server to keep the stored password.
-		if ($PSBoundParameters.ContainsKey('password')) {
+		#read as an instruction to clear it. Null is only understood as leave it alone for the fields
+		#of a custom data source, so the query parameter is what keeps an LDAP or database password.
+		if ($PSCmdlet.ParameterSetName -eq 'NewPassword') {
 
 			$Template['password'] = $password | ConvertTo-InsecureString
 
@@ -157,6 +182,16 @@ function Set-R1DataSource {
 			$Template['password'] = $null
 
 		}
+
+		$Path = "data_sources/$($name | Get-EscapedString)"
+
+		if ($PSCmdlet.ParameterSetName -eq 'ExistingCredentials') {
+
+			$Path = "$Path`?useExistingCredentials=true"
+
+		}
+
+		$URI = Resolve-R1ServiceUrl -Service Catalog -Path $Path
 
 		$Body = $Template | ConvertTo-R1SecretBody
 

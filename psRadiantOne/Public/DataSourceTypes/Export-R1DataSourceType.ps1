@@ -12,13 +12,16 @@ function Export-R1DataSourceType {
 		[string[]]$templates,
 
 		[parameter(
-			Mandatory = $true,
+			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
 		[ValidateScript({
-				if (-not (Test-Path -Path $PSItem -PathType Container)) {
+				#Either an existing directory, or the full path of a file in one
+				$Directory = if (Test-Path -LiteralPath $PSItem -PathType Container) { $PSItem } else { Split-Path -Path $PSItem -Parent }
 
-					throw "Directory not found: $PSItem"
+				if ((-not ([string]::IsNullOrEmpty($Directory))) -and (-not (Test-Path -LiteralPath $Directory -PathType Container))) {
+
+					throw "Directory not found: $Directory"
 
 				}
 				$true
@@ -38,25 +41,20 @@ function Export-R1DataSourceType {
 
 		$Body = @{ templates = @($templates) } | ConvertTo-R1JsonBody
 
-		$Result = Invoke-R1RestMethod -Uri $URI -Method POST -Body $Body
+		$Download = @{
+			Uri         = $URI
+			Method      = 'POST'
+			Body        = $Body
+			DefaultName = 'templates.zip'
+		}
 
-		if ($null -ne $Result) {
+		if ($PSBoundParameters.ContainsKey('Path')) {
 
-			$OutputFile = Join-Path -Path $Path -ChildPath 'templates.zip'
-
-			if ($Result -is [byte[]]) {
-
-				[System.IO.File]::WriteAllBytes($OutputFile, $Result)
-
-			} else {
-
-				[System.IO.File]::WriteAllText($OutputFile, $Result)
-
-			}
-
-			Get-Item -Path $OutputFile
+			$Download['Path'] = $Path
 
 		}
+
+		Save-R1Download @Download
 
 	}#process
 

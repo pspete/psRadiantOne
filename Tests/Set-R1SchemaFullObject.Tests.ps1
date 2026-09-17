@@ -52,6 +52,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 					'dataSourceName'   = 'vds'
 					'baseDn'           = 'o=base'
 					'publishToServer'  = $true
+					'objects'          = $null
 					'tablesWithFields' = @([pscustomobject]@{ 'name' = 'APP.CUSTOMERS'; 'fields' = @([pscustomobject]@{ 'name' = 'CID' }) })
 					'relationships'    = @([pscustomobject]@{ 'id' = 'rel1'; 'source' = 'APP.CUSTOMERS' })
 				}
@@ -108,6 +109,38 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 					if ($Method -ne 'PUT') { return $false }
 					@(@(($Body | ConvertFrom-Json).tablesWithFields)[0].fields)[0].name -eq 'CID'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends back the objects the api returned' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Body -match '"objects"\s*:\s*null'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'does not send a collection holding nothing when the api returns none' {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					[pscustomobject]@{
+						'name'             = 'default'
+						'type'             = 'LDAP'
+						'tablesWithFields' = $null
+						'relationships'    = $null
+					}
+				}
+
+				Set-R1SchemaFullObject -schemaName 'default' -baseDn 'o=base' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($Method -eq 'PUT') -and ($Body -match '"type"\s*:\s*"LDAP"') -and ($Body -notmatch '\[\s*null\s*\]')
 
 				} -Times 1 -Exactly -Scope It
 

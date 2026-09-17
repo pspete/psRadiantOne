@@ -12,13 +12,16 @@ function Export-R1File {
 		[string[]]$files,
 
 		[parameter(
-			Mandatory = $true,
+			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
 		[ValidateScript({
-				if (-not (Test-Path -Path $PSItem -PathType Container)) {
+				#Either an existing directory, or the full path of a file in one
+				$Directory = if (Test-Path -LiteralPath $PSItem -PathType Container) { $PSItem } else { Split-Path -Path $PSItem -Parent }
 
-					throw "Directory not found: $PSItem"
+				if ((-not ([string]::IsNullOrEmpty($Directory))) -and (-not (Test-Path -LiteralPath $Directory -PathType Container))) {
+
+					throw "Directory not found: $Directory"
 
 				}
 				$true
@@ -38,28 +41,23 @@ function Export-R1File {
 
 		$Body = @{ files = @($files) } | ConvertTo-R1JsonBody -EmptyArrayProperty files
 
-		$Result = Invoke-R1RestMethod -Uri $URI -Method POST -Body $Body
+		#A single file comes back as itself; several come back as an archive
+		$OutputName = if ($files.Count -eq 1) { Split-Path -Path $files[0] -Leaf } else { 'files.zip' }
 
-		if ($null -ne $Result) {
+		$Download = @{
+			Uri         = $URI
+			Method      = 'POST'
+			Body        = $Body
+			DefaultName = $OutputName
+		}
 
-			#A single file comes back as itself; several come back as an archive
-			$OutputName = if ($files.Count -eq 1) { Split-Path -Path $files[0] -Leaf } else { 'files.zip' }
+		if ($PSBoundParameters.ContainsKey('Path')) {
 
-			$OutputFile = Join-Path -Path $Path -ChildPath $OutputName
-
-			if ($Result -is [byte[]]) {
-
-				[System.IO.File]::WriteAllBytes($OutputFile, $Result)
-
-			} else {
-
-				[System.IO.File]::WriteAllText($OutputFile, $Result)
-
-			}
-
-			Get-Item -Path $OutputFile
+			$Download['Path'] = $Path
 
 		}
+
+		Save-R1Download @Download
 
 	}#process
 

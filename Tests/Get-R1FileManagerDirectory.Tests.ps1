@@ -44,8 +44,15 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			}
 			New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
 
+			#The shape the API answers with: the entries, wrapped in the flag for the directory listed
 			Mock Invoke-R1RestMethod -MockWith {
-				[pscustomobject]@{ 'name' = 'conf'; 'files' = @(); 'directories' = @() }
+				[pscustomobject]@{
+					'uploadAllowed' = $false
+					'entries'       = @(
+						[pscustomobject]@{ 'name' = 'certs'; 'id' = '/certs'; 'directory' = $true; 'editable' = $false }
+						[pscustomobject]@{ 'name' = 'lib'; 'id' = '/lib'; 'directory' = $true; 'editable' = $false }
+					)
+				}
 			}
 
 		}
@@ -78,11 +85,41 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'has expected typename' {
 
-				$response = Get-R1FileManagerDirectory
+				$response = @(Get-R1FileManagerDirectory)[0]
 
 				$response.psobject.TypeNames[0] | Should -Be 'psRadiantOne.Directory'
 
 			}
+
+		Context 'Output' {
+
+			It 'returns the entries, not the object wrapping them' {
+
+				$Result = @(Get-R1FileManagerDirectory)
+
+				$Result.Count | Should -Be 2
+				$Result[0].name | Should -Be 'certs'
+				$Result[1].id | Should -Be '/lib'
+
+			}
+
+			It 'carries the upload flag of the directory listed onto each entry' {
+
+				(Get-R1FileManagerDirectory)[0].uploadAllowed | Should -Be $false
+
+			}
+
+			It 'returns what it was given when the API does not wrap it' {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					@([pscustomobject]@{ 'name' = 'certs' })
+				}
+
+				(Get-R1FileManagerDirectory).name | Should -Be 'certs'
+
+			}
+
+		}
 
 		}
 

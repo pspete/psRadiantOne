@@ -19,6 +19,9 @@ Get-R1FileManagerDirectory [[-path] <String>] [<CommonParameters>]
 ## DESCRIPTION
 Lists the files and folders in a directory. Without a path, the base directory is listed.
 
+Each entry carries uploadAllowed, the flag the API returns for the directory listed rather than for
+the entry itself.
+
 ## EXAMPLES
 
 ### Example 1
@@ -30,10 +33,18 @@ Lists the base directory.
 
 ### Example 2
 ```powershell
-Get-R1FileManagerDirectory -path '/conf'
+Get-R1FileManagerDirectory -path '/vds_server/custom/src'
 ```
 
-Lists the conf directory.
+Lists that directory.
+
+### Example 3
+```powershell
+Get-R1FileManagerDirectory -path '/certs' | Where-Object directory
+
+```
+
+Lists the folders in /certs, leaving out the files.
 
 ## PARAMETERS
 

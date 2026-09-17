@@ -129,6 +129,19 @@ function New-R1DataSource {
 		)]
 		[string]$kerberosProfile,
 
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true,
+			ParameterSetName = 'Ldap'
+		)]
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true,
+			ParameterSetName = 'Database'
+		)]
+		[ValidateNotNull()]
+		[hashtable]$sdcMappings,
+
 		#----------------------------------------------------------------------------- database
 		[parameter(
 			Mandatory = $true,
@@ -234,7 +247,7 @@ function New-R1DataSource {
 
 		foreach ($Collection in 'addedSchemas', 'failovers') {
 
-			if ($Request.Contains($Collection)) {
+			if ($null -ne $Request[$Collection]) {
 
 				$Request[$Collection] = @($Request[$Collection])
 

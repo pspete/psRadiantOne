@@ -23,7 +23,7 @@ Deletes the directory at the given path.
 
 ### Example 1
 ```powershell
-Remove-R1FileManagerDirectory -path '/conf/logs'
+Remove-R1FileManagerDirectory -path '/vds_server/custom/src/psr1'
 ```
 
 Deletes the directory, after prompting for confirmation.
@@ -88,9 +88,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Void
 
 ## NOTES
-
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
 
 ## RELATED LINKS
 

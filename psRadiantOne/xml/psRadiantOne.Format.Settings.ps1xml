@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <ViewDefinitions>
+    <!--
+      Deployment settings which are returned as a single object. The automatic list is already right
+      for the flat ones, so only those carrying a date, an array or a nested object are defined here.
+    -->
+    <View>
+      <Name>psRadiantOne.ProductVersion</Name>
+      <ViewSelectedBy>
+        <TypeName>psRadiantOne.ProductVersion</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <PropertyName>version</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>installDate</Label>
+                <ScriptBlock>if ($null -ne $_.installDate) { ([datetime]$_.installDate).ToLocalTime().ToString('g') }</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>expireDate</Label>
+                <ScriptBlock>if ($null -ne $_.expireDate) { ([datetime]$_.expireDate).ToLocalTime().ToString('g') }</ScriptBlock>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+    <View>
+      <Name>psRadiantOne.ServiceSummary</Name>
+      <ViewSelectedBy>
+        <TypeName>psRadiantOne.ServiceSummary</TypeName>
+      </ViewSelectedBy>
+      <!--
+        Three counters, each returned as an object whose properties are the categories counted.
+      -->
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>dataSources</Label>
+                <ScriptBlock>($_.dataSources.PSObject.Properties | ForEach-Object { "$($_.Name) $($_.Value)" }) -join ', '</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>namingContexts</Label>
+                <ScriptBlock>($_.namingContexts.PSObject.Properties | ForEach-Object { "$($_.Name) $($_.Value)" }) -join ', '</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>caches</Label>
+                <ScriptBlock>($_.caches.PSObject.Properties | ForEach-Object { "$($_.Name) $($_.Value)" }) -join ', '</ScriptBlock>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+    <View>
+      <Name>psRadiantOne.LogSettings</Name>
+      <ViewSelectedBy>
+        <TypeName>psRadiantOne.LogSettings</TypeName>
+      </ViewSelectedBy>
+      <!--
+        What a component returns varies: Sync Engine carries a log level and nothing else, while the
+        RadiantOne Server carries the rollover settings, the log4j properties and the notification
+        settings. The items a component does not have render empty.
+      -->
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <PropertyName>logSettingsComponent</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>logLevel</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>rolloverSize</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>archiveMaxFileCount</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>integrityAssurance</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>enableDebugSSL</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>advancedProperties</Label>
+                <ScriptBlock>($_.advancedProperties | ForEach-Object { "$($_.key) = $($_.value)" }) -join [System.Environment]::NewLine</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>logNotificationFailure</Label>
+                <ScriptBlock>if ($null -ne $_.logNotificationFailure) { ($_.logNotificationFailure.PSObject.Properties | ForEach-Object { "$($_.Name) = $($_.Value)" }) -join [System.Environment]::NewLine }</ScriptBlock>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+    <View>
+      <Name>psRadiantOne.ChangeLogSettings</Name>
+      <ViewSelectedBy>
+        <TypeName>psRadiantOne.ChangeLogSettings</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <PropertyName>enableChangelog</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>maxAge</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>persistentCacheRefreshLog</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>changelogs</Label>
+                <ScriptBlock>($_.changelogs | ForEach-Object { "$($_.dn) [$($_.source)] enabled = $($_.enabled)" }) -join [System.Environment]::NewLine</ScriptBlock>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+    <View>
+      <Name>psRadiantOne.GlobalAttributes</Name>
+      <ViewSelectedBy>
+        <TypeName>psRadiantOne.GlobalAttributes</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <PropertyName>hideOpAttrs</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>excludedHiddenOpAttrs</Label>
+                <ScriptBlock>$_.excludedHiddenOpAttrs -join ', '</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>excludedAttrs</Label>
+                <ScriptBlock>$_.excludedAttrs -join ', '</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>binaryAttrs</Label>
+                <ScriptBlock>$_.binaryAttrs -join ', '</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>multiValuedAttrs</Label>
+                <ScriptBlock>$_.multiValuedAttrs -join ', '</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>keywordSearchAttrs</Label>
+                <ScriptBlock>$_.keywordSearchAttrs -join ', '</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>logsExcludedAttrs</Label>
+                <ScriptBlock>$_.logsExcludedAttrs -join ', '</ScriptBlock>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+    <View>
+      <Name>psRadiantOne.AttributeEncryption</Name>
+      <ViewSelectedBy>
+        <TypeName>psRadiantOne.AttributeEncryption</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <PropertyName>encryptKeyInUse</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>currentHdapCipher</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>hdapAttrKeyExists</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>currentLdifzCipher</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>ldifzKeyExists</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>secureLdifExport</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>availableCiphers</Label>
+                <ScriptBlock>$_.availableCiphers -join ', '</ScriptBlock>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+    <View>
+      <Name>psRadiantOne.PromotionSettings</Name>
+      <ViewSelectedBy>
+        <TypeName>psRadiantOne.PromotionSettings</TypeName>
+      </ViewSelectedBy>
+      <!--
+        Everything the type carries is inside the single auto property.
+      -->
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>state</Label>
+                <ScriptBlock>$_.auto.state</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>enabled</Label>
+                <ScriptBlock>$_.auto.enabled</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>promotionDataLocation</Label>
+                <ScriptBlock>$_.auto.promotionDataLocation</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>importFromEnvironment</Label>
+                <ScriptBlock>$_.auto.importFromEnvironment</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>exportToEnvironment</Label>
+                <ScriptBlock>$_.auto.exportToEnvironment</ScriptBlock>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+    <View>
+      <Name>psRadiantOne.InterceptionScriptContents</Name>
+      <ViewSelectedBy>
+        <TypeName>psRadiantOne.InterceptionScriptContents</TypeName>
+      </ViewSelectedBy>
+      <!--
+        The script itself runs to thousands of characters. The table names the file and measures it;
+        Format-List has no list view here, so it still prints the script in full.
+      -->
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>filename</Label>
+            <Width>36</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>classname</Label>
+            <Width>36</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>characters</Label>
+            <Width>11</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>filename</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>classname</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>if ($null -ne $_.scriptContents) { $_.scriptContents.Length }</ScriptBlock>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

@@ -68,7 +68,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			BeforeEach {
 
-				Set-R1DataSource -name 'opendj' -description 'Updated' -Confirm:$false
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
 
 			}
 
@@ -76,7 +76,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($Method -eq 'PUT') -and ($URI -eq 'https://radiantone.company.com/data-catalog-service/data_sources/opendj')
+					($Method -eq 'PUT') -and ($URI -like 'https://radiantone.company.com/data-catalog-service/data_sources/opendj?*')
 
 				} -Times 1 -Exactly -Scope It
 
@@ -118,7 +118,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends a null password rather than the empty string the api returned' {
 
-				Set-R1DataSource -name 'opendj' -description 'Updated' -Confirm:$false
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
@@ -146,6 +146,36 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'refuses a call which says nothing about the password' {
+
+				{ Set-R1DataSource -name 'opendj' -description 'Updated' -Confirm:$false -ErrorAction Stop } |
+					Should -Throw -ErrorId 'AmbiguousParameterSet,Set-R1DataSource'
+
+			}
+
+			It 'refuses a call which supplies a password and asks to keep the stored one' {
+
+				$Secret = 'newSecret' | ConvertTo-SecureString -AsPlainText -Force
+
+				{ Set-R1DataSource -name 'opendj' -password $Secret -useExistingCredentials -Confirm:$false -ErrorAction Stop } |
+					Should -Throw -ErrorId 'AmbiguousParameterSet,Set-R1DataSource'
+
+			}
+
+			It 'does not ask the server to keep the stored password when one was supplied' {
+
+				$Secret = 'newSecret' | ConvertTo-SecureString -AsPlainText -Force
+
+				Set-R1DataSource -name 'opendj' -password $Secret -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($Method -eq 'PUT') -and ($URI -notmatch 'useExistingCredentials')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'asks the server to keep the stored credentials when told to' {
 
 				Set-R1DataSource -name 'opendj' -useExistingCredentials -Confirm:$false
@@ -160,11 +190,151 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends the body as bytes so the password cannot be captured' {
 
-				Set-R1DataSource -name 'opendj' -Confirm:$false
+				Set-R1DataSource -name 'opendj' -useExistingCredentials -Confirm:$false
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
 					($Method -eq 'PUT') -and ($Body -is [byte[]])
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
+		Context 'Schemas' {
+
+			It 'sends a single schema name as a collection' {
+
+				Set-R1DataSource -name 'opendj' -addedSchemas 'default' -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					$Raw -match '"addedSchemas"\s*:\s*\[\s*"default"\s*\]'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'leaves out schema fields the api returns as null' {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					[pscustomobject]@{
+						'name'          = 'opendj'
+						'category'      = 'ldap'
+						'defaultSchema' = $null
+						'addedSchemas'  = $null
+					}
+				}
+
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					($Raw -notmatch '"addedSchemas"') -and ($Raw -notmatch '"defaultSchema"')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends the schemas the api returned' {
+
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					($Raw -match '"addedSchemas"\s*:\s*\[\s*"default"\s*\]') -and ($Raw -match '"defaultSchema"\s*:\s*"default"')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
+		Context 'Defaults' {
+
+			It 'sends the mappings it was given' {
+
+				Set-R1DataSource -name 'opendj' -sdcMappings @{ 'sdc1' = @{ 'host' = 'connector.example.com'; 'port' = 1234 } } -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Decoded = [System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json
+					($Decoded.sdcMappings.sdc1.host -eq 'connector.example.com') -and ($Decoded.sdcMappings.sdc1.port -eq 1234)
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends an empty map for the connector mappings, and leaves the rest null' {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					[pscustomobject]@{
+						'name'            = 'opendj'
+						'category'        = 'ldap'
+						'groupId'         = $null
+						'sdcMappings'     = $null
+						'kerberosProfile' = $null
+					}
+				}
+
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					($Raw -match '"sdcMappings"\s*:\s*\{\s*\}') -and ($Raw -match '"kerberosProfile"\s*:\s*null')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'leaves a null groupId as the api returned it' {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					[pscustomobject]@{
+						'name'     = 'opendj'
+						'category' = 'ldap'
+						'groupId'  = $null
+					}
+				}
+
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					($Raw -match '"groupId"\s*:\s*null') -and ($Raw -notmatch '"None"')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'does not add a property the api did not return' {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					[pscustomobject]@{
+						'name'     = 'northwind'
+						'category' = 'database'
+					}
+				}
+
+				Set-R1DataSource -name 'northwind' -description 'Updated' -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					($Raw -notmatch '"kerberosProfile"') -and ($Raw -notmatch '"groupId"') -and ($Raw -notmatch '"sdcMappings"')
 
 				} -Times 1 -Exactly -Scope It
 

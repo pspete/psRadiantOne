@@ -1,3 +1,48 @@
+# 0.3
+
+## Added
+
+- `Import-R1DataSource` takes `-overrideExisting`, `-performOpOnSchemas` and `-crossEnvironment`, and
+  `Export-R1DataSource` the last two. An import is refused where the data source already exists
+  unless `-overrideExisting` is given. Only the options supplied are sent.
+- `New-R1DataSource` and `Set-R1DataSource` take `-sdcMappings`, the Secure Data Connector mappings
+  the API defines for an LDAP or database data source.
+- Format views for the types returned by the data catalog, directory namespace, administration and
+  settings commands. Data sources, data source types, schemas, tables, fields, relationships, naming
+  contexts, directory entries, views, users, roles, tasks, ACIs, feature flags, file manager
+  directories and dashboard items are listed as tables rather than a page per object, and
+  `Format-List` renders the nested permission, log and counter blocks which previously printed as
+  `@{...}`. Dates display in local time. Nothing is lost: `Select-Object *` and `Format-List` still
+  reach every property, including a task's log and an interception script's contents.
+
+## Changed
+
+- **`Set-R1DataSource` requires either `-password` or `-useExistingCredentials`.** They cannot be
+  combined, and a call giving neither is refused. An existing call which updates a data source
+  without setting a password needs `-useExistingCredentials` adding to it.
+- `Get-R1FileManagerDirectory` returns the directory entries rather than the object which wraps
+  them, so they can be filtered and piped. Each carries `uploadAllowed`, the flag the API returns
+  for the directory listed.
+- `-Path` is optional on `Export-R1DataSource`, `Export-R1DataSourceType`,
+  `Export-R1DirectorySchemaFile`, `Export-R1File` and `Save-R1DirectoryLdif`, and takes a directory
+  or the full path of a file. A download is saved under the name the API sends it with, or under the
+  name the path ends in, and without a path to the current user's Downloads directory.
+
+## Fixed
+
+- The five export commands write a binary download intact. An archive had been written out as one
+  decimal number per byte, so it could not be opened.
+- A command no longer fails when the API answers a successful request with a message rather than
+  JSON. The message is warned and returned.
+- `Add-R1DataSourcePlugin` returns the staged import, which carries the id
+  `Complete-R1DataSourceTypeImport` and `Remove-R1DataSourceTypeImport` act on.
+- `Set-R1DataSource` keeps the stored password of an LDAP or database data source, which sending
+  null had cleared, and leaves a null `groupId` or `kerberosProfile` as the API returned it.
+- `Set-R1DataSource`, `New-R1DataSource`, `Set-R1DataSourceType` and `Set-R1SchemaFullObject` no
+  longer send a collection holding nothing where the API returns null. One such record could not be
+  read back, and made every later read of any data source fail.
+- `Set-R1SchemaFullObject` sends the schema's `objects` back, which it had left out of the update.
+
 # 0.2
 
 ## Fixed

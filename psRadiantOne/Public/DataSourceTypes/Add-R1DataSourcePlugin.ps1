@@ -1,7 +1,7 @@
 # .ExternalHelp psRadiantOne-help.xml
 function Add-R1DataSourcePlugin {
 	[CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
-	[OutputType([void])]
+	[OutputType('psRadiantOne.TemplateImport')]
 	param(
 		[parameter(
 			Mandatory = $true,
@@ -35,7 +35,15 @@ function Add-R1DataSourcePlugin {
 
 		if ($PSCmdlet.ShouldProcess($UploadFile.Name, 'Import Plugin')) {
 
-			$null = Invoke-R1RestMethod -Uri $URI -Method POST -Body $Form.Body -ContentType $Form.ContentType
+			#The upload stages the plugin rather than installing it, and the reply carries the id
+			#which Complete-R1DataSourceTypeImport and Remove-R1DataSourceTypeImport act on.
+			$Result = Invoke-R1RestMethod -Uri $URI -Method POST -Body $Form.Body -ContentType $Form.ContentType
+
+			if ($null -ne $Result) {
+
+				$Result | Add-CustomType -Type psRadiantOne.TemplateImport
+
+			}
 
 		}
 
