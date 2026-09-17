@@ -24,10 +24,10 @@ Renames a folder, leaving it in the same parent directory.
 
 ### Example 1
 ```powershell
-Rename-R1FileManagerDirectory -parentPath '/tmp' -oldName 'directory_old' -newName 'directory_new'
+Rename-R1FileManagerDirectory -parentPath '/vds_server/custom/src' -oldName 'psr1' -newName 'psr1-renamed'
 ```
 
-Renames a folder.
+Renames /vds_server/custom/src/psr1 to /vds_server/custom/src/psr1-renamed.
 
 ## PARAMETERS
 

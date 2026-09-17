@@ -20509,9 +20509,9 @@ New-R1DirectoryEntry -dn 'ou=people,o=example' -attributes $Attributes</dev:code
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>New-R1FileManagerDirectory -path '/conf' -folderName 'logs'</dev:code>
+        <dev:code>New-R1FileManagerDirectory -path '/vds_server/custom/src' -folderName 'psr1'</dev:code>
         <dev:remarks>
-          <maml:para>Creates /conf/logs.</maml:para>
+          <maml:para>Creates /vds_server/custom/src/psr1.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -26710,7 +26710,7 @@ Get-R1Operation -name $op.name</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Remove-R1FileManagerDirectory -path '/conf/logs'</dev:code>
+        <dev:code>Remove-R1FileManagerDirectory -path '/vds_server/custom/src/psr1'</dev:code>
         <dev:remarks>
           <maml:para>Deletes the directory, after prompting for confirmation.</maml:para>
         </dev:remarks>
@@ -29247,9 +29247,9 @@ Get-R1Operation -name $op.name</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Rename-R1FileManagerDirectory -parentPath '/tmp' -oldName 'directory_old' -newName 'directory_new'</dev:code>
+        <dev:code>Rename-R1FileManagerDirectory -parentPath '/vds_server/custom/src' -oldName 'psr1' -newName 'psr1-renamed'</dev:code>
         <dev:remarks>
-          <maml:para>Renames a folder.</maml:para>
+          <maml:para>Renames /vds_server/custom/src/psr1 to /vds_server/custom/src/psr1-renamed.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
