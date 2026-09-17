@@ -7,6 +7,13 @@
   unless `-overrideExisting` is given. Only the options supplied are sent.
 - `New-R1DataSource` and `Set-R1DataSource` take `-sdcMappings`, the Secure Data Connector mappings
   the API defines for an LDAP or database data source.
+- Format views for the types returned by the data catalog, directory namespace, administration and
+  settings commands. Data sources, data source types, schemas, tables, fields, relationships, naming
+  contexts, directory entries, views, users, roles, tasks, ACIs, feature flags, file manager
+  directories and dashboard items are listed as tables rather than a page per object, and
+  `Format-List` renders the nested permission, log and counter blocks which previously printed as
+  `@{...}`. Dates display in local time. Nothing is lost: `Select-Object *` and `Format-List` still
+  reach every property, including a task's log and an interception script's contents.
 
 ## Changed
 
