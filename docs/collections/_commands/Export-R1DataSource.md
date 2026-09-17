@@ -13,7 +13,8 @@ Exports data sources to a zip file.
 ## SYNTAX
 
 ```
-Export-R1DataSource [-dataSources] <String[]> [[-Path] <String>] [<CommonParameters>]
+Export-R1DataSource [-dataSources] <String[]> [-performOpOnSchemas <Boolean>] [-crossEnvironment <Boolean>]
+ [[-Path] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -69,6 +70,37 @@ Aliases:
 Required: False
 Position: 2
 Default value: The current user's Downloads directory
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -crossEnvironment
+Exports in cross environment mode. Without it, the data sources are not usable outside this
+environment. The API defaults this to true.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -performOpOnSchemas
+Includes the schemas associated with the data sources. The API defaults this to true.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```

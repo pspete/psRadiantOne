@@ -18,6 +18,24 @@ function Import-R1DataSource {
 		[Alias('FullName')]
 		[string]$Path,
 
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[bool]$overrideExisting,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[bool]$performOpOnSchemas,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[bool]$crossEnvironment,
+
 		[parameter(Mandatory = $false)]
 		[switch]$Xml
 	)
@@ -31,6 +49,28 @@ function Import-R1DataSource {
 	Process {
 
 		$Endpoint = if ($Xml) { 'data_sources/import_xml' } else { 'data_sources/import' }
+
+		#The xml import defines only overrideExisting; the others belong to the zip import alone. Any
+		#left unspecified is left out, so the API applies its own default.
+		$Supported = if ($Xml) { , 'overrideExisting' } else { 'overrideExisting', 'performOpOnSchemas', 'crossEnvironment' }
+
+		$Query = [ordered]@{ }
+
+		foreach ($Option in $Supported) {
+
+			if ($PSBoundParameters.ContainsKey($Option)) {
+
+				$Query[$Option] = "$($PSBoundParameters[$Option])".ToLower()
+
+			}
+
+		}
+
+		if ($Query.Count -gt 0) {
+
+			$Endpoint = "$Endpoint`?$($Query | ConvertTo-QueryString)"
+
+		}
 
 		$URI = Resolve-R1ServiceUrl -Service Catalog -Path $Endpoint
 

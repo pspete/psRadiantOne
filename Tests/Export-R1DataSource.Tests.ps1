@@ -122,6 +122,32 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Options' {
+
+			It 'sends no options when it was given none' {
+
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
+
+					$Uri -eq 'https://radiantone.company.com/data-catalog-service/data_sources/export?dataSources=opendj'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends the options it was given' {
+
+				$null = Export-R1DataSource -dataSources 'opendj' -performOpOnSchemas $false -crossEnvironment $true -Path $TestDrive
+
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
+
+					($Uri -match 'performOpOnSchemas=false') -and ($Uri -match 'crossEnvironment=true')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
 	}
 
 }

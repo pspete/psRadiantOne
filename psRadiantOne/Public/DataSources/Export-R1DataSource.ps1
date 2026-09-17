@@ -15,6 +15,18 @@ function Export-R1DataSource {
 			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
+		[bool]$performOpOnSchemas,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[bool]$crossEnvironment,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
 		[ValidateScript({
 				#Either an existing directory, or the full path of a file in one
 				$Directory = if (Test-Path -LiteralPath $PSItem -PathType Container) { $PSItem } else { Split-Path -Path $PSItem -Parent }
@@ -37,7 +49,20 @@ function Export-R1DataSource {
 
 	Process {
 
-		$Query = @{ dataSources = @($dataSources) } | ConvertTo-QueryString
+		$Parameters = [ordered]@{ dataSources = @($dataSources) }
+
+		#Left out unless specified, so the API applies its own default
+		foreach ($Option in 'performOpOnSchemas', 'crossEnvironment') {
+
+			if ($PSBoundParameters.ContainsKey($Option)) {
+
+				$Parameters[$Option] = "$($PSBoundParameters[$Option])".ToLower()
+
+			}
+
+		}
+
+		$Query = $Parameters | ConvertTo-QueryString
 
 		$URI = Resolve-R1ServiceUrl -Service Catalog -Path "data_sources/export`?$Query"
 

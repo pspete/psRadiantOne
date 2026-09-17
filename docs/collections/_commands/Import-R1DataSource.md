@@ -13,7 +13,8 @@ Imports data sources from a file.
 ## SYNTAX
 
 ```
-Import-R1DataSource [-Path] <String> [-Xml] [-WhatIf] [-Confirm] [<CommonParameters>]
+Import-R1DataSource [-Path] <String> [-overrideExisting <Boolean>] [-performOpOnSchemas <Boolean>]
+ [-crossEnvironment <Boolean>] [-Xml] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -96,6 +97,53 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -crossEnvironment
+Imports in cross environment mode. Without it, data sources are not usable outside the environment
+they were exported from. The API defaults this to true.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -overrideExisting
+Replaces a data source which already exists. Without it the API refuses the import with a bad
+request when the file names a data source the deployment already has.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -performOpOnSchemas
+Includes the schemas associated with the data sources. The API defaults this to true.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

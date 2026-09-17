@@ -2,6 +2,10 @@
 
 ## Added
 
+- `Import-R1DataSource` takes `-overrideExisting`, `-performOpOnSchemas` and `-crossEnvironment`, and
+  `Export-R1DataSource` takes the last two. The API defines them for these operations and neither
+  command could send any of them: an import of a data source which already exists is refused
+  without `-overrideExisting`. Only the options given are sent, so the API's own defaults apply.
 - `New-R1DataSource` and `Set-R1DataSource` take `-sdcMappings`, the Secure Data Connector mappings
   the API defines for an LDAP or database data source, which neither command could set.
 
