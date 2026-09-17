@@ -161,8 +161,9 @@ function Set-R1DataSource {
 
 		}
 
-		#Where the API reads these back as null, the control panel sends a default in their place.
-		$Defaults = @{ groupId = 'None'; sdcMappings = @{ }; kerberosProfile = '' }
+		#The API will not take null for these, so where it reads one back the value the control panel
+		#sends in its place goes instead. A property which does take null is left as it was read.
+		$Defaults = @{ sdcMappings = @{ }; kerberosProfile = '' }
 
 		foreach ($Property in $Defaults.Keys) {
 

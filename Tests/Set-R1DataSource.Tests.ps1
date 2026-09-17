@@ -291,7 +291,29 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 					if ($Method -ne 'PUT') { return $false }
 					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
-					($Raw -match '"groupId"\s*:\s*"None"') -and ($Raw -match '"sdcMappings"\s*:\s*\{\s*\}') -and ($Raw -match '"kerberosProfile"\s*:\s*""')
+					($Raw -match '"sdcMappings"\s*:\s*\{\s*\}') -and ($Raw -match '"kerberosProfile"\s*:\s*""')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'leaves a null groupId as the api returned it' {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					[pscustomobject]@{
+						'name'     = 'opendj'
+						'category' = 'ldap'
+						'groupId'  = $null
+					}
+				}
+
+				Set-R1DataSource -name 'opendj' -description 'Updated' -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					($Raw -match '"groupId"\s*:\s*null') -and ($Raw -notmatch '"None"')
 
 				} -Times 1 -Exactly -Scope It
 
