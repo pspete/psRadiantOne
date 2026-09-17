@@ -7485,6 +7485,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:details>
     <maml:description>
       <maml:para>Lists the files and folders in a directory. Without a path, the base directory is listed.</maml:para>
+      <maml:para>Each entry carries uploadAllowed, the flag the API returns for the directory listed rather than for the entry itself.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -7552,9 +7553,16 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Get-R1FileManagerDirectory -path '/conf'</dev:code>
+        <dev:code>Get-R1FileManagerDirectory -path '/vds_server/custom/src'</dev:code>
         <dev:remarks>
-          <maml:para>Lists the conf directory.</maml:para>
+          <maml:para>Lists that directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Get-R1FileManagerDirectory -path '/certs' | Where-Object directory</dev:code>
+        <dev:remarks>
+          <maml:para>Lists the folders in /certs, leaving out the files.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

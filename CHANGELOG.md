@@ -13,6 +13,9 @@
 - **`Set-R1DataSource` requires either `-password` or `-useExistingCredentials`.** They cannot be
   combined, and a call giving neither is refused. An existing call which updates a data source
   without setting a password needs `-useExistingCredentials` adding to it.
+- `Get-R1FileManagerDirectory` returns the directory entries rather than the object which wraps
+  them, so they can be filtered and piped. Each carries `uploadAllowed`, the flag the API returns
+  for the directory listed.
 - `-Path` is optional on `Export-R1DataSource`, `Export-R1DataSourceType`,
   `Export-R1DirectorySchemaFile`, `Export-R1File` and `Save-R1DirectoryLdif`, and takes a directory
   or the full path of a file. A download is saved under the name the API sends it with, or under the
