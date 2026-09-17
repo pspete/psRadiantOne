@@ -18,15 +18,15 @@ New-R1DataSource -name <String> -type <String> [-active <Boolean>] [-description
  [-defaultSchema <String>] [-addedSchemas <String[]>] [-groupId <String>] -hostName <String> -port <Int32>
  -bindDn <String> [-ssl <Boolean>] [-baseDn <String>] [-pagedResultsControl <Boolean>] [-pageSize <Int32>]
  [-chaseReferrals <Boolean>] [-failovers <Object[]>] [-verifySslHostname <Boolean>] [-kerberosProfile <String>]
- [-password <SecureString>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-sdcMappings <Hashtable>] [-password <SecureString>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Database
 ```
 New-R1DataSource -name <String> -type <String> [-active <Boolean>] [-description <String>]
- [-defaultSchema <String>] [-addedSchemas <String[]>] [-groupId <String>] -driverClassName <String>
- -url <String> -username <String> [-failOverName <String>] [-onPremHost <String>] [-onPremPort <Int32>]
- [-password <SecureString>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-defaultSchema <String>] [-addedSchemas <String[]>] [-groupId <String>] [-sdcMappings <Hashtable>]
+ -driverClassName <String> -url <String> -username <String> [-failOverName <String>] [-onPremHost <String>]
+ [-onPremPort <Int32>] [-password <SecureString>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Custom
@@ -487,6 +487,22 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -sdcMappings
+A map of Secure Data Connector mappings, keyed by name. Each value gives the host and port the
+connector reaches the data source on, and optionally the group id.
+
+```yaml
+Type: Hashtable
+Parameter Sets: Ldap, Database
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

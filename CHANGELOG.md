@@ -1,5 +1,10 @@
 # Unreleased
 
+## Added
+
+- `New-R1DataSource` and `Set-R1DataSource` take `-sdcMappings`, the Secure Data Connector mappings
+  the API defines for an LDAP or database data source, which neither command could set.
+
 ## Changed
 
 - **`Set-R1DataSource` now requires either `-password` or `-useExistingCredentials`.** They are

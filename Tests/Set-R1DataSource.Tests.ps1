@@ -259,6 +259,20 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		Context 'Defaults' {
 
+			It 'sends the mappings it was given' {
+
+				Set-R1DataSource -name 'opendj' -sdcMappings @{ 'sdc1' = @{ 'host' = 'connector.example.com'; 'port' = 1234 } } -useExistingCredentials -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Decoded = [System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json
+					($Decoded.sdcMappings.sdc1.host -eq 'connector.example.com') -and ($Decoded.sdcMappings.sdc1.port -eq 1234)
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'sends the defaults the control panel sends in place of null' {
 
 				Mock Invoke-R1RestMethod -MockWith {

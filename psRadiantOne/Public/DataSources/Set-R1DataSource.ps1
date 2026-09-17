@@ -84,6 +84,13 @@ function Set-R1DataSource {
 		[hashtable]$customProps,
 
 		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[ValidateNotNull()]
+		[hashtable]$sdcMappings,
+
+		[parameter(
 			Mandatory = $true,
 			ValueFromPipelineByPropertyName = $true,
 			ParameterSetName = 'NewPassword'

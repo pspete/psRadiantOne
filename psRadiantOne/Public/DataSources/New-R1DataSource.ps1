@@ -129,6 +129,19 @@ function New-R1DataSource {
 		)]
 		[string]$kerberosProfile,
 
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true,
+			ParameterSetName = 'Ldap'
+		)]
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true,
+			ParameterSetName = 'Database'
+		)]
+		[ValidateNotNull()]
+		[hashtable]$sdcMappings,
+
 		#----------------------------------------------------------------------------- database
 		[parameter(
 			Mandatory = $true,

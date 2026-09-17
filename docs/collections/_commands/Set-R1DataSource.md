@@ -12,20 +12,20 @@ Updates a data source.
 
 ## SYNTAX
 
-### ExistingCredentials
-```
-Set-R1DataSource [-name] <String> [[-active] <Boolean>] [[-description] <String>] [[-defaultSchema] <String>]
- [[-addedSchemas] <String[]>] [[-hostName] <String>] [[-port] <Int32>] [[-ssl] <Boolean>] [[-bindDn] <String>]
- [[-baseDn] <String>] [[-url] <String>] [[-username] <String>] [[-customProps] <Hashtable>]
- [-useExistingCredentials] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
 ### NewPassword
 ```
 Set-R1DataSource [-name] <String> [[-active] <Boolean>] [[-description] <String>] [[-defaultSchema] <String>]
  [[-addedSchemas] <String[]>] [[-hostName] <String>] [[-port] <Int32>] [[-ssl] <Boolean>] [[-bindDn] <String>]
  [[-baseDn] <String>] [[-url] <String>] [[-username] <String>] [[-customProps] <Hashtable>]
- [-password] <SecureString> [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-sdcMappings <Hashtable>] [-password] <SecureString> [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### ExistingCredentials
+```
+Set-R1DataSource [-name] <String> [[-active] <Boolean>] [[-description] <String>] [[-defaultSchema] <String>]
+ [[-addedSchemas] <String[]>] [[-hostName] <String>] [[-port] <Int32>] [[-ssl] <Boolean>] [[-bindDn] <String>]
+ [[-baseDn] <String>] [[-url] <String>] [[-username] <String>] [[-customProps] <Hashtable>]
+ [-sdcMappings <Hashtable>] [-useExistingCredentials] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -318,6 +318,22 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -sdcMappings
+A map of Secure Data Connector mappings, keyed by name. Each value gives the host and port the
+connector reaches the data source on, and optionally the group id.
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

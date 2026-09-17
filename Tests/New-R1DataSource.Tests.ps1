@@ -190,6 +190,35 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Sdc mappings' {
+
+			It 'sends the mappings it was given' {
+
+				New-R1DataSource -name 'opendj' -type 'Generic LDAP' -hostName 'ldap.example.com' -port 389 -bindDn 'cn=DirectoryManager' -sdcMappings @{ 'sdc1' = @{ 'host' = 'connector.example.com'; 'port' = 1234 } } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Decoded = [System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json
+					($Decoded.sdcMappings.sdc1.host -eq 'connector.example.com') -and ($Decoded.sdcMappings.sdc1.port -eq 1234)
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends no mappings when it was given none' {
+
+				New-R1DataSource -name 'opendj' -type 'Generic LDAP' -hostName 'ldap.example.com' -port 389 -bindDn 'cn=DirectoryManager' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					[System.Text.Encoding]::UTF8.GetString($Body) -notmatch '"sdcMappings"'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
 		Context 'Password' {
 
 			It 'sends a supplied password' {
