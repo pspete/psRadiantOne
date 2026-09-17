@@ -112,7 +112,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1553,7 +1553,7 @@ Complete-R1DataSourceTypeImport -id $Staged.id -templates $Staged.newTemplates.n
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1882,7 +1882,7 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2702,7 +2702,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2823,7 +2823,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -3330,7 +3330,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -5758,7 +5758,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -5870,7 +5870,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -8184,7 +8184,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -13608,7 +13608,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -13749,7 +13749,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -14392,7 +14392,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -14869,7 +14869,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -18024,7 +18024,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -18490,7 +18490,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -18662,7 +18662,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -20505,7 +20505,7 @@ New-R1DirectoryEntry -dn 'ou=people,o=example' -attributes $Attributes</dev:code
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -24806,7 +24806,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -25220,7 +25220,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -25350,7 +25350,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -25504,7 +25504,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -26569,7 +26569,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -26706,7 +26706,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -27104,7 +27104,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -28787,7 +28787,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -29243,7 +29243,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -34418,7 +34418,6 @@ Get-R1Operation -name $op.name</dev:code>
         <maml:para>The API does not return the bind password: a data source that has one reads back an empty string, and one that has none reads back null. Sending that empty string back would be read as an instruction to clear the password.</maml:para>
         <maml:para>Null means leave it alone only for the password fields of a custom data source. For an LDAP or database data source it is read as no password at all, which leaves the data source unable to connect.</maml:para>
         <maml:para>Every update therefore has to say what becomes of the password, and the two ways of saying it cannot be combined: -password sets a new one, and -useExistingCredentials keeps the stored one. A call which gives neither is refused rather than guessed at.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -34917,7 +34916,6 @@ Set-R1DataSourcePluginLibrary -pluginName 'example' -libraries ($Libraries + $Ex
       <maml:alert>
         <maml:para>Data source types do not all carry the same properties. An LDAP type has isLdap, a database type has driverClass and urlPattern, and a custom type has javaClassName, pluginName and a writable meta collection. Which properties a type has is decided by its backend category.</maml:para>
         <maml:para>The meta collection is read only for LDAP and database types, and writable only for custom ones.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -35099,7 +35097,7 @@ Set-R1DataSourcePluginLibrary -pluginName 'example' -libraries ($Libraries + $Ex
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -37763,7 +37761,6 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
     <maml:alertSet>
       <maml:alert>
         <maml:para>The contents supplied replace the file entirely. Retrieve the current contents with Get-R1FileContent first if only part is changing.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -39027,7 +39024,6 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
     <maml:alertSet>
       <maml:alert>
         <maml:para>The collection supplied replaces the one configured, so an entry left out is removed. Retrieve the current collection first and pass back the whole of it to add to it.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -44072,7 +44068,6 @@ Set-R1NamingContextSpecialAttribute -dn 'o=vds' -unnestGroups ($Current.unnestGr
       <maml:alert>
         <maml:para>Use this when several parts of a schema change together. To change one table or one relationship, the dedicated commands are narrower and safer.</maml:para>
         <maml:para>A collection which is specified replaces the collection currently configured, rather than being added to it. Retrieve the current value, add to it and pass the result back to append.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -45830,7 +45825,7 @@ Set-R1SchemaTableField -schemaName 'default' -tableName 'APP.CUSTOMERS' -fields 
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

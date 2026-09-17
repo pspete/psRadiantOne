@@ -107,9 +107,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 The collection supplied replaces the one configured, so an entry left out is removed. Retrieve
 the current collection first and pass back the whole of it to add to it.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1JdbcDriverLibrary](Get-R1JdbcDriverLibrary)

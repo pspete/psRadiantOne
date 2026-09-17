@@ -362,9 +362,6 @@ Every update therefore has to say what becomes of the password, and the two ways
 cannot be combined: -password sets a new one, and -useExistingCredentials keeps the stored one.
 A call which gives neither is refused rather than guessed at.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1DataSource](Get-R1DataSource)

@@ -222,9 +222,6 @@ writable meta collection. Which properties a type has is decided by its backend 
 The meta collection is read only for LDAP and database types, and writable only for
 custom ones.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1DataSourceType](Get-R1DataSourceType)
