@@ -12,7 +12,8 @@ function Get-R1Response {
 	response content.
 
 	An endpoint which answers a successful request with a message rather than JSON, while still
-	declaring the response to be JSON, has its message returned as it stands.
+	declaring the response to be JSON, has its message warned and returned as it stands. A command
+	which discards what its request returned still shows the caveat that way.
 
 	.PARAMETER APIResponse
 	The web response returned from the RadiantOne API by Invoke-WebRequest. Its content and its
@@ -69,9 +70,12 @@ function Get-R1Response {
 
 					} catch {
 
-						#The content type says json and the content is not. The API reports a
-						#successful create this way, so the message is returned rather than thrown.
-						Write-Debug "[Response] not json, returned as it stands: $RawContent"
+						#The content type says json and the content is not. The API reports the
+						#caveats of a successful request this way - a data source created without
+						#its default schema, say - so the message is warned and returned rather
+						#than thrown. Most commands discard what a request returns, and a caveat
+						#nobody sees is the same as no caveat at all.
+						Write-Warning $RawContent
 						$R1Response = $RawContent
 
 					}

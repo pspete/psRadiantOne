@@ -26,8 +26,10 @@
   and `Save-R1DirectoryLdif` write a binary download intact. It had been written out as a list of
   decimal numbers, one for each byte, so an exported archive could not be opened.
 - A command no longer fails when the API answers a successful request with a message rather than
-  JSON. `New-R1DataSource` reported a parse error where the API had created the data source and
-  replied 201 with "Unable to create default schema"; the message is now returned as it stands.
+  JSON, and the message is warned rather than lost. `New-R1DataSource` reported a parse error where
+  the API had created the data source and replied 201 with "Unable to create default schema. Default
+  schema will need to be manually created." Most commands discard what a request returns, so a
+  caveat like that was never shown.
 - `Set-R1DataSource` leaves a null `groupId` or `kerberosProfile` as the API returned it rather than
   sending the control panel's `None` and empty string in their place, so an update no longer changes
   a property it was not given. The connector mappings are the one property the API will not take

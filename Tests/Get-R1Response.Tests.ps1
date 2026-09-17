@@ -54,7 +54,26 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			$Message = 'Unable to create default schema. Default schema will need to be manually created.'
 
-			New-Response -Content $Message | Get-R1Response | Should -Be $Message
+			New-Response -Content $Message | Get-R1Response -WarningAction SilentlyContinue | Should -Be $Message
+
+		}
+
+		#Most commands discard what a request returned, so a caveat is only seen if it is warned
+		It 'warns with the message' {
+
+			$Message = 'Unable to create default schema. Default schema will need to be manually created.'
+
+			$null = New-Response -Content $Message | Get-R1Response -WarningVariable Warned -WarningAction SilentlyContinue
+
+			"$Warned" | Should -Be $Message
+
+		}
+
+		It 'does not warn about content which is json' {
+
+			$null = New-Response -Content '{"name":"opendj"}' | Get-R1Response -WarningVariable Warned -WarningAction SilentlyContinue
+
+			$Warned | Should -BeNullOrEmpty
 
 		}
 
