@@ -55,6 +55,7 @@ function Invoke-R1RestMethod {
 
 	.PARAMETER OutFile
 	Saves the response body to the specified file, for the endpoints which return a file download.
+	The response is returned in place of its content, so that its headers can be read.
 
 	.PARAMETER SkipCertificateCheck
 	Bypass certificate validation for the request. Applies to deployments presenting a self-signed
@@ -168,6 +169,14 @@ function Invoke-R1RestMethod {
 				$PSBoundParameters.Add('WebSession', $Script:psRadiantOneSession.WebSession)
 
 			}
+
+		}
+
+		#A download is written to the file by the request itself, and the response is still wanted
+		#for its headers, which carry the name the file was sent with
+		if ($PSBoundParameters.ContainsKey('OutFile')) {
+
+			$PSBoundParameters.Add('PassThru', $true)
 
 		}
 
@@ -401,8 +410,17 @@ function Invoke-R1RestMethod {
 				#Status code indicates success
 				If ($APIResponse.StatusCode -match '^20\d$') {
 
-					#Pass APIResponse to Get-R1Response
-					$APIResponse | Get-R1Response
+					if ($PSBoundParameters.ContainsKey('OutFile')) {
+
+						#The content is already in the file
+						$APIResponse
+
+					} else {
+
+						#Pass APIResponse to Get-R1Response
+						$APIResponse | Get-R1Response
+
+					}
 
 				}
 

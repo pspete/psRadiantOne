@@ -44,8 +44,10 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			}
 			New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
 
-			Mock Invoke-R1RestMethod -MockWith {
-				"dn: cn=schema`nobjectClass: top`n"
+			Mock Save-R1Download -MockWith {
+				$File = Join-Path -Path $(if ($Path) { $Path } else { $TestDrive }) -ChildPath $DefaultName
+				[System.IO.File]::WriteAllBytes($File, [byte[]](80, 75, 3, 4, 200, 0))
+				Get-Item -LiteralPath $File
 			}
 
 			$response = Export-R1DirectorySchemaFile -fileName 'custom.ldif' -Path $TestDrive
@@ -56,13 +58,13 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends request' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -Times 1 -Exactly -Scope It
+				Should -Invoke -CommandName Save-R1Download -Times 1 -Exactly -Scope It
 
 			}
 
 			It 'sends request to expected endpoint' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
 
 					($URI -eq 'https://radiantone.company.com/directory-schema-service/files/custom.ldif/download')
 
@@ -72,19 +74,29 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'uses expected method' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -match 'POST' } -Times 1 -Exactly -Scope It
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter { $Method -match 'POST' } -Times 1 -Exactly -Scope It
 
 			}
 
 			It 'sends request with no body' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Body -eq $null } -Times 1 -Exactly -Scope It
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter { $Body -eq $null } -Times 1 -Exactly -Scope It
 
 			}
 
 		}
 
 		Context 'Output' {
+
+			It 'downloads to the specified path' {
+
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
+
+					($Path -eq $TestDrive) -and ($DefaultName -eq 'custom.ldif')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
 
 			It 'writes the file into the specified directory' {
 
@@ -98,15 +110,25 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'writes the downloaded content' {
-
-				(Get-Content -Path (Join-Path $TestDrive 'custom.ldif') -Raw) | Should -Match 'objectClass: top'
-
-			}
-
 			It 'returns the file' {
 
 				$response | Should -BeOfType [System.IO.FileInfo]
+
+			}
+
+		}
+
+		Context 'Default path' {
+
+			It 'leaves the location to the download when no path is given' {
+
+				$null = Export-R1DirectorySchemaFile -fileName 'custom.ldif'
+
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
+
+					[string]::IsNullOrEmpty($Path)
+
+				} -Times 1 -Exactly -Scope It
 
 			}
 

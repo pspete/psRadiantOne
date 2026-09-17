@@ -23,10 +23,10 @@ Creates a folder beneath the given path.
 
 ### Example 1
 ```powershell
-New-R1FileManagerDirectory -path '/conf' -folderName 'logs'
+New-R1FileManagerDirectory -path '/vds_server/custom/src' -folderName 'psr1'
 ```
 
-Creates /conf/logs.
+Creates /vds_server/custom/src/psr1.
 
 ## PARAMETERS
 
@@ -103,9 +103,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Void
 
 ## NOTES
-
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
 
 ## RELATED LINKS
 

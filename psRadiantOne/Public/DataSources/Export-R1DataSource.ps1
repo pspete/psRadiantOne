@@ -12,13 +12,28 @@ function Export-R1DataSource {
 		[string[]]$dataSources,
 
 		[parameter(
-			Mandatory = $true,
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[bool]$performOpOnSchemas,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[bool]$crossEnvironment,
+
+		[parameter(
+			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
 		[ValidateScript({
-				if (-not (Test-Path -Path $PSItem -PathType Container)) {
+				#Either an existing directory, or the full path of a file in one
+				$Directory = if (Test-Path -LiteralPath $PSItem -PathType Container) { $PSItem } else { Split-Path -Path $PSItem -Parent }
 
-					throw "Directory not found: $PSItem"
+				if ((-not ([string]::IsNullOrEmpty($Directory))) -and (-not (Test-Path -LiteralPath $Directory -PathType Container))) {
+
+					throw "Directory not found: $Directory"
 
 				}
 				$true
@@ -34,29 +49,36 @@ function Export-R1DataSource {
 
 	Process {
 
-		$Query = @{ dataSources = @($dataSources) } | ConvertTo-QueryString
+		$Parameters = [ordered]@{ dataSources = @($dataSources) }
 
-		$URI = Resolve-R1ServiceUrl -Service Catalog -Path "data_sources/export`?$Query"
+		#Left out unless specified, so the API applies its own default
+		foreach ($Option in 'performOpOnSchemas', 'crossEnvironment') {
 
-		$Result = Invoke-R1RestMethod -Uri $URI -Method GET
+			if ($PSBoundParameters.ContainsKey($Option)) {
 
-		if ($null -ne $Result) {
-
-			$OutputFile = Join-Path -Path $Path -ChildPath 'datasources.zip'
-
-			if ($Result -is [byte[]]) {
-
-				[System.IO.File]::WriteAllBytes($OutputFile, $Result)
-
-			} else {
-
-				[System.IO.File]::WriteAllText($OutputFile, $Result)
+				$Parameters[$Option] = "$($PSBoundParameters[$Option])".ToLower()
 
 			}
 
-			Get-Item -Path $OutputFile
+		}
+
+		$Query = $Parameters | ConvertTo-QueryString
+
+		$URI = Resolve-R1ServiceUrl -Service Catalog -Path "data_sources/export`?$Query"
+
+		$Download = @{
+			Uri         = $URI
+			Method      = 'GET'
+			DefaultName = 'datasources.zip'
+		}
+
+		if ($PSBoundParameters.ContainsKey('Path')) {
+
+			$Download['Path'] = $Path
 
 		}
+
+		Save-R1Download @Download
 
 	}#process
 

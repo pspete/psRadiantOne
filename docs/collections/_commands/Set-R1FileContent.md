@@ -107,9 +107,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 The contents supplied replace the file entirely. Retrieve the current contents with
 Get-R1FileContent first if only part is changing.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1FileContent](Get-R1FileContent)

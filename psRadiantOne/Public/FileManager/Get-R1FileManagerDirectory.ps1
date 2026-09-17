@@ -34,7 +34,22 @@ function Get-R1FileManagerDirectory {
 
 		if ($null -ne $Result) {
 
-			$Result | Add-CustomType -Type psRadiantOne.Directory
+			#The API wraps the entries in an object which also carries uploadAllowed, the flag for the
+			#directory listed. The entries are what a caller reads and pipes, so they are returned,
+			#and the flag rides along on each of them.
+			$Entries = if ($null -ne $Result.PSObject.Properties['entries']) { $Result.entries } else { $Result }
+
+			foreach ($Entry in $Entries) {
+
+				if ($null -ne $Result.PSObject.Properties['uploadAllowed']) {
+
+					$Entry | Add-Member -MemberType NoteProperty -Name uploadAllowed -Value $Result.uploadAllowed -Force
+
+				}
+
+				$Entry | Add-CustomType -Type psRadiantOne.Directory
+
+			}
 
 		}
 

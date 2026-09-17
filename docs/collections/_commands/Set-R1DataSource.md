@@ -12,20 +12,20 @@ Updates a data source.
 
 ## SYNTAX
 
-### ExistingCredentials
-```
-Set-R1DataSource [-name] <String> [[-active] <Boolean>] [[-description] <String>] [[-defaultSchema] <String>]
- [[-addedSchemas] <String[]>] [[-hostName] <String>] [[-port] <Int32>] [[-ssl] <Boolean>] [[-bindDn] <String>]
- [[-baseDn] <String>] [[-url] <String>] [[-username] <String>] [[-customProps] <Hashtable>]
- [-useExistingCredentials] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
 ### NewPassword
 ```
 Set-R1DataSource [-name] <String> [[-active] <Boolean>] [[-description] <String>] [[-defaultSchema] <String>]
  [[-addedSchemas] <String[]>] [[-hostName] <String>] [[-port] <Int32>] [[-ssl] <Boolean>] [[-bindDn] <String>]
  [[-baseDn] <String>] [[-url] <String>] [[-username] <String>] [[-customProps] <Hashtable>]
- [-password] <SecureString> [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-sdcMappings <Hashtable>] [-password] <SecureString> [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### ExistingCredentials
+```
+Set-R1DataSource [-name] <String> [[-active] <Boolean>] [[-description] <String>] [[-defaultSchema] <String>]
+ [[-addedSchemas] <String[]>] [[-hostName] <String>] [[-port] <Int32>] [[-ssl] <Boolean>] [[-bindDn] <String>]
+ [[-baseDn] <String>] [[-url] <String>] [[-username] <String>] [[-customProps] <Hashtable>]
+ [-sdcMappings <Hashtable>] [-useExistingCredentials] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -321,6 +321,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -sdcMappings
+A map of Secure Data Connector mappings, keyed by name. Each value gives the host and port the
+connector reaches the data source on, and optionally the group id.
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
@@ -345,9 +361,6 @@ connect.
 Every update therefore has to say what becomes of the password, and the two ways of saying it
 cannot be combined: -password sets a new one, and -useExistingCredentials keeps the stored one.
 A call which gives neither is refused rather than guessed at.
-
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
 
 ## RELATED LINKS
 

@@ -84,6 +84,13 @@ function Set-R1DataSource {
 		[hashtable]$customProps,
 
 		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[ValidateNotNull()]
+		[hashtable]$sdcMappings,
+
+		[parameter(
 			Mandatory = $true,
 			ValueFromPipelineByPropertyName = $true,
 			ParameterSetName = 'NewPassword'
@@ -134,12 +141,32 @@ function Set-R1DataSource {
 
 		}
 
-		#A single schema name has to reach the API as a collection, but a null one must stay null.
-		#Wrapping null produces a collection holding nothing, which the API stores and can then
+		#A schema field the API reads back as null is left out of the update, as the control panel
+		#leaves it out. A null addedSchemas sent as a collection is one the API stores and can then
 		#never read back: one such record makes every later read of the collection fail.
-		if ($null -ne $Template['addedSchemas']) {
+		foreach ($Property in 'defaultSchema', 'addedSchemas') {
+
+			if ($Template.Contains($Property) -and $null -eq $Template[$Property]) {
+
+				$Template.Remove($Property)
+
+			}
+
+		}
+
+		#A single schema name has to reach the API as a collection.
+		if ($Template.Contains('addedSchemas')) {
 
 			$Template['addedSchemas'] = @($Template['addedSchemas'])
+
+		}
+
+		#The connector mappings are the one property the API will not take null for, so where it reads
+		#one back the empty map the control panel sends goes instead. Every other property is left as
+		#it was read, so an update carries back what it was given.
+		if ($Template.Contains('sdcMappings') -and $null -eq $Template['sdcMappings']) {
+
+			$Template['sdcMappings'] = @{ }
 
 		}
 

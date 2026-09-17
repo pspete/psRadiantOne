@@ -92,7 +92,9 @@ function Set-R1DataSourceType {
 
 		}
 
-		if ($Template.Contains('meta')) {
+		#A null meta stays null. Wrapped, it becomes a collection holding nothing, which the API can
+		#store and then never read back.
+		if ($null -ne $Template['meta']) {
 
 			$Template['meta'] = @($Template['meta'])
 

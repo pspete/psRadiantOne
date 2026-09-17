@@ -44,7 +44,11 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			}
 			New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
 
-			Mock Invoke-R1RestMethod -MockWith { 'file-content' }
+			Mock Save-R1Download -MockWith {
+				$File = Join-Path -Path $(if ($Path) { $Path } else { $TestDrive }) -ChildPath $DefaultName
+				[System.IO.File]::WriteAllBytes($File, [byte[]](80, 75, 3, 4, 200, 0))
+				Get-Item -LiteralPath $File
+			}
 
 		}
 
@@ -56,9 +60,19 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'downloads to the specified path' {
+
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
+
+					($Path -eq $TestDrive) -and ($DefaultName -eq 'app.properties')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'sends request to expected endpoint' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
 
 					($URI -eq 'https://radiantone.company.com/settings-service/file_manager/files/download') -and ($Method -eq 'POST')
 
@@ -94,9 +108,25 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				$null = Export-R1File -files '/conf/one.txt', '/conf/two.txt' -Path $TestDrive
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
 
 					@(($Body | ConvertFrom-Json).files).Count -eq 2
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
+		Context 'Default path' {
+
+			It 'leaves the location to the download when no path is given' {
+
+				$null = Export-R1File -files '/conf/app.properties'
+
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
+
+					[string]::IsNullOrEmpty($Path)
 
 				} -Times 1 -Exactly -Scope It
 

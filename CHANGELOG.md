@@ -1,20 +1,40 @@
 # Unreleased
 
+## Added
+
+- `Import-R1DataSource` takes `-overrideExisting`, `-performOpOnSchemas` and `-crossEnvironment`, and
+  `Export-R1DataSource` the last two. An import is refused where the data source already exists
+  unless `-overrideExisting` is given. Only the options supplied are sent.
+- `New-R1DataSource` and `Set-R1DataSource` take `-sdcMappings`, the Secure Data Connector mappings
+  the API defines for an LDAP or database data source.
+
 ## Changed
 
-- **`Set-R1DataSource` now requires either `-password` or `-useExistingCredentials`.** They are
-  mutually exclusive, and a call giving neither is refused rather than the stored password being
-  kept on its behalf. Every existing call which updates a data source without setting a password
-  needs `-useExistingCredentials` adding to it.
+- **`Set-R1DataSource` requires either `-password` or `-useExistingCredentials`.** They cannot be
+  combined, and a call giving neither is refused. An existing call which updates a data source
+  without setting a password needs `-useExistingCredentials` adding to it.
+- `Get-R1FileManagerDirectory` returns the directory entries rather than the object which wraps
+  them, so they can be filtered and piped. Each carries `uploadAllowed`, the flag the API returns
+  for the directory listed.
+- `-Path` is optional on `Export-R1DataSource`, `Export-R1DataSourceType`,
+  `Export-R1DirectorySchemaFile`, `Export-R1File` and `Save-R1DirectoryLdif`, and takes a directory
+  or the full path of a file. A download is saved under the name the API sends it with, or under the
+  name the path ends in, and without a path to the current user's Downloads directory.
 
 ## Fixed
 
-- `Set-R1DataSource` and `New-R1DataSource` no longer send a collection holding nothing when a
-  data source has no linked schemas or failovers. The API stored such a record and could then never
-  read it back, which made every later read of any data source fail.
-- `Set-R1DataSource` keeps the stored password of an LDAP or database data source. Sending null was
-  read as no password at all, leaving the data source unable to connect after any update which did
-  not supply `-password`.
+- The five export commands write a binary download intact. An archive had been written out as one
+  decimal number per byte, so it could not be opened.
+- A command no longer fails when the API answers a successful request with a message rather than
+  JSON. The message is warned and returned.
+- `Add-R1DataSourcePlugin` returns the staged import, which carries the id
+  `Complete-R1DataSourceTypeImport` and `Remove-R1DataSourceTypeImport` act on.
+- `Set-R1DataSource` keeps the stored password of an LDAP or database data source, which sending
+  null had cleared, and leaves a null `groupId` or `kerberosProfile` as the API returned it.
+- `Set-R1DataSource`, `New-R1DataSource`, `Set-R1DataSourceType` and `Set-R1SchemaFullObject` no
+  longer send a collection holding nothing where the API returns null. One such record could not be
+  read back, and made every later read of any data source fail.
+- `Set-R1SchemaFullObject` sends the schema's `objects` back, which it had left out of the update.
 
 # 0.2
 

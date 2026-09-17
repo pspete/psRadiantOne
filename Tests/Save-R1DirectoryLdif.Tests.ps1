@@ -44,7 +44,11 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			}
 			New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
 
-			Mock Invoke-R1RestMethod -MockWith { "dn: o=example`nobjectClass: top`n" }
+			Mock Save-R1Download -MockWith {
+				$File = Join-Path -Path $(if ($Path) { $Path } else { $TestDrive }) -ChildPath $DefaultName
+				[System.IO.File]::WriteAllBytes($File, [byte[]](80, 75, 3, 4, 200, 0))
+				Get-Item -LiteralPath $File
+			}
 
 			$response = Save-R1DirectoryLdif -sourceDn 'o=example' -scope 'SUB' -fileName 'export1.ldif' -Path $TestDrive
 
@@ -54,7 +58,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'sends request to expected endpoint' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
 
 					($URI -eq 'https://radiantone.company.com/directory-browser-service/directory_browser/ldif/download') -and ($Method -eq 'POST')
 
@@ -64,7 +68,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'does not send the local path in the request body' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
 
 					$null -eq ($Body | ConvertFrom-Json).Path
 
@@ -76,6 +80,16 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		Context 'Output' {
 
+			It 'downloads to the specified path' {
+
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
+
+					($Path -eq $TestDrive) -and ($DefaultName -eq 'export1.ldif')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'writes the file into the specified directory' {
 
 				Test-Path -Path (Join-Path $TestDrive 'export1.ldif') | Should -BeTrue
@@ -85,6 +99,22 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			It 'returns the file' {
 
 				$response | Should -BeOfType [System.IO.FileInfo]
+
+			}
+
+		}
+
+		Context 'Default path' {
+
+			It 'leaves the location to the download when no path is given' {
+
+				$null = Save-R1DirectoryLdif -sourceDn 'o=example' -scope 'SUB' -fileName 'export1.ldif'
+
+				Should -Invoke -CommandName Save-R1Download -ParameterFilter {
+
+					[string]::IsNullOrEmpty($Path)
+
+				} -Times 1 -Exactly -Scope It
 
 			}
 

@@ -86,6 +86,23 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			#The id is what Complete-R1DataSourceTypeImport and Remove-R1DataSourceTypeImport act on
+			It 'returns the staged import' {
+
+				$Result = Add-R1DataSourcePlugin -Path $UploadFile -Confirm:$false
+
+				$Result.id | Should -Be 'imp1'
+
+			}
+
+			It 'returns it as a template import' {
+
+				$Result = Add-R1DataSourcePlugin -Path $UploadFile -Confirm:$false
+
+				$Result.psobject.TypeNames | Should -Contain 'psRadiantOne.TemplateImport'
+
+			}
+
 		}
 
 	}
