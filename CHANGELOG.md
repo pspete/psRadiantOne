@@ -25,6 +25,9 @@
 - `Export-R1DataSource`, `Export-R1DataSourceType`, `Export-R1DirectorySchemaFile`, `Export-R1File`
   and `Save-R1DirectoryLdif` write a binary download intact. It had been written out as a list of
   decimal numbers, one for each byte, so an exported archive could not be opened.
+- `Add-R1DataSourcePlugin` returns the staged import the API answers with. A plugin upload stages
+  rather than installs, and the reply carries the id which `Complete-R1DataSourceTypeImport` and
+  `Remove-R1DataSourceTypeImport` act on, so discarding it left the staged plugin unreachable.
 - A command no longer fails when the API answers a successful request with a message rather than
   JSON, and the message is warned rather than lost. `New-R1DataSource` reported a parse error where
   the API had created the data source and replied 201 with "Unable to create default schema. Default

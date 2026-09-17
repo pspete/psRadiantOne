@@ -17,16 +17,21 @@ Add-R1DataSourcePlugin [-Path] <String> [-WhatIf] [-Confirm] [<CommonParameters>
 ```
 
 ## DESCRIPTION
-Uploads and installs a plugin providing custom data source types. The file is sent as multipart form data.
+Uploads a plugin providing custom data source types. The file is sent as multipart form data.
+
+The plugin is staged rather than installed: the returned object carries the id of the staged import,
+along with the templates the plugin brings and the drivers they need. Complete-R1DataSourceTypeImport
+installs it, and Remove-R1DataSourceTypeImport discards it.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-Add-R1DataSourcePlugin -Path .\\connector.jar
+$Staged = Add-R1DataSourcePlugin -Path .\\connector.jar
+Complete-R1DataSourceTypeImport -id $Staged.id -templates $Staged.newTemplates.name
 ```
 
-Installs a plugin from a local jar.
+Stages a plugin from a local jar, then installs the templates it brings.
 
 ## PARAMETERS
 
@@ -85,7 +90,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Void
+### psRadiantOne.TemplateImport
 
 ## NOTES
 

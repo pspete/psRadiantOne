@@ -10,7 +10,8 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Uploads and installs a plugin providing custom data source types. The file is sent as multipart form data.</maml:para>
+      <maml:para>Uploads a plugin providing custom data source types. The file is sent as multipart form data.</maml:para>
+      <maml:para>The plugin is staged rather than installed: the returned object carries the id of the staged import, along with the templates the plugin brings and the drivers they need. Complete-R1DataSourceTypeImport installs it, and Remove-R1DataSourceTypeImport discards it.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -102,7 +103,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>System.Void</maml:name>
+          <maml:name>psRadiantOne.TemplateImport</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -117,9 +118,10 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Add-R1DataSourcePlugin -Path .\\connector.jar</dev:code>
+        <dev:code>$Staged = Add-R1DataSourcePlugin -Path .\\connector.jar
+Complete-R1DataSourceTypeImport -id $Staged.id -templates $Staged.newTemplates.name</dev:code>
         <dev:remarks>
-          <maml:para>Installs a plugin from a local jar.</maml:para>
+          <maml:para>Stages a plugin from a local jar, then installs the templates it brings.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
