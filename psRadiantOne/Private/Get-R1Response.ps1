@@ -11,8 +11,13 @@ function Get-R1Response {
 	that the commands which download files, LDIF exports, logs and schema files receive the raw
 	response content.
 
+	An endpoint which answers a successful request with a message rather than JSON, while still
+	declaring the response to be JSON, has its message returned as it stands.
+
 	.PARAMETER APIResponse
-	A WebResponseObject, as returned from the RadiantOne API using Invoke-WebRequest
+	The web response returned from the RadiantOne API by Invoke-WebRequest. Its content and its
+	content type header are all this reads, and the type of response object differs between
+	PowerShell editions.
 
 	.EXAMPLE
 	$WebResponseObject | Get-R1Response
@@ -29,8 +34,8 @@ function Get-R1Response {
 			Position = 0,
 			Mandatory = $true,
 			ValueFromPipeline = $true)]
-		[ValidateNotNullOrEmpty()]
-		[Microsoft.PowerShell.Commands.WebResponseObject]$APIResponse
+		[ValidateNotNull()]
+		[object]$APIResponse
 	)
 
 	BEGIN { }#begin
@@ -58,7 +63,18 @@ function Get-R1Response {
 
 				if (-not ([string]::IsNullOrWhiteSpace($RawContent))) {
 
-					$R1Response = ConvertFrom-Json -InputObject $RawContent
+					try {
+
+						$R1Response = ConvertFrom-Json -InputObject $RawContent -ErrorAction Stop
+
+					} catch {
+
+						#The content type says json and the content is not. The API reports a
+						#successful create this way, so the message is returned rather than thrown.
+						Write-Debug "[Response] not json, returned as it stands: $RawContent"
+						$R1Response = $RawContent
+
+					}
 
 				}
 
