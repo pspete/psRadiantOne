@@ -161,17 +161,12 @@ function Set-R1DataSource {
 
 		}
 
-		#The API will not take null for these, so where it reads one back the value the control panel
-		#sends in its place goes instead. A property which does take null is left as it was read.
-		$Defaults = @{ sdcMappings = @{ }; kerberosProfile = '' }
+		#The connector mappings are the one property the API will not take null for, so where it reads
+		#one back the empty map the control panel sends goes instead. Every other property is left as
+		#it was read, so an update carries back what it was given.
+		if ($Template.Contains('sdcMappings') -and $null -eq $Template['sdcMappings']) {
 
-		foreach ($Property in $Defaults.Keys) {
-
-			if ($Template.Contains($Property) -and $null -eq $Template[$Property]) {
-
-				$Template[$Property] = $Defaults[$Property]
-
-			}
+			$Template['sdcMappings'] = @{ }
 
 		}
 

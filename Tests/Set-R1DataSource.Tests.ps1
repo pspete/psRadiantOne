@@ -273,7 +273,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'sends the defaults the control panel sends in place of null' {
+			It 'sends an empty map for the connector mappings, and leaves the rest null' {
 
 				Mock Invoke-R1RestMethod -MockWith {
 					[pscustomobject]@{
@@ -291,7 +291,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 					if ($Method -ne 'PUT') { return $false }
 					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
-					($Raw -match '"sdcMappings"\s*:\s*\{\s*\}') -and ($Raw -match '"kerberosProfile"\s*:\s*""')
+					($Raw -match '"sdcMappings"\s*:\s*\{\s*\}') -and ($Raw -match '"kerberosProfile"\s*:\s*null')
 
 				} -Times 1 -Exactly -Scope It
 
