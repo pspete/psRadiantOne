@@ -885,7 +885,7 @@ Complete-R1DataSourceTypeImport -id $Staged.id -templates $Staged.newTemplates.n
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -22952,7 +22952,8 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>The data source must be reachable when the schema is created.</maml:para>
+        <maml:para>The schema is linked to the data source on creation. Remove-R1DataSourceSchemaLink removes the link.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -25098,7 +25099,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
