@@ -44,82 +44,54 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			}
 			New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
 
-			Mock Invoke-R1RestMethod -MockWith { }
+			Mock Invoke-R1RestMethod -MockWith {
+				[pscustomobject]@{
+					'classname' = 'o_vds'
+					'filename' = 'o_vds.java'
+					'scriptContents' = 'package com.rli.scripts.intercept;'
+				}
+			}
 
-			New-R1NamingContextContainer -dn 'o=vds' -relationshipObjectDn 'APP.ORDERS,APP.CUSTOMERS' -isRelatedObjectsOnly $true -Confirm:$false
+			Set-R1NamingContextInterceptionScriptCode -dn 'o=vds' -scriptContents '// changed' -Confirm:$false
 
 		}
 
 		Context 'Input' {
 
-			It 'sends request' {
-
-				Should -Invoke -CommandName Invoke-R1RestMethod -Times 1 -Exactly -Scope It
-
-			}
-
 			It 'sends request to expected endpoint' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($URI -eq 'https://radiantone.company.com/directory-namespace-service/naming_contexts/o%3Dvds/add_container')
+					($Method -eq 'PUT') -and ($URI -eq 'https://radiantone.company.com/directory-namespace-service/naming_contexts/o%3Dvds/interception_script/code')
 
 				} -Times 1 -Exactly -Scope It
 
 			}
 
-			It 'uses expected method' {
+			It 'retrieves the current script before updating it' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -match 'POST' } -Times 1 -Exactly -Scope It
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -eq 'GET' } -Times 1 -Exactly -Scope It
 
 			}
 
-			It 'sends the specified value' {
+			It 'sends the specified script' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($Body | ConvertFrom-Json).relationshipObjectDn -eq 'APP.ORDERS,APP.CUSTOMERS'
+					if ($Method -ne 'PUT') { return $false }
+					($Body | ConvertFrom-Json).scriptContents -eq '// changed'
 
 				} -Times 1 -Exactly -Scope It
 
 			}
 
-			It 'sends the specified boolean' {
+			It 'sends back the file and class names' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($Body | ConvertFrom-Json).isRelatedObjectsOnly -eq $true
-
-				} -Times 1 -Exactly -Scope It
-
-			}
-
-			It 'does not send the dn in the request body' {
-
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
-
-					$null -eq ($Body | ConvertFrom-Json).dn
-
-				} -Times 1 -Exactly -Scope It
-
-			}
-
-			It 'sends the flags which were not specified as false' {
-
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
-
+					if ($Method -ne 'PUT') { return $false }
 					$Decoded = $Body | ConvertFrom-Json
-					($Decoded.isQuoteTableNames -eq $false) -and ($Decoded.isQuoteColumnNames -eq $false)
-
-				} -Times 1 -Exactly -Scope It
-
-			}
-
-			It 'does not send properties which were not specified' {
-
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
-
-					$null -eq ($Body | ConvertFrom-Json).schema
+					($Decoded.filename -eq 'o_vds.java') -and ($Decoded.classname -eq 'o_vds')
 
 				} -Times 1 -Exactly -Scope It
 

@@ -21,6 +21,21 @@
   - `Get-R1NamingContextInterceptionScriptCode` and `Get-R1NamingContextReplication`.
 - Format views listing caches, real time connectors and their types, computed attribute functions,
   content RDN attributes and link parameter attributes as tables.
+- Commands which configure LDAP and database proxies:
+  - `Mount-R1NamingContextBackend` mounts an LDAP directory or a database on a naming context node.
+  - `Set-R1NamingContextLdapProxyBackend` and `Set-R1NamingContextLdapProxyAdvanced` update an
+    LDAP proxy.
+  - `Add-R1NamingContextMergedBackend` and `Remove-R1NamingContextMergedBackend` merge a second
+    LDAP data source into an LDAP proxy, and remove it again.
+  - `Set-R1NamingContextInterceptionScriptCode` replaces the interception script of a naming
+    context.
+
+## Fixed
+
+- `New-R1NamingContextContent` and `New-R1NamingContextContainer` always send
+  `isQuoteTableNames`, `isQuoteColumnNames` and `isRelatedObjectsOnly`, as false unless
+  specified. `isRelatedObjectsOnly` was previously left out unless given, and the API takes an
+  absent value to be true.
 
 # 0.3
 

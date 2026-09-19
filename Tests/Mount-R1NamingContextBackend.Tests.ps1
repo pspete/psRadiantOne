@@ -46,15 +46,13 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			Mock Invoke-R1RestMethod -MockWith { }
 
-			New-R1NamingContextContainer -dn 'o=vds' -relationshipObjectDn 'APP.ORDERS,APP.CUSTOMERS' -isRelatedObjectsOnly $true -Confirm:$false
-
 		}
 
-		Context 'Input' {
+		Context 'LdapProxy' {
 
-			It 'sends request' {
+			BeforeEach {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -Times 1 -Exactly -Scope It
+				Mount-R1NamingContextBackend -dn 'o=vds' -datasource 'vds' -remoteBaseDn 'o=companydirectory' -Confirm:$false
 
 			}
 
@@ -62,33 +60,28 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($URI -eq 'https://radiantone.company.com/directory-namespace-service/naming_contexts/o%3Dvds/add_container')
+					($Method -eq 'POST') -and ($URI -eq 'https://radiantone.company.com/directory-namespace-service/naming_contexts/o%3Dvds/mount_backend')
 
 				} -Times 1 -Exactly -Scope It
 
 			}
 
-			It 'uses expected method' {
-
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -match 'POST' } -Times 1 -Exactly -Scope It
-
-			}
-
-			It 'sends the specified value' {
+			It 'sends the ldap proxy backend type' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($Body | ConvertFrom-Json).relationshipObjectDn -eq 'APP.ORDERS,APP.CUSTOMERS'
+					($Body | ConvertFrom-Json).backendType -eq 'LDAP_PROXY'
 
 				} -Times 1 -Exactly -Scope It
 
 			}
 
-			It 'sends the specified boolean' {
+			It 'sends the data source and remote base dn' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($Body | ConvertFrom-Json).isRelatedObjectsOnly -eq $true
+					$Decoded = $Body | ConvertFrom-Json
+					($Decoded.datasource -eq 'vds') -and ($Decoded.remoteBaseDn -eq 'o=companydirectory')
 
 				} -Times 1 -Exactly -Scope It
 
@@ -104,7 +97,47 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'sends the flags which were not specified as false' {
+		}
+
+		Context 'DbProxy' {
+
+			BeforeEach {
+
+				Mount-R1NamingContextBackend -dn 'ou=db,o=vds' -datasource 'northwind' -schema 'northwind' -tableViews 'APP.EMPLOYEES' -Confirm:$false
+
+			}
+
+			It 'sends request to expected endpoint' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($Method -eq 'POST') -and ($URI -eq 'https://radiantone.company.com/directory-namespace-service/naming_contexts/ou%3Ddb%2Co%3Dvds/mount_backend')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends the database proxy backend type' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($Body | ConvertFrom-Json).backendType -eq 'DB_PROXY'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends a single table as an array' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Body -match '"tableViews"\s*:\s*\[\s*"APP.EMPLOYEES"\s*\]'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends the quoting flags which were not specified as false' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
@@ -115,11 +148,11 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'does not send properties which were not specified' {
+			It 'sends the schema' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					$null -eq ($Body | ConvertFrom-Json).schema
+					($Body | ConvertFrom-Json).schema -eq 'northwind'
 
 				} -Times 1 -Exactly -Scope It
 

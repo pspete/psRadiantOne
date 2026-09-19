@@ -46,7 +46,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			Mock Invoke-R1RestMethod -MockWith { }
 
-			New-R1NamingContextContainer -dn 'o=vds' -relationshipObjectDn 'APP.ORDERS,APP.CUSTOMERS' -isRelatedObjectsOnly $true -Confirm:$false
+			Add-R1NamingContextMergedBackend -dn 'o=vds' -radiantoneNamespaceDn 'ou=merged,o=vds' -dataSource 'ldapds' -remoteBaseDn 'ou=people,o=remote' -Confirm:$false
 
 		}
 
@@ -62,33 +62,18 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($URI -eq 'https://radiantone.company.com/directory-namespace-service/naming_contexts/o%3Dvds/add_container')
+					($Method -eq 'POST') -and ($URI -eq 'https://radiantone.company.com/directory-namespace-service/naming_contexts/o%3Dvds/ldap_proxy/backend/merged_backends')
 
 				} -Times 1 -Exactly -Scope It
 
 			}
 
-			It 'uses expected method' {
-
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -match 'POST' } -Times 1 -Exactly -Scope It
-
-			}
-
-			It 'sends the specified value' {
+			It 'sends the merged backend' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($Body | ConvertFrom-Json).relationshipObjectDn -eq 'APP.ORDERS,APP.CUSTOMERS'
-
-				} -Times 1 -Exactly -Scope It
-
-			}
-
-			It 'sends the specified boolean' {
-
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
-
-					($Body | ConvertFrom-Json).isRelatedObjectsOnly -eq $true
+					$Decoded = $Body | ConvertFrom-Json
+					($Decoded.radiantoneNamespaceDn -eq 'ou=merged,o=vds') -and ($Decoded.dataSource -eq 'ldapds') -and ($Decoded.remoteBaseDn -eq 'ou=people,o=remote')
 
 				} -Times 1 -Exactly -Scope It
 
@@ -99,27 +84,6 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
 					$null -eq ($Body | ConvertFrom-Json).dn
-
-				} -Times 1 -Exactly -Scope It
-
-			}
-
-			It 'sends the flags which were not specified as false' {
-
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
-
-					$Decoded = $Body | ConvertFrom-Json
-					($Decoded.isQuoteTableNames -eq $false) -and ($Decoded.isQuoteColumnNames -eq $false)
-
-				} -Times 1 -Exactly -Scope It
-
-			}
-
-			It 'does not send properties which were not specified' {
-
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
-
-					$null -eq ($Body | ConvertFrom-Json).schema
 
 				} -Times 1 -Exactly -Scope It
 

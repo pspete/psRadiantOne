@@ -26,10 +26,11 @@ relationship object.
 
 ### Example 1
 ```powershell
-New-R1NamingContextContainer -dn 'o=vds' -relationshipObjectDn 'APP.PACKAGES,APP.CUSTOMERS'
+New-R1NamingContextContainer -dn 'ou=context,o=views' -relationshipObjectDn 'APP.EMPLOYEES' -schema 'northwind'
 ```
 
-Adds a container node beneath o=vds built from the APP.PACKAGES relationship object.
+Adds a container node beneath ou=context,o=views presenting the APP.EMPLOYEES table of the northwind
+schema.
 
 ## PARAMETERS
 
@@ -64,7 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -isQuoteTableNames
-Quotes table names in the generated queries.
+Quotes table names in the generated queries. Sent as false when not specified.
 
 ```yaml
 Type: Boolean
@@ -79,7 +80,7 @@ Accept wildcard characters: False
 ```
 
 ### -isQuoteColumnNames
-Quotes column names in the generated queries.
+Quotes column names in the generated queries. Sent as false when not specified.
 
 ```yaml
 Type: Boolean
@@ -94,7 +95,8 @@ Accept wildcard characters: False
 ```
 
 ### -isRelatedObjectsOnly
-Restricts the node to related objects only.
+Restricts the node to related objects only. Sent as false when not specified, as the API would
+otherwise take it to be true.
 
 ```yaml
 Type: Boolean
