@@ -110,7 +110,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					$URI -eq 'https://radiantone.company.com/settings-service/password_policies/policy?newPolicy=true'
+					$URI -eq 'https://radiantone.company.com/settings-service/password_policies/policy?policyName=&newPolicy=true'
 
 				} -Times 1 -Exactly -Scope It
 

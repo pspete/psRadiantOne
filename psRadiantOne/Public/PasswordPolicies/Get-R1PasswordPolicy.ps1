@@ -39,8 +39,9 @@ function Get-R1PasswordPolicy {
 
 			'NewPolicy' {
 
-				#Returns an empty policy populated with the API's defaults
-				$Path = 'password_policies/policy?newPolicy=true'
+				#Returns an empty policy populated with the API's defaults. policyName is required on
+				#this endpoint whichever policy is asked for, and an empty one means the default.
+				$Path = 'password_policies/policy?policyName=&newPolicy=true'
 
 			}
 
