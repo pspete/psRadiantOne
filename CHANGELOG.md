@@ -44,6 +44,13 @@
 - Commands which manage RadiantOne Directory stores: `Set-R1StoreProperty`, `Reset-R1StoreIndex`,
   `Backup-R1Store`, `Export-R1StoreBackup`, `Restore-R1Store` and `Import-R1StoreBackup`.
   `Mount-R1NamingContextBackend` mounts a store with `-Store`.
+  `Import-R1StoreData` initializes a store from an LDIF file.
+- Commands which create and manage persistent caches: `New-R1Cache`, `Set-R1CacheRefresh`,
+  `Initialize-R1Cache`, `Set-R1CacheProperty` and `Import-R1Cache`, and for real time refresh
+  `Set-R1CacheRealTimeConnectorConfig`, `Export-R1CacheRealTimeConnectorScript` and
+  `Invoke-R1CacheRealTimeConnectorScript`.
+- `New-R1NamingContextInterceptionScript` and `Set-R1NamingContextInterceptionScript` give a content
+  node a new interception script, or one which already exists.
 
 ## Fixed
 
