@@ -1,3 +1,27 @@
+# Unreleased
+
+## Added
+
+- Read commands for the directory namespace configuration which had none:
+  - Caches: `Get-R1Cache`, `Get-R1CacheProperty`, `Get-R1CacheRefresh`,
+    `Get-R1CacheRealTimeConnector`, `Get-R1CacheRealTimeConnectorDiagnostic`,
+    `Get-R1CacheRealTimeConnectorConfig` and `Get-R1CacheRealTimeConnectorType`. A cache pipes to
+    the other cache commands by its label.
+  - LDAP and database proxies: `Get-R1NamingContextLdapProxyBackend`,
+    `Get-R1NamingContextLdapProxyAdvanced`, `Get-R1NamingContextMergedBackend` and
+    `Get-R1NamingContextDbProxyProperty`.
+  - Content, label and link nodes: `Get-R1NamingContextContentProperty`,
+    `Get-R1NamingContextContentRdnAttribute`, `Get-R1NamingContextContentAdvanced`,
+    `Get-R1NamingContextConfigurationParameter`, `Get-R1NamingContextLabelProperty`,
+    `Get-R1NamingContextLinkProperty`, `Get-R1NamingContextLinkParameterTree`,
+    `Get-R1NamingContextLinkParameterTreeAttribute` and `Get-R1NamingContextLinkParameterString`.
+  - The object builder: `Get-R1PrimaryObject`, `Get-R1AvailablePrimaryObject`,
+    `Get-R1SecondaryObject` and `Get-R1ComputedAttributeFunction`.
+  - Directory stores: `Get-R1StoreProperty` and `Get-R1StoreBackup`.
+  - `Get-R1NamingContextInterceptionScriptCode` and `Get-R1NamingContextReplication`.
+- Format views listing caches, real time connectors and their types, computed attribute functions,
+  content RDN attributes and link parameter attributes as tables.
+
 # 0.3
 
 ## Added
