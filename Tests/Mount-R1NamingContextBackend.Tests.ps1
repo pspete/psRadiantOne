@@ -160,6 +160,27 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+
+		Context 'Store' {
+
+			BeforeEach {
+
+				Mount-R1NamingContextBackend -dn 'o=store' -Store -Confirm:$false
+
+			}
+
+			It 'sends the store backend type, active' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Decoded = $Body | ConvertFrom-Json
+					($Decoded.backendType -eq 'STORE') -and ($Decoded.isActive -eq $true) -and ($null -eq $Decoded.datasource)
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
 	}
 
 }

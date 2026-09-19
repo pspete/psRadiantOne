@@ -35,6 +35,15 @@
     content or container node names and presents its entries.
   - `Set-R1SecondaryObject` saves the object model of a primary object, and `Get-R1RelatedObject`
     returns the objects related to it for adding to the model.
+- Commands which build the parts of an object model in the object builder: `New-R1ObjectInputSource`,
+  `New-R1ObjectExtension` and `New-R1JoinProfile` build input sources, extensions and joins,
+  `New-R1ComputedAttributeExpression` builds a computed attribute expression from a function,
+  `Test-R1ComputedAttributeExpression` checks that one compiles, and
+  `Convert-R1ComputedAttributeExpression` rewrites expressions for a renamed attribute. Each returns
+  its result for saving with `Set-R1SecondaryObject`.
+- Commands which manage RadiantOne Directory stores: `Set-R1StoreProperty`, `Reset-R1StoreIndex`,
+  `Backup-R1Store`, `Export-R1StoreBackup`, `Restore-R1Store` and `Import-R1StoreBackup`.
+  `Mount-R1NamingContextBackend` mounts a store with `-Store`.
 
 ## Fixed
 
@@ -42,6 +51,8 @@
   `isQuoteTableNames`, `isQuoteColumnNames` and `isRelatedObjectsOnly`, as false unless
   specified. `isRelatedObjectsOnly` was previously left out unless given, and the API takes an
   absent value to be true.
+- `Set-R1NamingContextContentAdvanced` clears a where clause when given an empty string, sending it
+  as the control panel does. It sent null, which the API ignores.
 
 # 0.3
 

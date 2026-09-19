@@ -12,16 +12,22 @@ Mounts a backend on a naming context node.
 
 ## SYNTAX
 
+### DbProxy
+```
+Mount-R1NamingContextBackend -dn <String> -datasource <String> -tableViews <String[]> [-schema <String>]
+ [-isQuoteTableNames <Boolean>] [-isQuoteColumnNames <Boolean>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
 ### LdapProxy
 ```
 Mount-R1NamingContextBackend -dn <String> -datasource <String> -remoteBaseDn <String> [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
-### DbProxy
+### Store
 ```
-Mount-R1NamingContextBackend -dn <String> -datasource <String> -tableViews <String[]> [-schema <String>]
- [-isQuoteTableNames <Boolean>] [-isQuoteColumnNames <Boolean>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Mount-R1NamingContextBackend -dn <String> [-Store] [-isActive <Boolean>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,7 +36,8 @@ data held in an LDAP directory or a database.
 
 The LdapProxy parameter set proxies an LDAP data source from a remote base DN. The DbProxy
 parameter set presents tables or views of a database data source, each as a content node beneath
-the mounted node.
+the mounted node. The Store parameter set mounts a RadiantOne Directory store, which holds its
+entries itself.
 
 ## EXAMPLES
 
@@ -57,6 +64,14 @@ Mount-R1NamingContextBackend -dn 'ou=hr,o=aggregate' -datasource 'northwind' -sc
 Presents the table beneath the label ou=hr,o=aggregate. Mounted on a label, the database is
 presented as a virtual tree, whose properties Set-R1NamingContextVirtualTreeProperty changes.
 
+### Example 4
+```powershell
+New-R1NamingContext -dn 'o=store'
+Mount-R1NamingContextBackend -dn 'o=store' -Store
+```
+
+Adds a root naming context and mounts a RadiantOne Directory store on it.
+
 ## PARAMETERS
 
 ### -dn
@@ -79,7 +94,7 @@ The name of the data source to mount.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: DbProxy, LdapProxy
 Aliases:
 
 Required: True
@@ -196,6 +211,37 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -isActive
+Whether the RadiantOne Directory store is active once mounted. Defaults to true.
+
+```yaml
+Type: Boolean
+Parameter Sets: Store
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Store
+Mounts a RadiantOne Directory store, which holds its entries itself rather than presenting another
+source.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Store
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
@@ -211,8 +257,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 The node must be a root naming context or a label which has no backend of its own.
 
-The API also defines RadiantOne Directory, virtual tree and DSML/SPML service backends, which this
-command does not mount.
+The API also defines virtual tree and DSML/SPML service backends, which this command does not
+mount.
 
 ## RELATED LINKS
 

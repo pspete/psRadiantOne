@@ -46,6 +46,13 @@ Set-R1NamingContextContentAdvanced -dn 'uid,ou=hr,o=views' -sqlWhereClause "COUN
 
 Restricts the entries of the node to the rows the where clause selects.
 
+### Example 3
+```powershell
+Set-R1NamingContextContentAdvanced -dn 'uid,ou=hr,o=views' -sqlWhereClause ''
+```
+
+Clears the where clause.
+
 ## PARAMETERS
 
 ### -dn
@@ -169,7 +176,7 @@ Accept wildcard characters: False
 ```
 
 ### -sqlWhereClause
-A where clause applied to every query.
+A where clause applied to every query. An empty string clears it.
 
 ```yaml
 Type: String
@@ -257,14 +264,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-A where clause cannot be cleared with this command: an empty -sqlWhereClause is sent as null, and
-the server keeps the clause it has. An empty -ldapFilter is sent the same way.
-
 The interception script location, Java class, object class, data source type and LDAP filter
 attributes are maintained by the server and cannot be changed here. They are sent back unaltered so
 that the update carries the complete resource.
-
-This command has not been exercised against a live deployment.
 
 ## RELATED LINKS
 

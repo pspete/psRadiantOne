@@ -60,9 +60,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 This endpoint reports validity only, without a reason when a condition is rejected.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1JoinCondition](Get-R1JoinCondition)

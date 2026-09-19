@@ -118,17 +118,6 @@ function Set-R1NamingContextContentAdvanced {
 
 		$Request['interceptOn'] = @($Request['interceptOn'] | Where-Object { $null -ne $_ })
 
-		#An empty clause or filter clears it
-		foreach ($Property in 'sqlWhereClause', 'ldapFilter') {
-
-			if ([string]::IsNullOrEmpty($Request[$Property])) {
-
-				$Request[$Property] = $null
-
-			}
-
-		}
-
 		$Body = $Request | ConvertTo-R1JsonBody -EmptyArrayProperty interceptOn
 
 		if ($PSCmdlet.ShouldProcess($dn, 'Update Content Advanced Settings')) {

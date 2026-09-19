@@ -12,7 +12,13 @@ function Mount-R1NamingContextBackend {
 
 		[parameter(
 			Mandatory = $true,
-			ValueFromPipelineByPropertyName = $true
+			ValueFromPipelineByPropertyName = $true,
+			ParameterSetName = 'LdapProxy'
+		)]
+		[parameter(
+			Mandatory = $true,
+			ValueFromPipelineByPropertyName = $true,
+			ParameterSetName = 'DbProxy'
 		)]
 		[ValidateNotNullOrEmpty()]
 		[string]$datasource,
@@ -53,7 +59,20 @@ function Mount-R1NamingContextBackend {
 			ValueFromPipelineByPropertyName = $true,
 			ParameterSetName = 'DbProxy'
 		)]
-		[bool]$isQuoteColumnNames = $false
+		[bool]$isQuoteColumnNames = $false,
+
+		[parameter(
+			Mandatory = $true,
+			ParameterSetName = 'Store'
+		)]
+		[switch]$Store,
+
+		[parameter(
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $true,
+			ParameterSetName = 'Store'
+		)]
+		[bool]$isActive = $true
 	)
 
 	Begin {
@@ -74,6 +93,15 @@ function Mount-R1NamingContextBackend {
 					backendType  = 'LDAP_PROXY'
 					datasource   = $datasource
 					remoteBaseDn = $remoteBaseDn
+				}
+
+			}
+
+			'Store' {
+
+				$Request = [ordered]@{
+					backendType = 'STORE'
+					isActive    = $isActive
 				}
 
 			}

@@ -46,25 +46,27 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			Mock Invoke-R1RestMethod -MockWith {
 				[pscustomobject]@{
-					'interceptOn' = @()
-					'interceptionScriptFileName' = 'uid_.java'
-					'javaClass' = 'com.rli.scripts.intercept.uid_'
-					'objectClass' = $null
-					'processJoinComputedAttrsNecessary' = $false
-					'objectClassMapping' = 'top # person # organizationalPerson # inetorgperson'
-					'dataSourceType' = 'DATABASE'
-					'requestNecessaryAttrOnly' = $true
-					'distinct' = $false
-					'leftOuterJoin' = $false
-					'searchCaseSensitivity' = 'IGNORE_CASE'
-					'sqlWhereClause' = '1=1'
-					'ldapFilter' = $null
-					'maxRequestedAttributes' = 30
-					'ldapFilterAttributes' = $null
+					'isActive' = $true
+					'storageLocation' = $null
+					'isSchemaChecking' = $true
+					'isEnsureSuperiorObjectClasses' = $false
+					'isNormalizeAttributeNames' = $false
+					'indexedAttributes' = @()
+					'nonIndexedAttributes' = @('userpassword')
+					'sortedAttributes' = @()
+					'encryptedAttributes' = @()
+					'isInterClusterRep' = $false
+					'isEnsurePushModeEnabled' = $false
+					'pushModeDataSources' = @()
+					'replicationExcludedAttributes' = @()
+					'isFullTextSearchEnabled' = $false
+					'isOptimizeLinkAttributes' = $false
+					'enableChangelog' = $false
+					'asyncIndexing' = $false
 				}
 			}
 
-			Set-R1NamingContextContentAdvanced -dn 'uid,o=vds' -distinct $true -Confirm:$false
+			Set-R1StoreProperty -dn 'o=store' -indexedAttributes 'description' -Confirm:$false
 
 		}
 
@@ -74,7 +76,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($Method -eq 'PUT') -and ($URI -eq 'https://radiantone.company.com/directory-namespace-service/naming_contexts/uid%2Co%3Dvds/content/advanced')
+					($Method -eq 'PUT') -and ($URI -eq 'https://radiantone.company.com/directory-namespace-service/naming_contexts/o%3Dstore/store/properties')
 
 				} -Times 1 -Exactly -Scope It
 
@@ -86,12 +88,12 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'sends the specified value' {
+			It 'sends a single indexed attribute as an array' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
 					if ($Method -ne 'PUT') { return $false }
-					($Body | ConvertFrom-Json).distinct -eq $true
+					$Body -match '"indexedAttributes"\s*:\s*\[\s*"description"\s*\]'
 
 				} -Times 1 -Exactly -Scope It
 
@@ -103,19 +105,19 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 					if ($Method -ne 'PUT') { return $false }
 					$Decoded = $Body | ConvertFrom-Json
-					($Decoded.requestNecessaryAttrOnly -eq $true) -and ($Decoded.searchCaseSensitivity -eq 'IGNORE_CASE') -and ($Decoded.sqlWhereClause -eq '1=1') -and ($Decoded.maxRequestedAttributes -eq 30)
+					($Decoded.isSchemaChecking -eq $true) -and (@($Decoded.nonIndexedAttributes)[0] -eq 'userpassword')
 
 				} -Times 1 -Exactly -Scope It
 
 			}
 
-			It 'sends back the properties the api maintains' {
+			It 'sends the properties the control panel adds' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
 					if ($Method -ne 'PUT') { return $false }
 					$Decoded = $Body | ConvertFrom-Json
-					($Decoded.interceptionScriptFileName -eq 'uid_.java') -and ($Decoded.javaClass -eq 'com.rli.scripts.intercept.uid_') -and ($Decoded.dataSourceType -eq 'DATABASE')
+					($Decoded.type -eq 'RadiantOne Directory') -and ($Decoded.namingContext -eq 'o=store') -and ($Decoded.withoutCacheRefresh -eq $true)
 
 				} -Times 1 -Exactly -Scope It
 
@@ -126,28 +128,18 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
 					if ($Method -ne 'PUT') { return $false }
-					$Body -match '"interceptOn"\s*:\s*\[\s*\]'
+					$Body -match '"sortedAttributes"\s*:\s*\[\s*\]'
 
 				} -Times 1 -Exactly -Scope It
 
 			}
 
-		}
-
-		Context 'Clearing the where clause' {
-
-			BeforeEach {
-
-				Set-R1NamingContextContentAdvanced -dn 'uid,o=vds' -sqlWhereClause '' -Confirm:$false
-
-			}
-
-			It 'sends an empty clause as an empty string, which clears it' {
+			It 'sends an unset storage location as null' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
 					if ($Method -ne 'PUT') { return $false }
-					$Body -match '"sqlWhereClause"\s*:\s*""'
+					$Body -match '"storageLocation"\s*:\s*null'
 
 				} -Times 1 -Exactly -Scope It
 
