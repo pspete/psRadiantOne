@@ -104,6 +104,18 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'requests the default policy with an empty policy name when Default is specified' {
+
+				Get-R1PasswordPolicy -Default
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$URI -eq 'https://radiantone.company.com/settings-service/password_policies/policy?policyName='
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'requests an empty policy when NewPolicy is specified' {
 
 				Get-R1PasswordPolicy -NewPolicy
