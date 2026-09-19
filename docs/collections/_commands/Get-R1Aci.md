@@ -25,9 +25,8 @@ Get-R1Aci -aciId <Int64> -baseDn <String> [<CommonParameters>]
 ## DESCRIPTION
 Returns the access control instructions defined on the deployment.
 
-Specify aciId together with the baseDn holding it to return a single ACI. When no aciId is given,
-every ACI is returned, optionally limited to one baseDn. Get-R1AciLocation returns the DNs which
-hold ACIs.
+With no parameters, the ACIs held at the root are returned. Specify baseDn for the ACIs held at an
+entry. Specify aciId together with the baseDn holding it to return a single ACI.
 
 ## EXAMPLES
 
@@ -70,7 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -baseDn
-The base DN the ACI applies at. Get-R1AciLocation returns the DNs which hold ACIs.
+The DN holding the ACI. Omit it for the ACIs held at the root.
 
 ```yaml
 Type: String
@@ -110,5 +109,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### psRadiantOne.Aci
 
 ## NOTES
+
+An ACI held at the root cannot be returned on its own: the single read requires a DN, and an empty
+one is refused with HTTP 400. Return them with the listing instead.
 
 ## RELATED LINKS
