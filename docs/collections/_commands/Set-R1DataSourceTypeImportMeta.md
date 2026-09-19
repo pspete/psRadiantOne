@@ -26,12 +26,13 @@ need, and pass it back.
 
 ### Example 1
 ```powershell
-$Template = Get-R1DataSourceTypeImportMeta -importId 'imp1' -name 'My Custom'
+$Template = Get-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom'
 $Template.description = 'Updated'
-Set-R1DataSourceTypeImportMeta -importId 'imp1' -name 'My Custom' -DataSourceType $Template
+Set-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom' -DataSourceType $Template
 ```
 
-Retrieves a template, changes it and sends it back.
+Retrieves a staged template, changes it and sends it back. A template brought by a plugin reads back
+with readOnly set and cannot be changed.
 
 ## PARAMETERS
 

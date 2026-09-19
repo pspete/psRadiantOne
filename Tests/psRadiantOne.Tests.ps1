@@ -262,6 +262,7 @@ Describe 'Module' -Tag 'Consistency' {
 			'Set-R1DirectoryEntryMember'      = 'The request body is the complete membership list by definition, so there is nothing to preserve.'
 			'Set-R1FileContent'               = 'Replaces the contents of a file. The body is the new contents, which the caller supplies whole.'
 			'Reset-R1DashboardLink'           = 'Restores the default links. An action with no request body.'
+			'Set-R1NamingContextInterceptionScript' = 'Points the node at an existing script. The request body has a single property, which is the script being set.'
 		}
 
 		$PublicScripts = Get-ChildItem (Join-Path $ModulePath 'Public') -Include *.ps1 -Recurse

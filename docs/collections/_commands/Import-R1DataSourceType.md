@@ -26,18 +26,19 @@ Remove-R1DataSourceTypeImport.
 
 ### Example 1
 ```powershell
-Import-R1DataSourceType -Path .\\templates.zip
+Import-R1DataSourceType -Path .\templates.zip
 ```
 
-Uploads an archive and returns the upload session.
+Stages the templates in an archive written by Export-R1DataSourceType. The reply lists them under
+newTemplates, or under conflictingTemplates where one already exists, with the drivers they need.
 
 ### Example 2
 ```powershell
-$Session = Import-R1DataSourceType -Path .\\templates.zip
+$Session = Import-R1DataSourceType -Path .\templates.zip
 Get-R1DataSourceTypeImportMeta -importId $Session.id
 ```
 
-Uploads an archive and lists the templates it contains.
+Stages an archive and lists the templates it contains.
 
 ## PARAMETERS
 

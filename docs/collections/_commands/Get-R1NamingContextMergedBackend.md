@@ -23,10 +23,18 @@ Returns the backends merged into the LDAP proxy mounted at the naming context no
 
 ### Example 1
 ```powershell
-Get-R1NamingContextMergedBackend -dn 'o=companyprofiles'
+Get-R1NamingContextMergedBackend -dn 'o=proxy'
 ```
 
-Returns the backends merged into an LDAP proxy node at o=companyprofiles.
+Returns the backends merged into an LDAP proxy node at o=proxy, each with its data source, remote
+base DN and the DN it is presented at.
+
+### Example 2
+```powershell
+Get-R1NamingContextMergedBackend -dn 'o=proxy' | Where-Object dataSource -EQ 'vds' | Remove-R1NamingContextMergedBackend -dn 'o=proxy'
+```
+
+Removes the backends merged from the vds data source, prompting for confirmation of each.
 
 ## PARAMETERS
 

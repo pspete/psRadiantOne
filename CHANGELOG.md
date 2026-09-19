@@ -21,6 +21,45 @@
   - `Get-R1NamingContextInterceptionScriptCode` and `Get-R1NamingContextReplication`.
 - Format views listing caches, real time connectors and their types, computed attribute functions,
   content RDN attributes and link parameter attributes as tables.
+- Commands which configure LDAP and database proxies:
+  - `Mount-R1NamingContextBackend` mounts an LDAP directory or a database on a naming context node.
+  - `Set-R1NamingContextLdapProxyBackend` and `Set-R1NamingContextLdapProxyAdvanced` update an
+    LDAP proxy.
+  - `Add-R1NamingContextMergedBackend` and `Remove-R1NamingContextMergedBackend` merge a second
+    LDAP data source into an LDAP proxy, and remove it again.
+  - `Set-R1NamingContextInterceptionScriptCode` replaces the interception script of a naming
+    context.
+- Commands which configure label and content nodes and the object builder:
+  - `Set-R1NamingContextLabelProperty` updates a label node.
+  - `Set-R1NamingContextContentProperty` and `Set-R1NamingContextContentAdvanced` update how a
+    content or container node names and presents its entries.
+  - `Set-R1SecondaryObject` saves the object model of a primary object, and `Get-R1RelatedObject`
+    returns the objects related to it for adding to the model.
+- Commands which build the parts of an object model in the object builder: `New-R1ObjectInputSource`,
+  `New-R1ObjectExtension` and `New-R1JoinProfile` build input sources, extensions and joins,
+  `New-R1ComputedAttributeExpression` builds a computed attribute expression from a function,
+  `Test-R1ComputedAttributeExpression` checks that one compiles, and
+  `Convert-R1ComputedAttributeExpression` rewrites expressions for a renamed attribute. Each returns
+  its result for saving with `Set-R1SecondaryObject`.
+- Commands which manage RadiantOne Directory stores: `Set-R1StoreProperty`, `Reset-R1StoreIndex`,
+  `Backup-R1Store`, `Export-R1StoreBackup`, `Restore-R1Store` and `Import-R1StoreBackup`.
+  `Mount-R1NamingContextBackend` mounts a store with `-Store`.
+  `Import-R1StoreData` initializes a store from an LDIF file.
+- Commands which create and manage persistent caches: `New-R1Cache`, `Set-R1CacheRefresh`,
+  `Initialize-R1Cache`, `Set-R1CacheProperty` and `Import-R1Cache`, and for real time refresh
+  `Set-R1CacheRealTimeConnectorConfig`, `Export-R1CacheRealTimeConnectorScript` and
+  `Invoke-R1CacheRealTimeConnectorScript`. `Remove-R1Cache` deletes a cache.
+- `New-R1NamingContextInterceptionScript` and `Set-R1NamingContextInterceptionScript` give a content
+  node a new interception script, or one which already exists.
+
+## Fixed
+
+- `New-R1NamingContextContent` and `New-R1NamingContextContainer` always send
+  `isQuoteTableNames`, `isQuoteColumnNames` and `isRelatedObjectsOnly`, as false unless
+  specified. `isRelatedObjectsOnly` was previously left out unless given, and the API takes an
+  absent value to be true.
+- `Set-R1NamingContextContentAdvanced` clears a where clause when given an empty string, sending it
+  as the control panel does. It sent null, which the API ignores.
 
 # 0.3
 

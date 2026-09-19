@@ -23,14 +23,14 @@ Returns the UTF8 text contents of a file, together with its path.
 
 ### Example 1
 ```powershell
-Get-R1FileContent -file '/conf/app.properties'
+Get-R1FileContent -file '/certs/readme.txt'
 ```
 
 Returns the contents of a file.
 
 ### Example 2
 ```powershell
-(Get-R1FileContent -file '/conf/app.properties').contents | Set-Content .\\app.properties
+(Get-R1FileContent -file '/vds_server/custom/src/psr1/app.properties').contents | Set-Content .\app.properties
 ```
 
 Saves the contents to a local file.

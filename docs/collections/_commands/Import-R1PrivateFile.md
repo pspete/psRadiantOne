@@ -25,7 +25,7 @@ a custom data source type needs. The file is sent as multipart form data.
 
 ### Example 1
 ```powershell
-Import-R1PrivateFile -name 'mysource' -meta 'My Custom' -property 'certificate' -Path .\\client.pem
+Import-R1PrivateFile -name 'mysource' -meta 'My Custom' -property 'certificate' -Path .\client.pem
 ```
 
 Uploads a certificate against the certificate property of a data source.

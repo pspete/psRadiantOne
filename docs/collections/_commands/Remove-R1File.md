@@ -23,17 +23,17 @@ Deletes one or more files in a single request.
 
 ### Example 1
 ```powershell
-Remove-R1File -filePaths '/conf/old.txt'
+Remove-R1File -filePaths '/vds_server/custom/src/psr1/old.txt'
 ```
 
 Deletes one file, after prompting for confirmation.
 
 ### Example 2
 ```powershell
-Remove-R1File -filePaths '/conf/one.txt', '/conf/two.txt'
+Remove-R1File -filePaths '/vds_server/custom/src/psr1/one.txt', '/vds_server/custom/src/psr1/two.txt'
 ```
 
-Deletes two files in one request.
+Deletes two files in one request. The reply lists the paths deleted and those which could not be.
 
 ## PARAMETERS
 

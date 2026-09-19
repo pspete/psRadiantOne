@@ -30,17 +30,24 @@ so one command covers both.
 
 ### Example 1
 ```powershell
-New-R1TokenValidator -name 'partner-idp' -apiService SCIM -jsonWebKeySetUri 'https://idp.example.com/jwks'
+$Validator = @{
+    name                 = 'partner-idp'
+    jsonWebKeySetUri     = 'https://idp.example.com/jwks'
+    enabled              = $true
+    apiService           = 'SCIM'
+    oidcProvider         = 'partner'
+    oidcDiscoveryUrl     = 'https://idp.example.com/.well-known/openid-configuration'
+    scopeClaimName       = 'scope'
+    expectedAudience     = 'radiantone'
+    expectedScope        = 'scim'
+    jwtValidationClock   = 30
+    claimsExpressionList = 'uid=$sub'
+}
+New-R1TokenValidator @Validator
 ```
 
-Creates a SCIM token validator using the specified key set.
-
-### Example 2
-```powershell
-New-R1TokenValidator -name 'adap-idp' -apiService 'REST(adap)' -jsonWebKeySetUri 'https://idp.example.com/jwks' -expectedAudience radiantone -claimsExpressionList 'uid=$sub'
-```
-
-Creates an ADAP token validator with an expected audience and a claims mapping expression.
+Creates a SCIM token validator, giving every property as the control panel does. A create giving
+only the name and key set is refused.
 
 ## PARAMETERS
 

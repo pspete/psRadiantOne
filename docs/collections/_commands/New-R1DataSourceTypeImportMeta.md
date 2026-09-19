@@ -24,11 +24,12 @@ Adds a template definition to an upload session, before the session is imported.
 
 ### Example 1
 ```powershell
-$Definition = [pscustomobject]@{ name = 'My Custom'; backendCategory = 'custom'; javaClassName = 'com.example.Connector' }
-New-R1DataSourceTypeImportMeta -importId 'imp1' -DataSourceType $Definition
+$Template = Get-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom'
+$Template.name = 'My Custom Copy'
+New-R1DataSourceTypeImportMeta -importId $Session.id -DataSourceType $Template
 ```
 
-Adds a custom template to the session.
+Adds a copy of a staged template, under another name, to the same staged import.
 
 ## PARAMETERS
 

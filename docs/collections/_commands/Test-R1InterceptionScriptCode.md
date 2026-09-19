@@ -25,12 +25,22 @@ together with the compiler output. Nothing is saved to the server.
 
 ### Example 1
 ```powershell
-Test-R1InterceptionScriptCode -scriptContents (Get-Content .\MyInterception.java -Raw)
+Get-R1NamingContextInterceptionScriptCode -dn 'o=proxy' | Test-R1InterceptionScriptCode
 ```
 
-Compiles the contents of a local script file and returns the result.
+Compiles the interception script of o=proxy as it stands on the server.
 
 ### Example 2
+```powershell
+$Script = Get-R1NamingContextInterceptionScriptCode -dn 'o=proxy'
+$Script.scriptContents = $Script.scriptContents -replace 'oldValue', 'newValue'
+$Script | Test-R1InterceptionScriptCode
+```
+
+Checks that a change to the script compiles, before it is saved with
+Set-R1NamingContextInterceptionScriptCode.
+
+### Example 3
 ```powershell
 Get-R1GlobalInterceptionScript | Test-R1InterceptionScriptCode
 ```
@@ -97,8 +107,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+The class and file names must be those of an interception script which exists on the server. For
+any other names the result reports an invalid script path, whatever the contents sent.
 
 ## RELATED LINKS
 

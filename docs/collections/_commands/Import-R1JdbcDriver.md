@@ -23,17 +23,18 @@ Uploads a JDBC driver jar and returns the driver classes found in it.
 
 ### Example 1
 ```powershell
-Import-R1JdbcDriver -Path .\\postgresql-42.jar
+Import-R1JdbcDriver -Path .\csvjdbc-1.0.41.jar
 ```
 
-Uploads a driver.
+Uploads a driver. The reply names the driver class read from the jar.
 
 ### Example 2
 ```powershell
-(Import-R1JdbcDriver -Path .\\postgresql-42.jar).classNames | Test-R1DataSourceType
+$Driver = Import-R1JdbcDriver -Path .\csvjdbc-1.0.41.jar
+New-R1DataSourceType -name 'CSV files' -driverClass $Driver.driverClass -urlPattern 'jdbc:relique:csv:{path}'
 ```
 
-Uploads a driver and checks whether its classes are loaded.
+Uploads a driver and creates a database data source type which uses it.
 
 ## PARAMETERS
 

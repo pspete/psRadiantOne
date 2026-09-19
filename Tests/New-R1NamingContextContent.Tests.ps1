@@ -104,6 +104,17 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'sends the flags which were not specified as false' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Decoded = $Body | ConvertFrom-Json
+					($Decoded.isQuoteTableNames -eq $false) -and ($Decoded.isQuoteColumnNames -eq $false)
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'does not send properties which were not specified' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {

@@ -48,7 +48,8 @@ PowerShell parameter binding or module logging.
 
 ### Example 1
 ```powershell
-New-R1DataSource -name 'opendj' -type 'Generic LDAP' -hostName 'ldap.example.com' -port 389 -bindDn 'cn=DirectoryManager' -password $Secret
+$Secret = Read-Host -Prompt 'Bind password' -AsSecureString
+New-R1DataSource -name 'opendj' -type 'Generic LDAP' -hostName 'ldap.example.com' -port 389 -bindDn 'cn=DirectoryManager' -baseDn 'o=example' -password $Secret
 ```
 
 Creates an LDAP data source.

@@ -26,7 +26,15 @@ Returns the type and property values of a real time connector of the persistent 
 Get-R1CacheRealTimeConnectorConfig -dn 'o=hrdatabase' -connectorId 'northwind_APP.EMPLOYEES'
 ```
 
-Returns the configuration of a real time connector of a cache at o=hrdatabase.
+Returns the configuration of a real time connector of a cache at o=hrdatabase. The connector id is
+the data source name and the table, joined by an underscore.
+
+### Example 2
+```powershell
+Get-R1CacheRealTimeConnector -dn 'o=hrdatabase' | Get-R1CacheRealTimeConnectorConfig -dn 'o=hrdatabase'
+```
+
+Returns the configuration of every real time connector of the cache.
 
 ## PARAMETERS
 

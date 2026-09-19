@@ -23,7 +23,7 @@ Removes an uploaded JDBC driver file.
 
 ### Example 1
 ```powershell
-Remove-R1JdbcDriver -name 'postgresql-42.jar'
+Remove-R1JdbcDriver -name 'csvjdbc-1.0.41.jar'
 ```
 
 Removes the driver, after prompting for confirmation.

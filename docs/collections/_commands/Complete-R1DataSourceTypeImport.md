@@ -24,17 +24,21 @@ Imports the named templates from an upload session, making them available as dat
 
 ### Example 1
 ```powershell
-Complete-R1DataSourceTypeImport -id 'imp1' -templates 'My Custom'
+$Session = Import-R1DataSourceType -Path .\templates.zip
+Complete-R1DataSourceTypeImport -id $Session.id -templates @($Session.newTemplates).name
 ```
 
-Imports one template.
+Uploads an archive and installs the templates in it which do not exist yet.
 
 ### Example 2
 ```powershell
-Complete-R1DataSourceTypeImport -id 'imp1' -templates 'My Custom', 'My Other'
+Complete-R1DataSourceTypeImport -id $Session.id -templates 'My Custom'
+Remove-R1DataSourceTypeImport -id $Session.id
 ```
 
-Imports two templates in a single request.
+Installs the My Custom template, overwriting it if it already exists, then clears the staging area
+as the control panel does. A template listed in conflictingTemplates is overwritten simply by naming
+it.
 
 ## PARAMETERS
 

@@ -23,10 +23,19 @@ Returns the attributes of the object behind a content or container node which ca
 
 ### Example 1
 ```powershell
-Get-R1NamingContextContentRdnAttribute -dn 'EMPLOYEES,o=DBJoin'
+Get-R1NamingContextContentRdnAttribute -dn 'uid,ou=hr,o=views'
 ```
 
-Returns the attributes available to the RDN of a content node at EMPLOYEES,o=DBJoin.
+Returns the columns the RDN of a content node can be built from, each named as table and column, for
+example APP.EMPLOYEES.FIRSTNAME, with the attribute it is mapped to.
+
+### Example 2
+```powershell
+$Names = (Get-R1NamingContextContentRdnAttribute -dn 'uid,ou=hr,o=views' | Where-Object mappedName -In 'FIRSTNAME', 'LASTNAME').name
+Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues $Names
+```
+
+Builds the RDN of each entry from the first and last name columns.
 
 ## PARAMETERS
 

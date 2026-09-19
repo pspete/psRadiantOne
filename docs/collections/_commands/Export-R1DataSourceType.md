@@ -24,17 +24,17 @@ file that was written is returned.
 
 ### Example 1
 ```powershell
-Export-R1DataSourceType -templates 'My Custom' -Path 'C:\\backup'
+Export-R1DataSourceType -templates 'My Custom' -Path 'C:\backup'
 ```
 
-Exports one template.
+Exports one template into C:\backup as a zip archive.
 
 ### Example 2
 ```powershell
-Export-R1DataSourceType -templates 'My Custom', 'My Other' -Path 'C:\\backup'
+Export-R1DataSourceType -templates 'My Custom', 'My Other' -Path 'C:\backup\templates.zip'
 ```
 
-Exports two templates into a single archive.
+Exports two templates into a single archive with the name given.
 
 ## PARAMETERS
 

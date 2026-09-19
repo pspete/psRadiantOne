@@ -23,10 +23,10 @@ Replaces the library references of the named driver file with the collection sup
 
 ### Example 1
 ```powershell
-Set-R1JdbcDriverLibrary -name 'postgresql-42.jar' -libraries $Libraries
+Set-R1JdbcDriverLibrary -name 'csvjdbc-1.0.41.jar' -libraries @()
 ```
 
-Sets the libraries the driver depends on.
+Records that the driver depends on no other libraries, as the control panel does after an upload.
 
 ## PARAMETERS
 
