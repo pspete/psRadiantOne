@@ -48,7 +48,7 @@
 - Commands which create and manage persistent caches: `New-R1Cache`, `Set-R1CacheRefresh`,
   `Initialize-R1Cache`, `Set-R1CacheProperty` and `Import-R1Cache`, and for real time refresh
   `Set-R1CacheRealTimeConnectorConfig`, `Export-R1CacheRealTimeConnectorScript` and
-  `Invoke-R1CacheRealTimeConnectorScript`.
+  `Invoke-R1CacheRealTimeConnectorScript`. `Remove-R1Cache` deletes a cache.
 - `New-R1NamingContextInterceptionScript` and `Set-R1NamingContextInterceptionScript` give a content
   node a new interception script, or one which already exists.
 

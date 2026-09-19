@@ -3062,20 +3062,20 @@ Get-R1DataSource -name 'advworks-test' | Test-R1DataSourceConnection -useExistin
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
+        <maml:para>The server gives the archives of both actions the same name, taken from the cache, so a second download into the same directory replaces the first. Name the file in -Path to keep both.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Export-R1CacheRealTimeConnectorScript -dn 'o=hr' -connectorId 'northwind_APP.EMPLOYEES' -action CONFIGURE -Path 'C:\scripts'</dev:code>
+        <dev:code>Export-R1CacheRealTimeConnectorScript -dn 'o=hr' -connectorId 'northwind_APP.EMPLOYEES' -action CONFIGURE -Path 'C:\scripts\configure.zip'</dev:code>
         <dev:remarks>
           <maml:para>Downloads the scripts which create the triggers and log table the connector needs.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Export-R1CacheRealTimeConnectorScript -dn 'o=hr' -connectorId 'northwind_APP.EMPLOYEES' -action DECONFIGURE -Path 'C:\scripts'</dev:code>
+        <dev:code>Export-R1CacheRealTimeConnectorScript -dn 'o=hr' -connectorId 'northwind_APP.EMPLOYEES' -action DECONFIGURE -Path 'C:\scripts\deconfigure.zip'</dev:code>
         <dev:remarks>
           <maml:para>Downloads the scripts which remove them again.</maml:para>
         </dev:remarks>
@@ -16971,7 +16971,6 @@ Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues $Names</de
     <maml:alertSet>
       <maml:alert>
         <maml:para>Initializing a cache from the uploaded file is a separate request, which Initialize-R1Cache does not send.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -19282,7 +19281,7 @@ New-R1DataSourceType -name 'CSV files' -driverClass $Driver.driverClass -urlPatt
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -19446,7 +19445,6 @@ Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>The API also initializes a cache from an LDIF file already on the server, which this command does not do.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -19634,7 +19632,6 @@ Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>The scripts change the data source itself, not only RadiantOne.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -21838,7 +21835,7 @@ Mount-R1NamingContextBackend -dn 'o=store' -Store</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -27369,7 +27366,7 @@ Mount-R1NamingContextBackend -dn 'o=proxy' -datasource 'vds' -remoteBaseDn 'o=co
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -31020,6 +31017,153 @@ New-R1TokenValidator @Validator</dev:code>
       </command:example>
     </command:examples>
     <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Remove-R1Cache</command:name>
+      <command:verb>Remove</command:verb>
+      <command:noun>R1Cache</command:noun>
+      <maml:description>
+        <maml:para>Deletes a persistent cache.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Deletes the persistent cache of the naming context node identified by its DN. The naming context itself is left as it is, presenting its backend directly again.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Remove-R1Cache</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="label">
+          <maml:name>dn</maml:name>
+          <maml:description>
+            <maml:para>The DN of the cache.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="label">
+        <maml:name>dn</maml:name>
+        <maml:description>
+          <maml:para>The DN of the cache.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Void</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>The scripts a real time connector ran against its data source are not undone by deleting the cache. Run its DECONFIGURE scripts first with Invoke-R1CacheRealTimeConnectorScript.</maml:para>
+        <maml:para>This command has not been exercised against a live deployment.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>Remove-R1Cache -dn 'o=directory'</dev:code>
+        <dev:remarks>
+          <maml:para>Deletes the cache of o=directory, after prompting for confirmation.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Invoke-R1CacheRealTimeConnectorScript -dn 'o=hr' -connectorId 'northwind_APP.EMPLOYEES' -action DECONFIGURE
+Remove-R1Cache -dn 'o=hr'</dev:code>
+        <dev:remarks>
+          <maml:para>Removes the triggers and log table a real time connector put into its database, then deletes the cache.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>New-R1Cache</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1Cache</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Invoke-R1CacheRealTimeConnectorScript</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
@@ -40555,7 +40699,6 @@ Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
       <maml:alert>
         <maml:para>Whether the cache is configured and initialized, and its suffixes, are maintained by the server and cannot be changed here. They are sent back unaltered so that the update carries the complete resource.</maml:para>
         <maml:para>A collection which is specified replaces the collection currently configured, rather than being added to it. Retrieve the current value, add to it and pass the result back to append.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -40770,7 +40913,6 @@ Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>The scripts which prepare the data source for the connector, such as the triggers and log table of a database change log, are run with Invoke-R1CacheRealTimeConnectorScript.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -41013,7 +41155,6 @@ Set-R1CacheRealTimeConnectorConfig -dn 'o=hr' -connectorId 'northwind_APP.EMPLOY
     <maml:alertSet>
       <maml:alert>
         <maml:para>Only a periodic refresh can be set with this command. A real time refresh is configured through the connectors of the cache, with Set-R1CacheRealTimeConnectorConfig.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -50031,7 +50172,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

@@ -288,6 +288,7 @@
         'Read-R1License',
         'Remove-R1AccessToken',
         'Remove-R1Aci',
+        'Remove-R1Cache',
         'Remove-R1DataSource',
         'Remove-R1DataSourcePlugin',
         'Remove-R1DataSourceSchemaLink',
