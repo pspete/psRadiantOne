@@ -54,6 +54,9 @@
 
 ## Fixed
 
+- A command issued before `Connect-R1Session` stops at the session check. The check reported a
+  terminating error, which ended the check alone: the command carried on and failed a second time
+  on the request, reporting an invalid URI.
 - `New-R1NamingContextContent` and `New-R1NamingContextContainer` always send
   `isQuoteTableNames`, `isQuoteColumnNames` and `isRelatedObjectsOnly`, as false unless
   specified. `isRelatedObjectsOnly` was previously left out unless given, and the API takes an

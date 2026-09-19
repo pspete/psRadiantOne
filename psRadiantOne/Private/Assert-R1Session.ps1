@@ -4,8 +4,8 @@ function Assert-R1Session {
 	Ensures an authenticated RadiantOne session is present.
 
 	.DESCRIPTION
-	Checks the module scope session for the values a request requires, and throws a terminating
-	error naming the command to run when they are absent.
+	Checks the module scope session for the values a request requires, and throws when they are
+	absent, naming the command to run. The error stops the calling command, so no request is sent.
 
 	Without this check a command issued before Connect-R1Session fails against a null base URL,
 	reporting a URI format error rather than the missing session.
@@ -35,16 +35,14 @@ function Assert-R1Session {
 
 		if ([string]::IsNullOrEmpty($Script:psRadiantOneSession.BaseURI)) {
 
-			$PSCmdlet.ThrowTerminatingError(
+			#thrown rather than reported with ThrowTerminatingError, which would end this check alone
+			#and leave the calling command to carry on and send its request
+			throw [System.Management.Automation.ErrorRecord]::new(
 
-				[System.Management.Automation.ErrorRecord]::new(
-
-					[System.Exception]::new('No RadiantOne session found. Run Connect-R1Session first.'),
-					'psRadiantOne.NoSession',
-					[System.Management.Automation.ErrorCategory]::ConnectionError,
-					$Script:psRadiantOneSession
-
-				)
+				[System.Exception]::new('No RadiantOne session found. Run Connect-R1Session first.'),
+				'psRadiantOne.NoSession',
+				[System.Management.Automation.ErrorCategory]::ConnectionError,
+				$Script:psRadiantOneSession
 
 			)
 
@@ -52,16 +50,14 @@ function Assert-R1Session {
 
 		if (($RequireToken) -and ([string]::IsNullOrEmpty($Script:psRadiantOneSession.Token))) {
 
-			$PSCmdlet.ThrowTerminatingError(
+			#thrown rather than reported with ThrowTerminatingError, which would end this check alone
+			#and leave the calling command to carry on and send its request
+			throw [System.Management.Automation.ErrorRecord]::new(
 
-				[System.Management.Automation.ErrorRecord]::new(
-
-					[System.Exception]::new('No RadiantOne authentication token found. Run Connect-R1Session first.'),
-					'psRadiantOne.NoToken',
-					[System.Management.Automation.ErrorCategory]::AuthenticationError,
-					$Script:psRadiantOneSession
-
-				)
+				[System.Exception]::new('No RadiantOne authentication token found. Run Connect-R1Session first.'),
+				'psRadiantOne.NoToken',
+				[System.Management.Automation.ErrorCategory]::AuthenticationError,
+				$Script:psRadiantOneSession
 
 			)
 
