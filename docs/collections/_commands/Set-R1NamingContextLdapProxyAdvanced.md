@@ -271,8 +271,6 @@ changed here. They are sent back unaltered so that the update carries the comple
 A collection which is specified replaces the collection currently configured, rather than being
 added to it. Retrieve the current value, add to it and pass the result back to append.
 
-This command has not been exercised against a live deployment.
-
 ## RELATED LINKS
 
 [Get-R1NamingContextLdapProxyAdvanced](Get-R1NamingContextLdapProxyAdvanced)

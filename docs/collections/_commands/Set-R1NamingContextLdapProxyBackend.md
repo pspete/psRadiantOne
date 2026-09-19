@@ -212,8 +212,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 The namespace DN is maintained by the server and cannot be changed here. It is sent back unaltered
 so that the update carries the complete resource.
 
-This command has not been exercised against a live deployment.
-
 ## RELATED LINKS
 
 [Get-R1NamingContextLdapProxyBackend](Get-R1NamingContextLdapProxyBackend)

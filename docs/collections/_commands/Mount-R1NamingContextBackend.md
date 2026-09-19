@@ -205,8 +205,6 @@ The node must be a root naming context or a label which has no backend of its ow
 The API also defines RadiantOne Directory, virtual tree and DSML/SPML service backends, which this
 command does not mount.
 
-This command has not been exercised against a live deployment.
-
 ## RELATED LINKS
 
 [New-R1NamingContext](New-R1NamingContext)

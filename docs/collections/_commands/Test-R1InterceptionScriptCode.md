@@ -97,8 +97,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+The class and file names must be those of an interception script which exists on the server. For
+any other names the result reports an invalid script path, whatever the contents sent.
 
 ## RELATED LINKS
 

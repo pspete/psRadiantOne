@@ -112,8 +112,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 Test-R1InterceptionScriptCode compiles a script without saving it, and can be used to check a
 change before it is saved.
 
-This command has not been exercised against a live deployment.
-
 ## RELATED LINKS
 
 [Get-R1NamingContextInterceptionScriptCode](Get-R1NamingContextInterceptionScriptCode)
