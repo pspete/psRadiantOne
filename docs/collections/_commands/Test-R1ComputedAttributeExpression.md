@@ -131,8 +131,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment.
-
 ## RELATED LINKS
 
 [New-R1ComputedAttributeExpression](New-R1ComputedAttributeExpression)
