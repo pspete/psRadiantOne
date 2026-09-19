@@ -33,7 +33,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 				Privileges         = $null
 				Organization       = $null
 				Version            = $null
-				WebSession         = New-Object Microsoft.PowerShell.Commands.WebRequestSession
+				WebSession         = $null
 				StartTime          = $null
 				ElapsedTime        = $null
 				LastCommand        = $null
@@ -48,6 +48,23 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 				[pscustomobject]@{ 'Prop' = 'Value' }
 			}
 
+			#The roles are set on the user object, which is retrieved before it is sent back
+			Mock Get-R1FIDUser -MockWith {
+				[pscustomobject]@{
+					username     = 'john_smith'
+					firstName    = 'John'
+					lastName     = 'Smith'
+					entryDn      = 'uid=john_smith,ou=globalusers,cn=config'
+					email        = $null
+					active       = $true
+					roles        = @()
+					server       = $null
+					organization = $null
+					createdOn    = $null
+					assumeRole   = $null
+				}
+			}
+
 			Set-R1FIDUserRole -username john_smith -roles admin, dev -Confirm:$false
 		}
 
@@ -59,11 +76,11 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'sends request to expected endpoint' {
+			It 'updates the user rather than the deprecated roles endpoint' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					$URI -eq 'https://radiantone.company.com/authentication-service/users/john_smith/roles'
+					$URI -eq 'https://radiantone.company.com/authentication-service/users/john_smith'
 
 				} -Times 1 -Exactly -Scope It
 
@@ -75,29 +92,41 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'sends roles as a json array' {
+			It 'sends the roles on the user object' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					$Body -eq (@('admin', 'dev') | ConvertTo-Json)
+					$Roles = ([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).roles
+					(@($Roles).Count -eq 2) -and ($Roles -contains 'admin') -and ($Roles -contains 'dev')
 
 				} -Times 1 -Exactly -Scope It
 
 			}
 
-			It 'sends an empty json array when no roles specified' {
+			It 'keeps the properties it was not passed' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$User = [System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json
+					($User.firstName -eq 'John') -and ($User.lastName -eq 'Smith') -and ($User.active -eq $true)
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends an empty array when no roles specified' {
 
 				Set-R1FIDUserRole -username john_smith -roles @() -Confirm:$false
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					$Body -eq '[]'
+					@(([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).roles).Count -eq 0
 
 				} -Times 1 -Exactly -Scope It
 
 			}
 
-			It 'sends a single role as a json array' {
+			It 'sends a single role as an array' {
 
 				Set-R1FIDUserRole -username john_smith -roles admin -Confirm:$false
 
@@ -106,7 +135,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 					#Assign before counting: Windows PowerShell's ConvertFrom-Json emits an array
 					#root as a single object, so @($x | ConvertFrom-Json).Count is 1 whatever the
 					#array holds. Assignment collects it properly on both hosts.
-					$Decoded = $Body | ConvertFrom-Json
+					$Decoded = ([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).roles
 					@($Decoded).Count -eq 1
 
 				} -Times 1 -Exactly -Scope It

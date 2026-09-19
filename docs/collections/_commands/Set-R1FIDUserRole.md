@@ -20,9 +20,8 @@ Set-R1FIDUserRole [-username] <String> [-roles] <String[]> [-WhatIf] [-Confirm] 
 Replaces the complete list of roles associated with a FID user. Any role not included in the
 supplied list is removed from the user.
 
-The roles property is read-only on both the user and access token objects, so this command is the
-only way to change the roles associated with a user. It targets an endpoint the API marks as
-deprecated, but the RadiantOne 8.5.0 API offers no replacement for it.
+The roles are set by updating the user, which is what the control panel does. The properties not
+being changed keep their current values.
 
 ## EXAMPLES
 
@@ -117,5 +116,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Void
 
 ## NOTES
+
+The API also defines an endpoint dedicated to a user's roles, which it marks as deprecated. A
+RadiantOne 8.5.3 deployment answers 404 for it.
 
 ## RELATED LINKS

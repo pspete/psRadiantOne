@@ -27,21 +27,11 @@ function Set-R1FIDUserRole {
 
 	Process {
 
-		$URI = Resolve-R1ServiceUrl -Service Auth -Path "users/$($username | Get-EscapedString)/roles"
-
-		if ($roles.Count -eq 0) {
-
-			$Body = '[]'
-
-		} else {
-
-			$Body = ConvertTo-R1JsonBody -Body @($roles)
-
-		}
-
+		#The roles endpoint is deprecated in the API definition and answers 404 here, so the roles
+		#are set on the user itself, which is what the control panel updates.
 		if ($PSCmdlet.ShouldProcess($username, "Set FID User Roles: $($roles -join ', ')")) {
 
-			$null = Invoke-R1RestMethod -Uri $URI -Method PUT -Body $Body
+			Set-R1FIDUser -username $username -roles $roles -Confirm:$false
 
 		}
 
