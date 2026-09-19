@@ -67,7 +67,7 @@ Accept wildcard characters: False
 ```
 
 ### -attributes
-The attributes to return. Without any, every attribute is returned.
+The attributes of the new entry, each with a name and its values.
 
 ```yaml
 Type: Object[]
