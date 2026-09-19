@@ -21,6 +21,8 @@
   - `Get-R1NamingContextInterceptionScriptCode` and `Get-R1NamingContextReplication`.
 - Format views listing caches, real time connectors and their types, computed attribute functions,
   content RDN attributes and link parameter attributes as tables.
+- `Get-R1PasswordPolicy -Default` returns the default password policy, which the API identifies by
+  an empty policy name and `-policyName` could not ask for.
 - Commands which configure LDAP and database proxies:
   - `Mount-R1NamingContextBackend` mounts an LDAP directory or a database on a naming context node.
   - `Set-R1NamingContextLdapProxyBackend` and `Set-R1NamingContextLdapProxyAdvanced` update an
@@ -63,6 +65,13 @@
   absent value to be true.
 - `Set-R1NamingContextContentAdvanced` clears a where clause when given an empty string, sending it
   as the control panel does. It sent null, which the API ignores.
+- `Test-R1Aci` sends the ACI string as the request body, which is what the endpoint reads. It sent
+  an object built from its parameters, which came back as an unparsable ACI string, so it now takes
+  `-aciString` alone. `New-R1Aci` builds an ACI from individual permissions.
+- `Set-R1FIDUserRole` sets the roles on the user. It used an endpoint the API marks deprecated,
+  which a RadiantOne 8.5.3 deployment answers 404.
+- `Get-R1PasswordPolicy -NewPolicy` sends the policy name the endpoint requires, which it answered
+  "Required parameter 'policyName' is not present." without.
 
 # 0.3
 
