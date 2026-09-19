@@ -1,118 +1,14 @@
 # .ExternalHelp psRadiantOne-help.xml
 function Test-R1Aci {
 	[CmdletBinding()]
-	[OutputType('System.Boolean')]
+	[OutputType('psRadiantOne.Aci')]
 	param(
 		[parameter(
-			Mandatory = $false,
+			Mandatory = $true,
 			ValueFromPipelineByPropertyName = $true
 		)]
-		[ValidateLength(0, 1000)]
-		[string]$name,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[ValidateLength(0, 50000)]
-		[string]$aciString,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[bool]$parsable,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[string]$targetDn,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[ValidateSet('BASE', 'ONE', 'SUBTREE')]
-		[string]$targetScope,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[ValidateLength(0, 5000)]
-		[string]$targetFilter,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[bool]$includeTargetAttributes,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[string[]]$targetAttributes,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[ValidateSet('ALLOW', 'DENY')]
-		[string]$permsType,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[ValidateSet('READ', 'WRITE', 'SEARCH', 'SELF_WRITE', 'ADD', 'PROXY', 'DELETE', 'MOVE_CURRENT', 'COMPARE', 'MOVE_FUTURE')]
-		[string[]]$selectedOperations,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[ValidateLength(0, 10)]
-		[string]$loaOperator,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[ValidateRange(0, 4)]
-		[int]$loaLevel,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[ValidateSet('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY')]
-		[string[]]$daysOfWeek,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[string[]]$timeRanges,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[string[]]$applyUserDns,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[string[]]$applyGroupDns,
-
-		[parameter(
-			Mandatory = $false,
-			ValueFromPipelineByPropertyName = $true
-		)]
-		[string[]]$applyIps
+		[ValidateLength(1, 50000)]
+		[string]$aciString
 	)
 
 	Begin {
@@ -125,22 +21,17 @@ function Test-R1Aci {
 
 		$URI = Resolve-R1ServiceUrl -Service Settings -Path 'access_control/acis/validate_parsable'
 
-		$Request = $PSBoundParameters | Get-Parameter
+		#The request body is the aci string itself. The endpoint reads what it is sent without
+		#parsing it as json, so a json encoded value is taken as part of the aci and the answer
+		#comes back unparsable.
+		#The endpoint is a GET which carries the aci as its request body.
+		$Result = Invoke-R1RestMethod -Uri $URI -Method GET -Body $aciString
 
-		foreach ($Collection in 'targetAttributes', 'selectedOperations', 'daysOfWeek', 'timeRanges', 'applyUserDns', 'applyGroupDns', 'applyIps') {
+		if ($null -ne $Result) {
 
-			if ($Request.Contains($Collection)) {
-
-				$Request[$Collection] = @($Request[$Collection])
-
-			}
+			$Result | Add-CustomType -Type psRadiantOne.Aci
 
 		}
-
-		$Body = $Request | ConvertTo-R1JsonBody
-
-		#The endpoint is a GET which carries the ACI as its request body
-		Invoke-R1RestMethod -Uri $URI -Method GET -Body $Body
 
 	}#process
 

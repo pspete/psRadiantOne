@@ -1,6 +1,7 @@
 # .ExternalHelp psRadiantOne-help.xml
 function Get-R1PasswordPolicy {
 	[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'NewPolicy', Justification = 'Selects the parameter set, which the analyzer does not follow')]
+	[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Default', Justification = 'Selects the parameter set, which the analyzer does not follow')]
 	[CmdletBinding(DefaultParameterSetName = 'All')]
 	[OutputType('psRadiantOne.PasswordPolicy')]
 	param(
@@ -11,6 +12,13 @@ function Get-R1PasswordPolicy {
 		)]
 		[ValidateNotNullOrEmpty()]
 		[string]$policyName,
+
+		[parameter(
+			Mandatory = $true,
+			ValueFromPipelineByPropertyName = $false,
+			ParameterSetName = 'Default'
+		)]
+		[switch]$Default,
 
 		[parameter(
 			Mandatory = $true,
@@ -37,10 +45,18 @@ function Get-R1PasswordPolicy {
 
 			}
 
+			'Default' {
+
+				#An empty policyName asks for the default policy, which is how the control panel
+				#reads it. policyName is required on this endpoint whichever policy is asked for.
+				$Path = 'password_policies/policy?policyName='
+
+			}
+
 			'NewPolicy' {
 
 				#Returns an empty policy populated with the API's defaults
-				$Path = 'password_policies/policy?newPolicy=true'
+				$Path = 'password_policies/policy?policyName=&newPolicy=true'
 
 			}
 

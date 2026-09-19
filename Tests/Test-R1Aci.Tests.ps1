@@ -44,7 +44,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 			}
 			New-Variable -Name psRadiantOneSession -Value $psRadiantOneSession -Scope Script -Force
 
-			Mock Invoke-R1RestMethod -MockWith { $true }
+			Mock Invoke-R1RestMethod -MockWith { [pscustomobject]@{ aciString = 'SomeAciString'; parsable = $true } }
 
 			$response = Test-R1Aci -aciString 'SomeAciString'
 
@@ -74,11 +74,21 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
-			It 'sends the aci as the request body of a GET' {
+			It 'sends the aci string itself as the request body of a GET' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($Method -eq 'GET') -and (($Body | ConvertFrom-Json).aciString -eq 'SomeAciString')
+					($Method -eq 'GET') -and ($Body -eq 'SomeAciString')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'does not json encode the aci string' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Body -notmatch '^"'
 
 				} -Times 1 -Exactly -Scope It
 
@@ -90,7 +100,13 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'provides output' {
 
-				$response | Should -BeTrue
+				$response | Should -Not -BeNullOrEmpty
+
+			}
+
+			It 'has expected typename' {
+
+				$response | Get-Member | Select-Object -ExpandProperty TypeName -Unique | Should -Be 'psRadiantOne.Aci'
 
 			}
 
