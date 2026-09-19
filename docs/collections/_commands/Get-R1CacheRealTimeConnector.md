@@ -23,10 +23,11 @@ Returns the connectors which detect changes in the sources of the persistent cac
 
 ### Example 1
 ```powershell
-Get-R1CacheRealTimeConnector -dn 'o=MyProfile'
+Get-R1CacheRealTimeConnector -dn 'o=hrdatabase'
 ```
 
-Returns the real time connectors of a cache at o=MyProfile.
+Returns the real time connectors of a cache at o=hrdatabase, one for each table or directory it
+refreshes from.
 
 ## PARAMETERS
 

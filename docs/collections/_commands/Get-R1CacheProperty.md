@@ -28,6 +28,13 @@ Get-R1CacheProperty -dn 'o=directory'
 
 Returns the properties of a cache at o=directory.
 
+### Example 2
+```powershell
+Get-R1Cache | Get-R1CacheProperty
+```
+
+Returns the properties of every cache.
+
 ## PARAMETERS
 
 ### -dn

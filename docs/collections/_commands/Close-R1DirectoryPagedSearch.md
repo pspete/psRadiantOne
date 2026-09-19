@@ -28,7 +28,9 @@ session abandoned part way through.
 Close-R1DirectoryPagedSearch -cookie $Cursor
 ```
 
-Closes the paging session.
+Closes a paged search which is not going to be read to the end, releasing it on the server. The
+cursor is the one returned with a page of search results. Get-R1DirectoryEntry reads every page of a
+search itself, so it leaves nothing to close.
 
 ## PARAMETERS
 

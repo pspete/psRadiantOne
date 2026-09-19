@@ -23,7 +23,7 @@ Writes new text contents to a file.
 
 ### Example 1
 ```powershell
-Set-R1FileContent -id '/conf/app.properties' -contents (Get-Content .\\app.properties -Raw)
+Set-R1FileContent -id '/vds_server/custom/src/psr1/app.properties' -contents (Get-Content .\app.properties -Raw)
 ```
 
 Replaces a file with the contents of a local one.

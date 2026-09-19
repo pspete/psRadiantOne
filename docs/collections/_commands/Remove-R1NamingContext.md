@@ -28,7 +28,14 @@ The node and everything configured beneath it are removed, and the deletion cann
 Remove-R1NamingContext -dn 'o=mynewroot'
 ```
 
-Deletes the naming context node at o=mynewroot, after prompting for confirmation.
+Deletes the root naming context at o=mynewroot, after prompting for confirmation.
+
+### Example 2
+```powershell
+Remove-R1NamingContext -dn 'ou=context,o=views'
+```
+
+Deletes a label together with everything configured beneath it, containers and content included.
 
 ## PARAMETERS
 

@@ -23,10 +23,10 @@ Uploads a local file and stores it at the given path. The file is sent as multip
 
 ### Example 1
 ```powershell
-Import-R1File -filePath '/conf/app.properties' -Path .\\app.properties
+Import-R1File -filePath '/vds_server/custom/src/psr1/app.properties' -Path .\app.properties
 ```
 
-Uploads a file.
+Uploads a local file into /vds_server/custom/src/psr1.
 
 ## PARAMETERS
 

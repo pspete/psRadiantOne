@@ -23,10 +23,11 @@ Returns the upload session created by Import-R1DataSourceType, and the templates
 
 ### Example 1
 ```powershell
-Get-R1DataSourceTypeImport -id 'imp1'
+$Session = Import-R1DataSourceType -Path .\templates.zip
+Get-R1DataSourceTypeImport -id $Session.id
 ```
 
-Returns the upload session.
+Returns the staged import again, with its new and conflicting templates and the drivers they need.
 
 ## PARAMETERS
 

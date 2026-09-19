@@ -25,7 +25,7 @@ multipart form data.
 
 ### Example 1
 ```powershell
-New-R1CustomTask -JavaClassPath .\\MyTask.class -TaskPropertiesPath .\\task.properties
+New-R1CustomTask -JavaClassPath .\MyTask.class -TaskPropertiesPath .\task.properties
 ```
 
 Creates a custom task from a class and its properties.

@@ -23,7 +23,7 @@ Returns the library references the named driver file depends on.
 
 ### Example 1
 ```powershell
-Get-R1JdbcDriverLibrary -name 'postgresql-42.jar'
+Get-R1JdbcDriverLibrary -name 'csvjdbc-1.0.41.jar'
 ```
 
 Returns the libraries the driver depends on.

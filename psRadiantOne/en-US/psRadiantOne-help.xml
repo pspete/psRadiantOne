@@ -118,7 +118,7 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>$Staged = Add-R1DataSourcePlugin -Path .\\connector.jar
+        <dev:code>$Staged = Add-R1DataSourcePlugin -Path .\connector.jar
 Complete-R1DataSourceTypeImport -id $Staged.id -templates $Staged.newTemplates.name</dev:code>
         <dev:remarks>
           <maml:para>Stages a plugin from a local jar, then installs the templates it brings.</maml:para>
@@ -1453,7 +1453,7 @@ Complete-R1DataSourceTypeImport -id $Staged.id -templates $Staged.newTemplates.n
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>Close-R1DirectoryPagedSearch -cookie $Cursor</dev:code>
         <dev:remarks>
-          <maml:para>Closes the paging session.</maml:para>
+          <maml:para>Closes a paged search which is not going to be read to the end, releasing it on the server. The cursor is the one returned with a page of search results. Get-R1DirectoryEntry reads every page of a search itself, so it leaves nothing to close.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1765,16 +1765,18 @@ Complete-R1DataSourceTypeImport -id $Staged.id -templates $Staged.newTemplates.n
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Complete-R1DataSourceTypeImport -id 'imp1' -templates 'My Custom'</dev:code>
+        <dev:code>$Session = Import-R1DataSourceType -Path .\templates.zip
+Complete-R1DataSourceTypeImport -id $Session.id -templates @($Session.newTemplates).name</dev:code>
         <dev:remarks>
-          <maml:para>Imports one template.</maml:para>
+          <maml:para>Uploads an archive and installs the templates in it which do not exist yet.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Complete-R1DataSourceTypeImport -id 'imp1' -templates 'My Custom', 'My Other'</dev:code>
+        <dev:code>Complete-R1DataSourceTypeImport -id $Session.id -templates 'My Custom'
+Remove-R1DataSourceTypeImport -id $Session.id</dev:code>
         <dev:remarks>
-          <maml:para>Imports two templates in a single request.</maml:para>
+          <maml:para>Installs the My Custom template, overwriting it if it already exists, then clears the staging area as the control panel does. A template listed in conflictingTemplates is overwritten simply by naming it.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -2097,6 +2099,14 @@ Reset-R1Password -resetToken $reset.resetToken -newPassword (Read-Host -AsSecure
         <dev:code>Copy-R1DataSource -existingDataSource 'opendj' -newDataSourceName 'opendj-test'</dev:code>
         <dev:remarks>
           <maml:para>Copies the opendj data source.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Copy-R1DataSource -existingDataSource 'advworks' -newDataSourceName 'advworks-test'
+Get-R1DataSource -name 'advworks-test' | Test-R1DataSourceConnection -useExistingCredentials</dev:code>
+        <dev:remarks>
+          <maml:para>Copies a data source and tests the copy. The stored password is copied too, so the copy connects with -useExistingCredentials.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -2914,16 +2924,23 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Export-R1DataSource -dataSources 'opendj' -Path 'C:\\backup'</dev:code>
+        <dev:code>Export-R1DataSource -dataSources 'opendj' -Path 'C:\backup'</dev:code>
         <dev:remarks>
-          <maml:para>Exports one data source.</maml:para>
+          <maml:para>Exports opendj into C:\backup as a zip archive, under the file name the server gives it.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Export-R1DataSource -dataSources 'opendj', 'advworks' -Path 'C:\\backup'</dev:code>
+        <dev:code>Export-R1DataSource -dataSources 'opendj', 'advworks' -Path 'C:\backup\datasources.zip'</dev:code>
         <dev:remarks>
-          <maml:para>Exports two data sources into a single archive.</maml:para>
+          <maml:para>Exports two data sources into a single archive with the name given.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Export-R1DataSource -dataSources 'opendj' -performOpOnSchemas $false</dev:code>
+        <dev:remarks>
+          <maml:para>Exports opendj without its schemas into the Downloads directory.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -3035,16 +3052,16 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Export-R1DataSourceType -templates 'My Custom' -Path 'C:\\backup'</dev:code>
+        <dev:code>Export-R1DataSourceType -templates 'My Custom' -Path 'C:\backup'</dev:code>
         <dev:remarks>
-          <maml:para>Exports one template.</maml:para>
+          <maml:para>Exports one template into C:\backup as a zip archive.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Export-R1DataSourceType -templates 'My Custom', 'My Other' -Path 'C:\\backup'</dev:code>
+        <dev:code>Export-R1DataSourceType -templates 'My Custom', 'My Other' -Path 'C:\backup\templates.zip'</dev:code>
         <dev:remarks>
-          <maml:para>Exports two templates into a single archive.</maml:para>
+          <maml:para>Exports two templates into a single archive with the name given.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -3296,14 +3313,22 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Export-R1DirectoryLdif -sourceDn 'o=example' -scope 'SUB' -fileName 'example.ldif'</dev:code>
+        <dev:code>Export-R1DirectoryLdif -sourceDn 'o=companydirectory' -scope 'SUB' -fileName 'companydirectory.ldif'</dev:code>
         <dev:remarks>
           <maml:para>Exports a subtree to a file on the server.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Export-R1DirectoryLdif -sourceDn 'o=example' -scope 'SUB' -fileName 'example.ldif' -targetDn 'o=copy'</dev:code>
+        <dev:code>Export-R1DirectoryLdif -sourceDn 'o=companydirectory' -scope 'SUB' -fileName 'companydirectory.ldif'
+do { Start-Sleep -Seconds 5 } until (Get-R1DirectoryLdifFile | Where-Object { $PSItem -eq 'companydirectory.ldif' })</dev:code>
+        <dev:remarks>
+          <maml:para>Exports a subtree and waits for the file to appear. The export runs in the background, so the file is not listed straight away.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Export-R1DirectoryLdif -sourceDn 'o=companydirectory' -scope 'SUB' -fileName 'copy.ldif' -targetDn 'o=copy'</dev:code>
         <dev:remarks>
           <maml:para>Exports a subtree, rewriting the entries under a different DN.</maml:para>
         </dev:remarks>
@@ -3421,14 +3446,14 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Export-R1DirectorySchemaFile -fileName 'ldapschema_14.ldif' -Path 'C:\\schema'</dev:code>
+        <dev:code>Export-R1DirectorySchemaFile -fileName 'ldapschema_14.ldif' -Path 'C:\schema'</dev:code>
         <dev:remarks>
           <maml:para>Downloads ldapschema_14.ldif into C:\schema.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Get-R1DirectorySchemaFile | ForEach-Object { Export-R1DirectorySchemaFile -fileName $PSItem -Path 'C:\\schema' }</dev:code>
+        <dev:code>Get-R1DirectorySchemaFile | ForEach-Object { Export-R1DirectorySchemaFile -fileName $PSItem -Path 'C:\schema' }</dev:code>
         <dev:remarks>
           <maml:para>Downloads every schema file on the server.</maml:para>
         </dev:remarks>
@@ -3542,14 +3567,14 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Export-R1File -files '/conf/app.properties' -Path 'C:\\backup'</dev:code>
+        <dev:code>Export-R1File -files '/vds_server/custom/src/psr1/app.properties' -Path 'C:\backup'</dev:code>
         <dev:remarks>
-          <maml:para>Downloads one file.</maml:para>
+          <maml:para>Downloads one file into C:\backup.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Export-R1File -files '/conf/one.txt', '/conf/two.txt' -Path 'C:\\backup'</dev:code>
+        <dev:code>Export-R1File -files '/certs/one.txt', '/certs/two.txt' -Path 'C:\backup'</dev:code>
         <dev:remarks>
           <maml:para>Downloads two files as an archive.</maml:para>
         </dev:remarks>
@@ -4589,6 +4614,13 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Get-R1Cache -baseDn 'o=directory'</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the caches at or below o=directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
         <dev:code>Get-R1Cache | Get-R1CacheRefresh</dev:code>
         <dev:remarks>
           <maml:para>Returns the refresh settings of every cache.</maml:para>
@@ -4686,6 +4718,13 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
           <maml:para>Returns the properties of a cache at o=directory.</maml:para>
         </dev:remarks>
       </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Get-R1Cache | Get-R1CacheProperty</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the properties of every cache.</maml:para>
+        </dev:remarks>
+      </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
@@ -4765,9 +4804,9 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Get-R1CacheRealTimeConnector -dn 'o=MyProfile'</dev:code>
+        <dev:code>Get-R1CacheRealTimeConnector -dn 'o=hrdatabase'</dev:code>
         <dev:remarks>
-          <maml:para>Returns the real time connectors of a cache at o=MyProfile.</maml:para>
+          <maml:para>Returns the real time connectors of a cache at o=hrdatabase, one for each table or directory it refreshes from.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -4875,7 +4914,14 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>Get-R1CacheRealTimeConnectorConfig -dn 'o=hrdatabase' -connectorId 'northwind_APP.EMPLOYEES'</dev:code>
         <dev:remarks>
-          <maml:para>Returns the configuration of a real time connector of a cache at o=hrdatabase.</maml:para>
+          <maml:para>Returns the configuration of a real time connector of a cache at o=hrdatabase. The connector id is the data source name and the table, joined by an underscore.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Get-R1CacheRealTimeConnector -dn 'o=hrdatabase' | Get-R1CacheRealTimeConnectorConfig -dn 'o=hrdatabase'</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the configuration of every real time connector of the cache.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -6394,9 +6440,10 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Get-R1DataSourcePluginClass -pluginName 'example' -importId 'imp1'</dev:code>
+        <dev:code>$Staged = Add-R1DataSourcePlugin -Path .\connector.jar
+Get-R1DataSourcePluginClass -pluginName @($Staged.plugins).name[0] -importId $Staged.id</dev:code>
         <dev:remarks>
-          <maml:para>Returns the classes of a plugin in an upload session.</maml:para>
+          <maml:para>Returns the classes of a plugin which has been uploaded but not yet installed.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -6848,9 +6895,10 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Get-R1DataSourceTypeImport -id 'imp1'</dev:code>
+        <dev:code>$Session = Import-R1DataSourceType -Path .\templates.zip
+Get-R1DataSourceTypeImport -id $Session.id</dev:code>
         <dev:remarks>
-          <maml:para>Returns the upload session.</maml:para>
+          <maml:para>Returns the staged import again, with its new and conflicting templates and the drivers they need.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -6960,14 +7008,14 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Get-R1DataSourceTypeImportMeta -importId 'imp1'</dev:code>
+        <dev:code>Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
         <dev:remarks>
-          <maml:para>Returns every template in the session.</maml:para>
+          <maml:para>Returns every template in a staged import.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Get-R1DataSourceTypeImportMeta -importId 'imp1' -name 'My Custom'</dev:code>
+        <dev:code>Get-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom'</dev:code>
         <dev:remarks>
           <maml:para>Returns one template.</maml:para>
         </dev:remarks>
@@ -8534,14 +8582,14 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Get-R1FileContent -file '/conf/app.properties'</dev:code>
+        <dev:code>Get-R1FileContent -file '/certs/readme.txt'</dev:code>
         <dev:remarks>
           <maml:para>Returns the contents of a file.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>(Get-R1FileContent -file '/conf/app.properties').contents | Set-Content .\\app.properties</dev:code>
+        <dev:code>(Get-R1FileContent -file '/vds_server/custom/src/psr1/app.properties').contents | Set-Content .\app.properties</dev:code>
         <dev:remarks>
           <maml:para>Saves the contents to a local file.</maml:para>
         </dev:remarks>
@@ -8632,14 +8680,14 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>Get-R1FileManagerDirectory</dev:code>
         <dev:remarks>
-          <maml:para>Lists the base directory.</maml:para>
+          <maml:para>Lists the base directory, which holds /certs, /lib, /ontology and /vds_server.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>Get-R1FileManagerDirectory -path '/vds_server/custom/src'</dev:code>
         <dev:remarks>
-          <maml:para>Lists that directory.</maml:para>
+          <maml:para>Lists /vds_server/custom/src, the one tree in which files can be uploaded and directories created.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -9282,7 +9330,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Get-R1JdbcDriverLibrary -name 'postgresql-42.jar'</dev:code>
+        <dev:code>Get-R1JdbcDriverLibrary -name 'csvjdbc-1.0.41.jar'</dev:code>
         <dev:remarks>
           <maml:para>Returns the libraries the driver depends on.</maml:para>
         </dev:remarks>
@@ -9418,16 +9466,16 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Get-R1JoinCondition -secondaryObject 'inetOrgPerson' -primaryJoinAttribute 'EMPLOYEEID' -secondaryJoinAttribute 'employeeID'</dev:code>
+        <dev:code>Get-R1JoinCondition -secondaryObject 'inetOrgPerson' -primaryJoinAttribute 'uid' -secondaryJoinAttribute 'uid'</dev:code>
         <dev:remarks>
-          <maml:para>Returns the join condition built from those properties.</maml:para>
+          <maml:para>Returns the join condition built from those properties, in the form the join commands take: (&amp;(uid=@[uid:varchar])(objectclass=inetOrgPerson)).</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>(Get-R1JoinCondition -secondaryObject 'inetOrgPerson' -primaryJoinAttribute 'EMPLOYEEID' -secondaryJoinAttribute 'employeeID').joinCondition | Test-R1JoinCondition</dev:code>
+        <dev:code>Get-R1JoinCondition -secondaryObject 'inetOrgPerson' -primaryJoinAttribute 'EMPLOYEEID' -secondaryJoinAttribute 'employeeNumber'</dev:code>
         <dev:remarks>
-          <maml:para>Builds a join condition and checks that the server accepts it.</maml:para>
+          <maml:para>Returns the condition joining the EMPLOYEEID column of a database object to the employeeNumber attribute of inetOrgPerson entries.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -11522,9 +11570,17 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Get-R1NamingContextContentRdnAttribute -dn 'EMPLOYEES,o=DBJoin'</dev:code>
+        <dev:code>Get-R1NamingContextContentRdnAttribute -dn 'uid,ou=hr,o=views'</dev:code>
         <dev:remarks>
-          <maml:para>Returns the attributes available to the RDN of a content node at EMPLOYEES,o=DBJoin.</maml:para>
+          <maml:para>Returns the columns the RDN of a content node can be built from, each named as table and column, for example APP.EMPLOYEES.FIRSTNAME, with the attribute it is mapped to.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>$Names = (Get-R1NamingContextContentRdnAttribute -dn 'uid,ou=hr,o=views' | Where-Object mappedName -In 'FIRSTNAME', 'LASTNAME').name
+Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues $Names</dev:code>
+        <dev:remarks>
+          <maml:para>Builds the RDN of each entry from the first and last name columns.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -11692,7 +11748,21 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>Get-R1NamingContextInterceptionScriptCode -dn 'o=companyprofiles'</dev:code>
         <dev:remarks>
-          <maml:para>Returns the interception script of a naming context node at o=companyprofiles.</maml:para>
+          <maml:para>Returns the interception script of a naming context node at o=companyprofiles, with its file and class names.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>(Get-R1NamingContextInterceptionScriptCode -dn 'o=companyprofiles').scriptContents | Set-Content .\o_companyprofiles.java</dev:code>
+        <dev:remarks>
+          <maml:para>Saves the script to a local file.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Get-R1NamingContextInterceptionScriptCode -dn 'o=companyprofiles' | Test-R1InterceptionScriptCode</dev:code>
+        <dev:remarks>
+          <maml:para>Compiles the script as it stands on the server.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -12410,9 +12480,16 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Get-R1NamingContextMergedBackend -dn 'o=companyprofiles'</dev:code>
+        <dev:code>Get-R1NamingContextMergedBackend -dn 'o=proxy'</dev:code>
         <dev:remarks>
-          <maml:para>Returns the backends merged into an LDAP proxy node at o=companyprofiles.</maml:para>
+          <maml:para>Returns the backends merged into an LDAP proxy node at o=proxy, each with its data source, remote base DN and the DN it is presented at.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Get-R1NamingContextMergedBackend -dn 'o=proxy' | Where-Object dataSource -EQ 'vds' | Remove-R1NamingContextMergedBackend -dn 'o=proxy'</dev:code>
+        <dev:remarks>
+          <maml:para>Removes the backends merged from the vds data source, prompting for confirmation of each.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -13738,7 +13815,14 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>Get-R1PrimaryObject -dn 'o=companyprofiles'</dev:code>
         <dev:remarks>
-          <maml:para>Returns the primary objects of a naming context node at o=companyprofiles.</maml:para>
+          <maml:para>Returns the name of each primary object of a naming context node at o=companyprofiles.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Get-R1PrimaryObject -dn 'o=companyprofiles' | Get-R1SecondaryObject -dn 'o=companyprofiles'</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the object model built around each primary object.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -14183,7 +14267,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -15222,7 +15306,21 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>Get-R1SecondaryObject -dn 'o=companyprofiles' -primaryObject 'inetOrgPerson'</dev:code>
         <dev:remarks>
-          <maml:para>Returns the object model built around a primary object at o=companyprofiles.</maml:para>
+          <maml:para>Returns the object model built around a primary object at o=companyprofiles: its input sources, attribute mappings, joins and final output.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Get-R1PrimaryObject -dn 'o=companyprofiles' | Get-R1SecondaryObject -dn 'o=companyprofiles'</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the object model of every primary object of the node.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>(Get-R1SecondaryObject -dn 'uid,ou=hr,o=views' -primaryObject 'inetorgperson').finalOutput.attributes | Select-Object virtualName, isHidden</dev:code>
+        <dev:remarks>
+          <maml:para>Lists the attributes the entries present, and whether each is hidden.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -15835,7 +15933,7 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>Get-R1TaskLog -id 'e4ef6b3e'</dev:code>
         <dev:remarks>
-          <maml:para>Returns the log the task has written so far.</maml:para>
+          <maml:para>Returns the log the task has written so far. A long running task can write tens of thousands of lines.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -16511,14 +16609,21 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Import-R1DataSource -Path .\\datasources.json</dev:code>
+        <dev:code>Import-R1DataSource -Path .\opendj.zip</dev:code>
         <dev:remarks>
-          <maml:para>Imports a JSON export.</maml:para>
+          <maml:para>Imports the data sources in an archive written by Export-R1DataSource. The import is refused if one of them already exists.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Import-R1DataSource -Path .\\datasources.xml -Xml</dev:code>
+        <dev:code>Import-R1DataSource -Path .\opendj.zip -overrideExisting $true</dev:code>
+        <dev:remarks>
+          <maml:para>Imports the archive, replacing any data source of the same name.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Import-R1DataSource -Path .\datasources.xml -Xml</dev:code>
         <dev:remarks>
           <maml:para>Imports an XML export.</maml:para>
         </dev:remarks>
@@ -16652,17 +16757,17 @@ Export-R1Configuration -stagedResources $Staged</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Import-R1DataSourceType -Path .\\templates.zip</dev:code>
+        <dev:code>Import-R1DataSourceType -Path .\templates.zip</dev:code>
         <dev:remarks>
-          <maml:para>Uploads an archive and returns the upload session.</maml:para>
+          <maml:para>Stages the templates in an archive written by Export-R1DataSourceType. The reply lists them under newTemplates, or under conflictingTemplates where one already exists, with the drivers they need.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>$Session = Import-R1DataSourceType -Path .\\templates.zip
+        <dev:code>$Session = Import-R1DataSourceType -Path .\templates.zip
 Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
         <dev:remarks>
-          <maml:para>Uploads an archive and lists the templates it contains.</maml:para>
+          <maml:para>Stages an archive and lists the templates it contains.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -16884,16 +16989,24 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Import-R1DirectoryLdif -Path .\\example.ldif</dev:code>
+        <dev:code>Import-R1DirectoryLdif -Path .\example.ldif</dev:code>
         <dev:remarks>
           <maml:para>Uploads and imports a local LDIF file.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Import-R1DirectoryLdif -filename 'example.ldif' -overwrite $true</dev:code>
+        <dev:code>Import-R1DirectoryLdif -filename 'companydirectory.ldif' -overwrite $true</dev:code>
         <dev:remarks>
           <maml:para>Imports a file already on the server, overwriting entries which already exist.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>$Task = Import-R1DirectoryLdif -Path .\example.ldif
+Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
+        <dev:remarks>
+          <maml:para>Starts an import and shows the end of the log of the task running it.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -17123,14 +17236,14 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Import-R1DirectorySchemaFile -Path .\\custom.ldif</dev:code>
+        <dev:code>Import-R1DirectorySchemaFile -Path .\custom.ldif</dev:code>
         <dev:remarks>
           <maml:para>Uploads and imports a local schema file.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Import-R1DirectorySchemaFile -Path .\\custom.ldif -isOverride $true</dev:code>
+        <dev:code>Import-R1DirectorySchemaFile -Path .\custom.ldif -isOverride $true</dev:code>
         <dev:remarks>
           <maml:para>Uploads and imports a local schema file, overwriting entries which already exist.</maml:para>
         </dev:remarks>
@@ -17295,9 +17408,9 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Import-R1File -filePath '/conf/app.properties' -Path .\\app.properties</dev:code>
+        <dev:code>Import-R1File -filePath '/vds_server/custom/src/psr1/app.properties' -Path .\app.properties</dev:code>
         <dev:remarks>
-          <maml:para>Uploads a file.</maml:para>
+          <maml:para>Uploads a local file into /vds_server/custom/src/psr1.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -17772,16 +17885,17 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Import-R1JdbcDriver -Path .\\postgresql-42.jar</dev:code>
+        <dev:code>Import-R1JdbcDriver -Path .\csvjdbc-1.0.41.jar</dev:code>
         <dev:remarks>
-          <maml:para>Uploads a driver.</maml:para>
+          <maml:para>Uploads a driver. The reply names the driver class read from the jar.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>(Import-R1JdbcDriver -Path .\\postgresql-42.jar).classNames | Test-R1DataSourceType</dev:code>
+        <dev:code>$Driver = Import-R1JdbcDriver -Path .\csvjdbc-1.0.41.jar
+New-R1DataSourceType -name 'CSV files' -driverClass $Driver.driverClass -urlPattern 'jdbc:relique:csv:{path}'</dev:code>
         <dev:remarks>
-          <maml:para>Uploads a driver and checks whether its classes are loaded.</maml:para>
+          <maml:para>Uploads a driver and creates a database data source type which uses it.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -17913,7 +18027,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Import-R1Library -Path .\\acs-1.0.jar</dev:code>
+        <dev:code>Import-R1Library -Path .\acs-1.0.jar</dev:code>
         <dev:remarks>
           <maml:para>Uploads a library.</maml:para>
         </dev:remarks>
@@ -18119,7 +18233,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Import-R1PrivateFile -name 'mysource' -meta 'My Custom' -property 'certificate' -Path .\\client.pem</dev:code>
+        <dev:code>Import-R1PrivateFile -name 'mysource' -meta 'My Custom' -property 'certificate' -Path .\client.pem</dev:code>
         <dev:remarks>
           <maml:para>Uploads a certificate against the certificate property of a data source.</maml:para>
         </dev:remarks>
@@ -19101,14 +19215,21 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>Mount-R1NamingContextBackend -dn 'o=proxy' -datasource 'vds' -remoteBaseDn 'o=companydirectory'</dev:code>
         <dev:remarks>
-          <maml:para>Presents o=companydirectory of the vds data source at o=proxy.</maml:para>
+          <maml:para>Presents o=companydirectory of the vds data source at o=proxy. The node becomes an LDAP proxy.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Mount-R1NamingContextBackend -dn 'o=hr' -datasource 'northwind' -schema 'northwind' -tableViews 'APP.EMPLOYEES'</dev:code>
+        <dev:remarks>
+          <maml:para>Presents the APP.EMPLOYEES table of the northwind database at o=hr. The node becomes a database proxy.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
         <dev:code>Mount-R1NamingContextBackend -dn 'ou=hr,o=aggregate' -datasource 'northwind' -schema 'northwind' -tableViews 'APP.EMPLOYEES'</dev:code>
         <dev:remarks>
-          <maml:para>Presents the APP.EMPLOYEES table of the northwind database beneath ou=hr,o=aggregate.</maml:para>
+          <maml:para>Presents the table beneath the label ou=hr,o=aggregate. Mounted on a label, the database is presented as a virtual tree, whose properties Set-R1NamingContextVirtualTreeProperty changes.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -20242,7 +20363,7 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>New-R1CustomTask -JavaClassPath .\\MyTask.class -TaskPropertiesPath .\\task.properties</dev:code>
+        <dev:code>New-R1CustomTask -JavaClassPath .\MyTask.class -TaskPropertiesPath .\task.properties</dev:code>
         <dev:remarks>
           <maml:para>Creates a custom task from a class and its properties.</maml:para>
         </dev:remarks>
@@ -21267,7 +21388,8 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>New-R1DataSource -name 'opendj' -type 'Generic LDAP' -hostName 'ldap.example.com' -port 389 -bindDn 'cn=DirectoryManager' -password $Secret</dev:code>
+        <dev:code>$Secret = Read-Host -Prompt 'Bind password' -AsSecureString
+New-R1DataSource -name 'opendj' -type 'Generic LDAP' -hostName 'ldap.example.com' -port 389 -bindDn 'cn=DirectoryManager' -baseDn 'o=example' -password $Secret</dev:code>
         <dev:remarks>
           <maml:para>Creates an LDAP data source.</maml:para>
         </dev:remarks>
@@ -21905,10 +22027,11 @@ Get-R1DataSourceTypeImportMeta -importId $Session.id</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>$Definition = [pscustomobject]@{ name = 'My Custom'; backendCategory = 'custom'; javaClassName = 'com.example.Connector' }
-New-R1DataSourceTypeImportMeta -importId 'imp1' -DataSourceType $Definition</dev:code>
+        <dev:code>$Template = Get-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom'
+$Template.name = 'My Custom Copy'
+New-R1DataSourceTypeImportMeta -importId $Session.id -DataSourceType $Template</dev:code>
         <dev:remarks>
-          <maml:para>Adds a custom template to the session.</maml:para>
+          <maml:para>Adds a copy of a staged template, under another name, to the same staged import.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -22453,6 +22576,19 @@ New-R1DataSourceTypeImportMeta -importId 'imp1' -DataSourceType $Definition</dev
 New-R1DirectoryEntry -dn 'ou=people,o=example' -attributes $Attributes</dev:code>
         <dev:remarks>
           <maml:para>Adds an organizational unit.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>$Attributes = @(
+    [pscustomobject]@{ name = 'objectClass'; values = @('top', 'person', 'organizationalPerson', 'inetOrgPerson') }
+    [pscustomobject]@{ name = 'uid'; values = @('one') }
+    [pscustomobject]@{ name = 'cn'; values = @('User One') }
+    [pscustomobject]@{ name = 'sn'; values = @('One') }
+)
+New-R1DirectoryEntry -dn 'uid=one,ou=people,o=example' -attributes $Attributes</dev:code>
+        <dev:remarks>
+          <maml:para>Adds a user. The DN is the full DN of the new entry, not the DN of its parent.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -24401,7 +24537,15 @@ Get-R1MigrationStatus</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>New-R1NamingContext -dn 'o=mynewroot'</dev:code>
         <dev:remarks>
-          <maml:para>Adds a root naming context at o=mynewroot.</maml:para>
+          <maml:para>Adds a root naming context at o=mynewroot. It is a label until a backend is mounted on it or a level added beneath it.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>New-R1NamingContext -dn 'o=proxy'
+Mount-R1NamingContextBackend -dn 'o=proxy' -datasource 'vds' -remoteBaseDn 'o=companydirectory'</dev:code>
+        <dev:remarks>
+          <maml:para>Adds a root naming context and mounts an LDAP directory on it.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -24655,7 +24799,14 @@ Get-R1MigrationStatus</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>New-R1NamingContextContainer -dn 'ou=context,o=views' -relationshipObjectDn 'APP.EMPLOYEES' -schema 'northwind'</dev:code>
         <dev:remarks>
-          <maml:para>Adds a container node beneath ou=context,o=views presenting the APP.EMPLOYEES table of the northwind schema.</maml:para>
+          <maml:para>Adds a container presenting the APP.EMPLOYEES table of the northwind schema beneath ou=context,o=views. The container is named after the schema and numbered, such as dv=northwind0, with a node for the table, EMPLOYEES, beneath it.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Get-R1NamingContextChild -dn 'dv=northwind0,ou=context,o=views'</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the table node beneath the new container, which is where content nodes are added.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -25072,9 +25223,16 @@ Get-R1MigrationStatus</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>New-R1NamingContextLabel -dn 'o=vds' -rdn 'ou=testlabel'</dev:code>
+        <dev:code>New-R1NamingContextLabel -dn 'o=views' -rdn 'ou=people'</dev:code>
         <dev:remarks>
-          <maml:para>Adds the label ou=testlabel beneath o=vds.</maml:para>
+          <maml:para>Adds the label ou=people beneath o=views.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>'ou=people', 'ou=groups' | ForEach-Object { New-R1NamingContextLabel -dn 'o=views' -rdn $PSItem }</dev:code>
+        <dev:remarks>
+          <maml:para>Adds two labels beneath o=views. Get-R1NamingContextChild lists them.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -27409,16 +27567,22 @@ Get-R1Operation -name $op.name</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>New-R1TokenValidator -name 'partner-idp' -apiService SCIM -jsonWebKeySetUri 'https://idp.example.com/jwks'</dev:code>
+        <dev:code>$Validator = @{
+    name                 = 'partner-idp'
+    jsonWebKeySetUri     = 'https://idp.example.com/jwks'
+    enabled              = $true
+    apiService           = 'SCIM'
+    oidcProvider         = 'partner'
+    oidcDiscoveryUrl     = 'https://idp.example.com/.well-known/openid-configuration'
+    scopeClaimName       = 'scope'
+    expectedAudience     = 'radiantone'
+    expectedScope        = 'scim'
+    jwtValidationClock   = 30
+    claimsExpressionList = 'uid=$sub'
+}
+New-R1TokenValidator @Validator</dev:code>
         <dev:remarks>
-          <maml:para>Creates a SCIM token validator using the specified key set.</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>New-R1TokenValidator -name 'adap-idp' -apiService 'REST(adap)' -jsonWebKeySetUri 'https://idp.example.com/jwks' -expectedAudience radiantone -claimsExpressionList 'uid=$sub'</dev:code>
-        <dev:remarks>
-          <maml:para>Creates an ADAP token validator with an expected audience and a claims mapping expression.</maml:para>
+          <maml:para>Creates a SCIM token validator, giving every property as the control panel does. A create giving only the name and key set is refused.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -28599,9 +28763,9 @@ Get-R1Operation -name $op.name</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Remove-R1DataSourceTypeImport -id 'imp1'</dev:code>
+        <dev:code>Remove-R1DataSourceTypeImport -id $Session.id</dev:code>
         <dev:remarks>
-          <maml:para>Discards the upload session.</maml:para>
+          <maml:para>Discards a staged import, after prompting for confirmation. Once an import has been applied with Complete-R1DataSourceTypeImport, this clears the staging area.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -28753,9 +28917,9 @@ Get-R1Operation -name $op.name</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Remove-R1DataSourceTypeImportMeta -importId 'imp1' -name 'My Custom'</dev:code>
+        <dev:code>Remove-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom Copy'</dev:code>
         <dev:remarks>
-          <maml:para>Removes the template from the session, after prompting for confirmation.</maml:para>
+          <maml:para>Removes a template from a staged import, after prompting for confirmation. The rest of the import is left as it is.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -29178,9 +29342,16 @@ Get-R1Operation -name $op.name</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Remove-R1DirectoryLdifFile -fileName 'example.ldif'</dev:code>
+        <dev:code>Remove-R1DirectoryLdifFile -fileName 'companydirectory.ldif'</dev:code>
         <dev:remarks>
           <maml:para>Deletes the file, after prompting for confirmation.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Get-R1DirectoryLdifFile | ForEach-Object { Remove-R1DirectoryLdifFile -fileName $PSItem }</dev:code>
+        <dev:remarks>
+          <maml:para>Deletes every LDIF file on the server, including the ones Save-R1DirectoryLdif leaves behind under generated names, prompting for confirmation of each.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -29818,16 +29989,16 @@ Get-R1Operation -name $op.name</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Remove-R1File -filePaths '/conf/old.txt'</dev:code>
+        <dev:code>Remove-R1File -filePaths '/vds_server/custom/src/psr1/old.txt'</dev:code>
         <dev:remarks>
           <maml:para>Deletes one file, after prompting for confirmation.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Remove-R1File -filePaths '/conf/one.txt', '/conf/two.txt'</dev:code>
+        <dev:code>Remove-R1File -filePaths '/vds_server/custom/src/psr1/one.txt', '/vds_server/custom/src/psr1/two.txt'</dev:code>
         <dev:remarks>
-          <maml:para>Deletes two files in one request.</maml:para>
+          <maml:para>Deletes two files in one request. The reply lists the paths deleted and those which could not be.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -30353,7 +30524,7 @@ Get-R1Operation -name $op.name</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Remove-R1JdbcDriver -name 'postgresql-42.jar'</dev:code>
+        <dev:code>Remove-R1JdbcDriver -name 'csvjdbc-1.0.41.jar'</dev:code>
         <dev:remarks>
           <maml:para>Removes the driver, after prompting for confirmation.</maml:para>
         </dev:remarks>
@@ -30806,7 +30977,14 @@ Get-R1Operation -name $op.name</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>Remove-R1NamingContext -dn 'o=mynewroot'</dev:code>
         <dev:remarks>
-          <maml:para>Deletes the naming context node at o=mynewroot, after prompting for confirmation.</maml:para>
+          <maml:para>Deletes the root naming context at o=mynewroot, after prompting for confirmation.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Remove-R1NamingContext -dn 'ou=context,o=views'</dev:code>
+        <dev:remarks>
+          <maml:para>Deletes a label together with everything configured beneath it, containers and content included.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -33871,9 +34049,9 @@ Get-R1Operation -name $op.name</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Save-R1DirectoryLdif -sourceDn 'o=example' -scope 'SUB' -fileName 'example.ldif' -Path 'C:\\backup'</dev:code>
+        <dev:code>Save-R1DirectoryLdif -sourceDn 'o=companydirectory' -scope 'SUB' -fileName 'companydirectory.ldif' -Path 'C:\backup'</dev:code>
         <dev:remarks>
-          <maml:para>Downloads a subtree as LDIF.</maml:para>
+          <maml:para>Exports a subtree as LDIF and downloads it into C:\backup. The server keeps a copy under a generated name, which Remove-R1DirectoryLdifFile deletes.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -33983,14 +34161,21 @@ Get-R1Operation -name $op.name</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>Search-R1DataSource -objectFilter 'person'</dev:code>
         <dev:remarks>
-          <maml:para>Searches every data source for objects matching person.</maml:para>
+          <maml:para>Searches every data source for objects whose name contains person, ignoring case.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>Search-R1DataSource -dataSourceFilter 'open' -objectFilter 'group'</dev:code>
         <dev:remarks>
-          <maml:para>Searches only data sources whose name contains open.</maml:para>
+          <maml:para>Searches the data sources whose name contains open for objects whose name contains group.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Search-R1DataSource -dataSourceFilter 'open'</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the data sources whose name contains open. No objects are searched, so each comes back with an empty list of objects.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -38559,11 +38744,11 @@ Set-R1DataSourcePluginLibrary -pluginName 'example' -libraries ($Libraries + $Ex
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>$Template = Get-R1DataSourceTypeImportMeta -importId 'imp1' -name 'My Custom'
+        <dev:code>$Template = Get-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom'
 $Template.description = 'Updated'
-Set-R1DataSourceTypeImportMeta -importId 'imp1' -name 'My Custom' -DataSourceType $Template</dev:code>
+Set-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom' -DataSourceType $Template</dev:code>
         <dev:remarks>
-          <maml:para>Retrieves a template, changes it and sends it back.</maml:para>
+          <maml:para>Retrieves a staged template, changes it and sends it back. A template brought by a plugin reads back with readOnly set and cannot be changed.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -39060,7 +39245,18 @@ Set-R1DirectoryEntry -dn 'o=example' -modifications $Modifications</dev:code>
 )
 Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:code>
         <dev:remarks>
-          <maml:para>Adds a value to an attribute.</maml:para>
+          <maml:para>Adds a value to an attribute, keeping the values it already has.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>$Modifications = @(
+    [pscustomobject]@{ modifyType = 'DELETE'; attributes = @([pscustomobject]@{ name = 'telephoneNumber'; values = @() }) }
+    [pscustomobject]@{ modifyType = 'REPLACE'; attributes = @([pscustomobject]@{ name = 'l'; values = @('London') }) }
+)
+Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:code>
+        <dev:remarks>
+          <maml:para>Removes an attribute altogether, by deleting it with no values, and replaces another in the same request.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -41222,7 +41418,7 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Set-R1FileContent -id '/conf/app.properties' -contents (Get-Content .\\app.properties -Raw)</dev:code>
+        <dev:code>Set-R1FileContent -id '/vds_server/custom/src/psr1/app.properties' -contents (Get-Content .\app.properties -Raw)</dev:code>
         <dev:remarks>
           <maml:para>Replaces a file with the contents of a local one.</maml:para>
         </dev:remarks>
@@ -42485,9 +42681,9 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Set-R1JdbcDriverLibrary -name 'postgresql-42.jar' -libraries $Libraries</dev:code>
+        <dev:code>Set-R1JdbcDriverLibrary -name 'csvjdbc-1.0.41.jar' -libraries @()</dev:code>
         <dev:remarks>
-          <maml:para>Sets the libraries the driver depends on.</maml:para>
+          <maml:para>Records that the driver depends on no other libraries, as the control panel does after an upload.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -43019,7 +43215,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Set-R1Library -groupId 'com.example' -artifactId 'acs' -version '1.0' -Path .\\acs-1.0.jar</dev:code>
+        <dev:code>Set-R1Library -groupId 'com.example' -artifactId 'acs' -version '1.0' -Path .\acs-1.0.jar</dev:code>
         <dev:remarks>
           <maml:para>Replaces the jar of an existing library.</maml:para>
         </dev:remarks>
@@ -44718,7 +44914,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="10" aliases="none">
           <maml:name>ldapFilter</maml:name>
           <maml:description>
-            <maml:para>An LDAP filter applied to every entry. An empty string clears it.</maml:para>
+            <maml:para>An LDAP filter applied to every entry.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -44826,7 +45022,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="9" aliases="none">
           <maml:name>sqlWhereClause</maml:name>
           <maml:description>
-            <maml:para>A where clause applied to every query. An empty string clears it.</maml:para>
+            <maml:para>A where clause applied to every query.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -44959,7 +45155,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="9" aliases="none">
         <maml:name>sqlWhereClause</maml:name>
         <maml:description>
-          <maml:para>A where clause applied to every query. An empty string clears it.</maml:para>
+          <maml:para>A where clause applied to every query.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -44971,7 +45167,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="10" aliases="none">
         <maml:name>ldapFilter</maml:name>
         <maml:description>
-          <maml:para>An LDAP filter applied to every entry. An empty string clears it.</maml:para>
+          <maml:para>An LDAP filter applied to every entry.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -45039,6 +45235,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
+        <maml:para>A where clause cannot be cleared with this command: an empty -sqlWhereClause is sent as null, and the server keeps the clause it has. An empty -ldapFilter is sent the same way.</maml:para>
         <maml:para>The interception script location, Java class, object class, data source type and LDAP filter attributes are maintained by the server and cannot be changed here. They are sent back unaltered so that the update carries the complete resource.</maml:para>
         <maml:para>This command has not been exercised against a live deployment.</maml:para>
       </maml:alert>
@@ -45056,13 +45253,6 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
         <dev:code>Set-R1NamingContextContentAdvanced -dn 'uid,ou=hr,o=views' -sqlWhereClause "COUNTRY = 'UK'"</dev:code>
         <dev:remarks>
           <maml:para>Restricts the entries of the node to the rows the where clause selects.</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
-        <dev:code>Set-R1NamingContextContentAdvanced -dn 'uid,ou=hr,o=views' -sqlWhereClause ''</dev:code>
-        <dev:remarks>
-          <maml:para>Clears the where clause.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -45263,7 +45453,6 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
       <maml:alert>
         <maml:para>The node is named by its RDN attribute, so changing rdnName renames the node: its DN afterwards begins with the new name, and the old DN is no longer found.</maml:para>
         <maml:para>The schema and node type are maintained by the server and cannot be changed here. They are sent back unaltered so that the update carries the complete resource.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -45696,7 +45885,6 @@ $Script | Set-R1NamingContextInterceptionScriptCode -dn 'o=proxy'</dev:code>
       <maml:alert>
         <maml:para>Changing rdnPrefix or rdnSuffix renames the label, so its DN changes.</maml:para>
         <maml:para>A collection which is specified replaces the collection currently configured, rather than being added to it. Retrieve the current value, add to it and pass the result back to append.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -46956,22 +47144,21 @@ Set-R1NamingContextSpecialAttribute -dn 'o=vds' -unnestGroups ($Current.unnestGr
       <maml:alert>
         <maml:para>The naming context and schema are maintained by the server and cannot be changed here. They are sent back unaltered so that the update carries the complete resource.</maml:para>
         <maml:para>A collection which is specified replaces the collection currently configured, rather than being added to it. Retrieve the current value, add to it and pass the result back to append.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Set-R1NamingContextVirtualTreeProperty -dn 'o=vds' -isActive $false</dev:code>
+        <dev:code>Set-R1NamingContextVirtualTreeProperty -dn 'ou=hr,o=aggregate' -isActive $false</dev:code>
         <dev:remarks>
-          <maml:para>Deactivates the virtual tree at o=vds, leaving its other properties as they are.</maml:para>
+          <maml:para>Deactivates the virtual tree at ou=hr,o=aggregate, leaving its other properties as they are.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>Set-R1NamingContextVirtualTreeProperty -dn 'o=vds' -directoryView 'anotherview'</dev:code>
+        <dev:code>Set-R1NamingContextVirtualTreeProperty -dn 'ou=hr,o=aggregate' -isActive $true</dev:code>
         <dev:remarks>
-          <maml:para>Points the virtual tree at a different directory view.</maml:para>
+          <maml:para>Activates it again.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -50337,7 +50524,6 @@ Set-R1SchemaTableField -schemaName 'default' -tableName 'APP.CUSTOMERS' -fields 
     <maml:alertSet>
       <maml:alert>
         <maml:para>A collection which is specified replaces the collection currently configured, rather than being added to it. Retrieve the current value, add to it and pass the result back to append.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -53546,13 +53732,22 @@ Test-R1DataSourceConnection -DataSource $Definition</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Test-R1InterceptionScriptCode -scriptContents (Get-Content .\MyInterception.java -Raw)</dev:code>
+        <dev:code>Get-R1NamingContextInterceptionScriptCode -dn 'o=proxy' | Test-R1InterceptionScriptCode</dev:code>
         <dev:remarks>
-          <maml:para>Compiles the contents of a local script file and returns the result.</maml:para>
+          <maml:para>Compiles the interception script of o=proxy as it stands on the server.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>$Script = Get-R1NamingContextInterceptionScriptCode -dn 'o=proxy'
+$Script.scriptContents = $Script.scriptContents -replace 'oldValue', 'newValue'
+$Script | Test-R1InterceptionScriptCode</dev:code>
+        <dev:remarks>
+          <maml:para>Checks that a change to the script compiles, before it is saved with Set-R1NamingContextInterceptionScriptCode.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
         <dev:code>Get-R1GlobalInterceptionScript | Test-R1InterceptionScriptCode</dev:code>
         <dev:remarks>
           <maml:para>Compiles the global interception script as it currently stands on the server.</maml:para>

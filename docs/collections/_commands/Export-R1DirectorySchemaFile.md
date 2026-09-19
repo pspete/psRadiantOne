@@ -24,14 +24,14 @@ it has on the server. The file that was written is returned.
 
 ### Example 1
 ```powershell
-Export-R1DirectorySchemaFile -fileName 'ldapschema_14.ldif' -Path 'C:\\schema'
+Export-R1DirectorySchemaFile -fileName 'ldapschema_14.ldif' -Path 'C:\schema'
 ```
 
-Downloads ldapschema_14.ldif into C:\\schema.
+Downloads ldapschema_14.ldif into C:\schema.
 
 ### Example 2
 ```powershell
-Get-R1DirectorySchemaFile | ForEach-Object { Export-R1DirectorySchemaFile -fileName $PSItem -Path 'C:\\schema' }
+Get-R1DirectorySchemaFile | ForEach-Object { Export-R1DirectorySchemaFile -fileName $PSItem -Path 'C:\schema' }
 ```
 
 Downloads every schema file on the server.

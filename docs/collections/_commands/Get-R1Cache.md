@@ -47,6 +47,13 @@ Returns the cache at o=directory.
 
 ### Example 3
 ```powershell
+Get-R1Cache -baseDn 'o=directory'
+```
+
+Returns the caches at or below o=directory.
+
+### Example 4
+```powershell
 Get-R1Cache | Get-R1CacheRefresh
 ```
 

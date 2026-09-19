@@ -29,19 +29,18 @@ the entry itself.
 Get-R1FileManagerDirectory
 ```
 
-Lists the base directory.
+Lists the base directory, which holds /certs, /lib, /ontology and /vds_server.
 
 ### Example 2
 ```powershell
 Get-R1FileManagerDirectory -path '/vds_server/custom/src'
 ```
 
-Lists that directory.
+Lists /vds_server/custom/src, the one tree in which files can be uploaded and directories created.
 
 ### Example 3
 ```powershell
 Get-R1FileManagerDirectory -path '/certs' | Where-Object directory
-
 ```
 
 Lists the folders in /certs, leaving out the files.

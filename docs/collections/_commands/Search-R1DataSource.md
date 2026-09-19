@@ -27,14 +27,22 @@ objects are searched unless an object filter is given.
 Search-R1DataSource -objectFilter 'person'
 ```
 
-Searches every data source for objects matching person.
+Searches every data source for objects whose name contains person, ignoring case.
 
 ### Example 2
 ```powershell
 Search-R1DataSource -dataSourceFilter 'open' -objectFilter 'group'
 ```
 
-Searches only data sources whose name contains open.
+Searches the data sources whose name contains open for objects whose name contains group.
+
+### Example 3
+```powershell
+Search-R1DataSource -dataSourceFilter 'open'
+```
+
+Returns the data sources whose name contains open. No objects are searched, so each comes back
+with an empty list of objects.
 
 ## PARAMETERS
 

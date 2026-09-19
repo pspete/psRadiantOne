@@ -26,7 +26,22 @@ Returns the class name, file name and source of the interception script of a con
 Get-R1NamingContextInterceptionScriptCode -dn 'o=companyprofiles'
 ```
 
-Returns the interception script of a naming context node at o=companyprofiles.
+Returns the interception script of a naming context node at o=companyprofiles, with its file and
+class names.
+
+### Example 2
+```powershell
+(Get-R1NamingContextInterceptionScriptCode -dn 'o=companyprofiles').scriptContents | Set-Content .\o_companyprofiles.java
+```
+
+Saves the script to a local file.
+
+### Example 3
+```powershell
+Get-R1NamingContextInterceptionScriptCode -dn 'o=companyprofiles' | Test-R1InterceptionScriptCode
+```
+
+Compiles the script as it stands on the server.
 
 ## PARAMETERS
 

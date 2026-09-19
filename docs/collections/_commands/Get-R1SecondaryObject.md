@@ -26,7 +26,22 @@ Returns the object model the object builder holds for a primary object of a prox
 Get-R1SecondaryObject -dn 'o=companyprofiles' -primaryObject 'inetOrgPerson'
 ```
 
-Returns the object model built around a primary object at o=companyprofiles.
+Returns the object model built around a primary object at o=companyprofiles: its input sources,
+attribute mappings, joins and final output.
+
+### Example 2
+```powershell
+Get-R1PrimaryObject -dn 'o=companyprofiles' | Get-R1SecondaryObject -dn 'o=companyprofiles'
+```
+
+Returns the object model of every primary object of the node.
+
+### Example 3
+```powershell
+(Get-R1SecondaryObject -dn 'uid,ou=hr,o=views' -primaryObject 'inetorgperson').finalOutput.attributes | Select-Object virtualName, isHidden
+```
+
+Lists the attributes the entries present, and whether each is hidden.
 
 ## PARAMETERS
 

@@ -24,10 +24,11 @@ Removes a template definition from an upload session before the session is impor
 
 ### Example 1
 ```powershell
-Remove-R1DataSourceTypeImportMeta -importId 'imp1' -name 'My Custom'
+Remove-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom Copy'
 ```
 
-Removes the template from the session, after prompting for confirmation.
+Removes a template from a staged import, after prompting for confirmation. The rest of the import is
+left as it is.
 
 ## PARAMETERS
 

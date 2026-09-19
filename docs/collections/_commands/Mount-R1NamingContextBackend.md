@@ -39,14 +39,23 @@ the mounted node.
 Mount-R1NamingContextBackend -dn 'o=proxy' -datasource 'vds' -remoteBaseDn 'o=companydirectory'
 ```
 
-Presents o=companydirectory of the vds data source at o=proxy.
+Presents o=companydirectory of the vds data source at o=proxy. The node becomes an LDAP proxy.
 
 ### Example 2
+```powershell
+Mount-R1NamingContextBackend -dn 'o=hr' -datasource 'northwind' -schema 'northwind' -tableViews 'APP.EMPLOYEES'
+```
+
+Presents the APP.EMPLOYEES table of the northwind database at o=hr. The node becomes a database
+proxy.
+
+### Example 3
 ```powershell
 Mount-R1NamingContextBackend -dn 'ou=hr,o=aggregate' -datasource 'northwind' -schema 'northwind' -tableViews 'APP.EMPLOYEES'
 ```
 
-Presents the APP.EMPLOYEES table of the northwind database beneath ou=hr,o=aggregate.
+Presents the table beneath the label ou=hr,o=aggregate. Mounted on a label, the database is
+presented as a virtual tree, whose properties Set-R1NamingContextVirtualTreeProperty changes.
 
 ## PARAMETERS
 

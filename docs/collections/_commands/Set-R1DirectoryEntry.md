@@ -43,7 +43,19 @@ $Modifications = @(
 Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications
 ```
 
-Adds a value to an attribute.
+Adds a value to an attribute, keeping the values it already has.
+
+### Example 3
+```powershell
+$Modifications = @(
+    [pscustomobject]@{ modifyType = 'DELETE'; attributes = @([pscustomobject]@{ name = 'telephoneNumber'; values = @() }) }
+    [pscustomobject]@{ modifyType = 'REPLACE'; attributes = @([pscustomobject]@{ name = 'l'; values = @('London') }) }
+)
+Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications
+```
+
+Removes an attribute altogether, by deleting it with no values, and replaces another in the same
+request.
 
 ## PARAMETERS
 

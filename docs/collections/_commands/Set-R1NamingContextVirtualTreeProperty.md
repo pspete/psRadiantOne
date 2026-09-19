@@ -30,17 +30,17 @@ to change them.
 
 ### Example 1
 ```powershell
-Set-R1NamingContextVirtualTreeProperty -dn 'o=vds' -isActive $false
+Set-R1NamingContextVirtualTreeProperty -dn 'ou=hr,o=aggregate' -isActive $false
 ```
 
-Deactivates the virtual tree at o=vds, leaving its other properties as they are.
+Deactivates the virtual tree at ou=hr,o=aggregate, leaving its other properties as they are.
 
 ### Example 2
 ```powershell
-Set-R1NamingContextVirtualTreeProperty -dn 'o=vds' -directoryView 'anotherview'
+Set-R1NamingContextVirtualTreeProperty -dn 'ou=hr,o=aggregate' -isActive $true
 ```
 
-Points the virtual tree at a different directory view.
+Activates it again.
 
 ## PARAMETERS
 

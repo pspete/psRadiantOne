@@ -29,8 +29,16 @@ relationship object.
 New-R1NamingContextContainer -dn 'ou=context,o=views' -relationshipObjectDn 'APP.EMPLOYEES' -schema 'northwind'
 ```
 
-Adds a container node beneath ou=context,o=views presenting the APP.EMPLOYEES table of the northwind
-schema.
+Adds a container presenting the APP.EMPLOYEES table of the northwind schema beneath
+ou=context,o=views. The container is named after the schema and numbered, such as dv=northwind0,
+with a node for the table, EMPLOYEES, beneath it.
+
+### Example 2
+```powershell
+Get-R1NamingContextChild -dn 'dv=northwind0,ou=context,o=views'
+```
+
+Returns the table node beneath the new container, which is where content nodes are added.
 
 ## PARAMETERS
 

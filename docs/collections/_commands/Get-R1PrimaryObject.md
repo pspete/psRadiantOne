@@ -26,7 +26,14 @@ Returns the names of the primary objects defined in the object builder of a prox
 Get-R1PrimaryObject -dn 'o=companyprofiles'
 ```
 
-Returns the primary objects of a naming context node at o=companyprofiles.
+Returns the name of each primary object of a naming context node at o=companyprofiles.
+
+### Example 2
+```powershell
+Get-R1PrimaryObject -dn 'o=companyprofiles' | Get-R1SecondaryObject -dn 'o=companyprofiles'
+```
+
+Returns the object model built around each primary object.
 
 ## PARAMETERS
 

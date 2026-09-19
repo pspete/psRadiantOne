@@ -37,10 +37,11 @@ Returns the classes of an installed plugin.
 
 ### Example 2
 ```powershell
-Get-R1DataSourcePluginClass -pluginName 'example' -importId 'imp1'
+$Staged = Add-R1DataSourcePlugin -Path .\connector.jar
+Get-R1DataSourcePluginClass -pluginName @($Staged.plugins).name[0] -importId $Staged.id
 ```
 
-Returns the classes of a plugin in an upload session.
+Returns the classes of a plugin which has been uploaded but not yet installed.
 
 ## PARAMETERS
 
