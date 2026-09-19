@@ -25,14 +25,14 @@ undo that preparation, for them to be run by hand. The control panel offers them
 
 ### Example 1
 ```powershell
-Export-R1CacheRealTimeConnectorScript -dn 'o=hr' -connectorId 'northwind_APP.EMPLOYEES' -action CONFIGURE -Path 'C:\scripts'
+Export-R1CacheRealTimeConnectorScript -dn 'o=hr' -connectorId 'northwind_APP.EMPLOYEES' -action CONFIGURE -Path 'C:\scripts\configure.zip'
 ```
 
 Downloads the scripts which create the triggers and log table the connector needs.
 
 ### Example 2
 ```powershell
-Export-R1CacheRealTimeConnectorScript -dn 'o=hr' -connectorId 'northwind_APP.EMPLOYEES' -action DECONFIGURE -Path 'C:\scripts'
+Export-R1CacheRealTimeConnectorScript -dn 'o=hr' -connectorId 'northwind_APP.EMPLOYEES' -action DECONFIGURE -Path 'C:\scripts\deconfigure.zip'
 ```
 
 Downloads the scripts which remove them again.
@@ -114,7 +114,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment.
+The server gives the archives of both actions the same name, taken from the cache, so a second
+download into the same directory replaces the first. Name the file in -Path to keep both.
 
 ## RELATED LINKS
 
