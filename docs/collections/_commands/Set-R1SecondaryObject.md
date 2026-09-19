@@ -5,42 +5,49 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-R1NamingContextVirtualTreeProperty
+# Set-R1SecondaryObject
 
 ## SYNOPSIS
-Updates the virtual tree properties of a naming context.
+Saves the object model built in the object builder for a primary object.
 
 ## SYNTAX
 
 ```
-Set-R1NamingContextVirtualTreeProperty [-dn] <String> [[-directoryView] <String>] [[-isActive] <Boolean>]
- [[-dataSourceType] <String>] [[-dataSourceName] <String>] [[-virtualAttributes] <Object[]>]
- [[-baseDn] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-R1SecondaryObject [-dn] <String> [-primaryObject] <String> [[-finalOutput] <Object>] [[-joins] <Object[]>]
+ [[-attributeMappings] <Object[]>] [[-inputSources] <Object[]>] [[-joinComputedAttributes] <Object[]>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Updates the properties of the virtual tree mounted at the naming context node.
+Saves the object model of a primary object in the object builder: its input sources, attribute
+mappings, joins, join computed attributes and final output. This is what the SAVE button of the
+object builder sends.
 
-The current settings are retrieved before they are updated, and sent back with the supplied values
-applied over them, so a setting left unspecified keeps its current value. The command therefore
-issues a GET followed by a PUT, and the account needs permission to read the settings as well as
-to change them.
+The current model is retrieved first and each section which is not specified is sent back
+unchanged. The usual way to change a model is to retrieve it with Get-R1SecondaryObject, change
+the section concerned and pass that section back.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-Set-R1NamingContextVirtualTreeProperty -dn 'o=vds' -isActive $false
+$Model = Get-R1SecondaryObject -dn 'uid,ou=hr,o=views' -primaryObject 'inetorgperson'
+($Model.finalOutput.attributes | Where-Object virtualName -EQ 'NOTES').isHidden = $true
+$Model | Set-R1SecondaryObject -dn 'uid,ou=hr,o=views' -primaryObject 'inetorgperson'
 ```
 
-Deactivates the virtual tree at o=vds, leaving its other properties as they are.
+Hides the NOTES attribute from the entries of the node, piping the whole model back.
 
 ### Example 2
 ```powershell
-Set-R1NamingContextVirtualTreeProperty -dn 'o=vds' -directoryView 'anotherview'
+$Model = Get-R1SecondaryObject -dn 'EMPLOYEES,o=join' -primaryObject 'vdAPPEMPLOYEES'
+$Related = Get-R1RelatedObject -dn 'EMPLOYEES,o=join' -primaryObject 'vdAPPEMPLOYEES' -objectDn 'APP.ORDERS,APP.CUSTOMERS'
+$Primary = $Model.inputSources | Where-Object sourceType -EQ 'PRIMARY'
+$Primary.relatedObjects = @($Primary.relatedObjects) + @($Related)
+Set-R1SecondaryObject -dn 'EMPLOYEES,o=join' -primaryObject 'vdAPPEMPLOYEES' -inputSources $Model.inputSources
 ```
 
-Points the virtual tree at a different directory view.
+Adds the orders and customers related to each employee to the input sources of the model.
 
 ## PARAMETERS
 
@@ -59,41 +66,41 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -directoryView
-The name of the directory view the virtual tree presents.
+### -primaryObject
+The name of the primary object, as Get-R1PrimaryObject returns it.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 2
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -isActive
-Whether the virtual tree is active.
+### -finalOutput
+The attributes the entries present, with their origin and precedence, and the bind order.
 
 ```yaml
-Type: Boolean
+Type: Object
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 3
-Default value: False
+Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -dataSourceType
-The category of the backing data source.
+### -joins
+The joins to secondary objects.
 
 ```yaml
-Type: String
+Type: Object[]
 Parameter Sets: (All)
 Aliases:
 
@@ -104,11 +111,11 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -dataSourceName
-The name of the backing data source.
+### -attributeMappings
+The attributes of the input sources and the names they are presented with.
 
 ```yaml
-Type: String
+Type: Object[]
 Parameter Sets: (All)
 Aliases:
 
@@ -119,8 +126,8 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -virtualAttributes
-The virtual attributes, each mapping a name to the name it is presented as.
+### -inputSources
+The primary object and the other objects the model draws on, each with its related objects.
 
 ```yaml
 Type: Object[]
@@ -134,11 +141,11 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -baseDn
-The base DN of the backing data.
+### -joinComputedAttributes
+The computed attributes used in joins.
 
 ```yaml
-Type: String
+Type: Object[]
 Parameter Sets: (All)
 Aliases:
 
@@ -193,12 +200,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-The naming context and schema are maintained by the server and cannot be changed here. They are
-sent back unaltered so that the update carries the complete resource.
-
 A collection which is specified replaces the collection currently configured, rather than being
 added to it. Retrieve the current value, add to it and pass the result back to append.
 
 ## RELATED LINKS
 
-[Get-R1NamingContextVirtualTreeProperty](Get-R1NamingContextVirtualTreeProperty)
+[Get-R1SecondaryObject](Get-R1SecondaryObject)
+
+[Get-R1PrimaryObject](Get-R1PrimaryObject)
+
+[Get-R1RelatedObject](Get-R1RelatedObject)

@@ -5,21 +5,22 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-R1NamingContextVirtualTreeProperty
+# Set-R1NamingContextLabelProperty
 
 ## SYNOPSIS
-Updates the virtual tree properties of a naming context.
+Updates the properties of a label naming context node.
 
 ## SYNTAX
 
 ```
-Set-R1NamingContextVirtualTreeProperty [-dn] <String> [[-directoryView] <String>] [[-isActive] <Boolean>]
- [[-dataSourceType] <String>] [[-dataSourceName] <String>] [[-virtualAttributes] <Object[]>]
- [[-baseDn] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-R1NamingContextLabelProperty [-dn] <String> [[-rdnPrefix] <String>] [[-rdnSuffix] <String>]
+ [[-objectClasses] <String[]>] [[-description] <String>] [[-virtualAttributes] <Object[]>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Updates the properties of the virtual tree mounted at the naming context node.
+Updates the RDN, object classes, description and virtual attributes of the label node identified
+by its DN.
 
 The current settings are retrieved before they are updated, and sent back with the supplied values
 applied over them, so a setting left unspecified keeps its current value. The command therefore
@@ -30,22 +31,22 @@ to change them.
 
 ### Example 1
 ```powershell
-Set-R1NamingContextVirtualTreeProperty -dn 'o=vds' -isActive $false
+Set-R1NamingContextLabelProperty -dn 'ou=people,o=views' -objectClasses 'top', 'extensibleObject'
 ```
 
-Deactivates the virtual tree at o=vds, leaving its other properties as they are.
+Gives the label ou=people,o=views the extensibleObject object class as well as top.
 
 ### Example 2
 ```powershell
-Set-R1NamingContextVirtualTreeProperty -dn 'o=vds' -directoryView 'anotherview'
+Set-R1NamingContextLabelProperty -dn 'ou=people,o=views' -description 'Everyone'
 ```
 
-Points the virtual tree at a different directory view.
+Sets the description of the label, leaving its other properties as they are.
 
 ## PARAMETERS
 
 ### -dn
-The DN of the naming context node.
+The DN of the label node.
 
 ```yaml
 Type: String
@@ -59,8 +60,8 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -directoryView
-The name of the directory view the virtual tree presents.
+### -rdnPrefix
+The attribute naming the label, for example ou.
 
 ```yaml
 Type: String
@@ -74,26 +75,26 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -isActive
-Whether the virtual tree is active.
+### -rdnSuffix
+The value naming the label.
 
 ```yaml
-Type: Boolean
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 3
-Default value: False
+Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -dataSourceType
-The category of the backing data source.
+### -objectClasses
+The object classes of the label entry.
 
 ```yaml
-Type: String
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
@@ -104,8 +105,8 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -dataSourceName
-The name of the backing data source.
+### -description
+A description of the label. An empty string clears it.
 
 ```yaml
 Type: String
@@ -120,7 +121,7 @@ Accept wildcard characters: False
 ```
 
 ### -virtualAttributes
-The virtual attributes, each mapping a name to the name it is presented as.
+The virtual attributes the label entry presents.
 
 ```yaml
 Type: Object[]
@@ -129,21 +130,6 @@ Aliases:
 
 Required: False
 Position: 6
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -baseDn
-The base DN of the backing data.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 7
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
@@ -193,12 +179,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-The naming context and schema are maintained by the server and cannot be changed here. They are
-sent back unaltered so that the update carries the complete resource.
+Changing rdnPrefix or rdnSuffix renames the label, so its DN changes.
 
 A collection which is specified replaces the collection currently configured, rather than being
 added to it. Retrieve the current value, add to it and pass the result back to append.
 
 ## RELATED LINKS
 
-[Get-R1NamingContextVirtualTreeProperty](Get-R1NamingContextVirtualTreeProperty)
+[Get-R1NamingContextLabelProperty](Get-R1NamingContextLabelProperty)
+
+[New-R1NamingContextLabel](New-R1NamingContextLabel)

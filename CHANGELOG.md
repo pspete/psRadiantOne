@@ -29,6 +29,12 @@
     LDAP data source into an LDAP proxy, and remove it again.
   - `Set-R1NamingContextInterceptionScriptCode` replaces the interception script of a naming
     context.
+- Commands which configure label and content nodes and the object builder:
+  - `Set-R1NamingContextLabelProperty` updates a label node.
+  - `Set-R1NamingContextContentProperty` and `Set-R1NamingContextContentAdvanced` update how a
+    content or container node names and presents its entries.
+  - `Set-R1SecondaryObject` saves the object model of a primary object, and `Get-R1RelatedObject`
+    returns the objects related to it for adding to the model.
 
 ## Fixed
 

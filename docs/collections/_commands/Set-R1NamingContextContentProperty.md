@@ -5,21 +5,21 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-R1NamingContextVirtualTreeProperty
+# Set-R1NamingContextContentProperty
 
 ## SYNOPSIS
-Updates the virtual tree properties of a naming context.
+Updates the properties of a content or container naming context node.
 
 ## SYNTAX
 
 ```
-Set-R1NamingContextVirtualTreeProperty [-dn] <String> [[-directoryView] <String>] [[-isActive] <Boolean>]
- [[-dataSourceType] <String>] [[-dataSourceName] <String>] [[-virtualAttributes] <Object[]>]
- [[-baseDn] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-R1NamingContextContentProperty [-dn] <String> [[-rdnName] <String>] [[-rdnValues] <String[]>]
+ [[-primaryKey] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Updates the properties of the virtual tree mounted at the naming context node.
+Updates how the entries of the content or container node identified by its DN are named: the RDN
+attribute, the columns its value is built from, and the primary key.
 
 The current settings are retrieved before they are updated, and sent back with the supplied values
 applied over them, so a setting left unspecified keeps its current value. The command therefore
@@ -30,22 +30,22 @@ to change them.
 
 ### Example 1
 ```powershell
-Set-R1NamingContextVirtualTreeProperty -dn 'o=vds' -isActive $false
+Set-R1NamingContextContentProperty -dn 'EMPLOYEES,ou=hr,o=views' -rdnName 'uid'
 ```
 
-Deactivates the virtual tree at o=vds, leaving its other properties as they are.
+Names the entries of the EMPLOYEES node by uid. The node itself is renamed to uid,ou=hr,o=views.
 
 ### Example 2
 ```powershell
-Set-R1NamingContextVirtualTreeProperty -dn 'o=vds' -directoryView 'anotherview'
+Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues 'APP.EMPLOYEES.FIRSTNAME', 'APP.EMPLOYEES.LASTNAME'
 ```
 
-Points the virtual tree at a different directory view.
+Builds the RDN value of each entry from the first and last name columns.
 
 ## PARAMETERS
 
 ### -dn
-The DN of the naming context node.
+The DN of the content or container node.
 
 ```yaml
 Type: String
@@ -59,8 +59,8 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -directoryView
-The name of the directory view the virtual tree presents.
+### -rdnName
+The attribute naming each entry.
 
 ```yaml
 Type: String
@@ -74,23 +74,24 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -isActive
-Whether the virtual tree is active.
+### -rdnValues
+The columns the RDN value is built from, named as Get-R1NamingContextContentRdnAttribute returns
+them.
 
 ```yaml
-Type: Boolean
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 3
-Default value: False
+Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -dataSourceType
-The category of the backing data source.
+### -primaryKey
+The column identifying each entry.
 
 ```yaml
 Type: String
@@ -99,51 +100,6 @@ Aliases:
 
 Required: False
 Position: 4
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -dataSourceName
-The name of the backing data source.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 5
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -virtualAttributes
-The virtual attributes, each mapping a name to the name it is presented as.
-
-```yaml
-Type: Object[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 6
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -baseDn
-The base DN of the backing data.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 7
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
@@ -193,12 +149,16 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-The naming context and schema are maintained by the server and cannot be changed here. They are
-sent back unaltered so that the update carries the complete resource.
+The node is named by its RDN attribute, so changing rdnName renames the node: its DN afterwards
+begins with the new name, and the old DN is no longer found.
 
-A collection which is specified replaces the collection currently configured, rather than being
-added to it. Retrieve the current value, add to it and pass the result back to append.
+The schema and node type are maintained by the server and cannot be changed here. They are sent
+back unaltered so that the update carries the complete resource.
 
 ## RELATED LINKS
 
-[Get-R1NamingContextVirtualTreeProperty](Get-R1NamingContextVirtualTreeProperty)
+[Get-R1NamingContextContentProperty](Get-R1NamingContextContentProperty)
+
+[Get-R1NamingContextContentRdnAttribute](Get-R1NamingContextContentRdnAttribute)
+
+[Set-R1NamingContextContentAdvanced](Set-R1NamingContextContentAdvanced)
