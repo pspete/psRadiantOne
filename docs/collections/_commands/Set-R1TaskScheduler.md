@@ -119,9 +119,6 @@ The running state and the log levels are reported by the scheduler but are not p
 update, so they are not sent. Use the start, stop and restart commands to change the running
 state.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1TaskScheduler](Get-R1TaskScheduler)

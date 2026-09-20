@@ -35386,7 +35386,7 @@ Remove-R1Cache -dn 'o=hr'</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -36789,7 +36789,7 @@ Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -46457,7 +46457,6 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
     <maml:alertSet>
       <maml:alert>
         <maml:para>Test the code with Test-R1InterceptionScriptCode before setting it, and rebuild the jar with New-R1InterceptionScriptJar afterwards.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -56231,7 +56230,7 @@ Reset-R1StoreIndex -dn 'o=store'</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>The status, whether the task is recurrent, its execution times and its log list are reported by the API but are not part of the update, so they are not sent.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>Any update, even one that changes nothing, re-runs the task. Expect status and lastExecution to reset.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -56394,7 +56393,6 @@ Reset-R1StoreIndex -dn 'o=store'</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>The running state and the log levels are reported by the scheduler but are not part of the update, so they are not sent. Use the start, stop and restart commands to change the running state.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -57060,7 +57058,7 @@ Get-R1PromotionState</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -57174,7 +57172,7 @@ Get-R1PromotionState</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -57547,7 +57545,7 @@ Get-R1PromotionState</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -57664,7 +57662,7 @@ Get-R1PromotionState</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
