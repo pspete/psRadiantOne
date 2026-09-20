@@ -144,15 +144,16 @@ function Set-R1Aci {
 		#left unspecified keeps its current value.
 		$Existing = Get-R1Aci -aciId $aciId -baseDn $baseDn
 
+		#aciString is left out: the server builds it from the other properties, and sending the one
+		#it built for the ACI as it stands is refused with 409.
 		$Template = [ordered]@{
-			aciString               = $null
 			parsable                = $false
 			name                    = $null
 			targetDn                = $null
 			targetScope             = $null
 			targetFilter            = $null
 			includeTargetAttributes = $false
-			targetAttributes        = @()
+			targetAttributes        = $null
 			permsType               = $null
 			selectedOperations      = @()
 			loaOperator             = $null
@@ -168,9 +169,21 @@ function Set-R1Aci {
 
 		foreach ($Collection in 'targetAttributes', 'selectedOperations', 'daysOfWeek', 'timeRanges', 'applyUserDns', 'applyGroupDns', 'applyIps') {
 
-			if ($Request.Contains($Collection)) {
+			#A null targetAttributes is how every attribute is expressed, and is not an empty list
+			if ($Request.Contains($Collection) -and ($null -ne $Request[$Collection])) {
 
 				$Request[$Collection] = @($Request[$Collection])
+
+			}
+
+		}
+
+		#The control panel leaves these out rather than sending them empty
+		foreach ($Optional in 'loaOperator', 'applyGroupDns', 'applyIps') {
+
+			if ((-not ($PSBoundParameters.ContainsKey($Optional))) -and (-not ($Request[$Optional]))) {
+
+				$Request.Remove($Optional)
 
 			}
 
