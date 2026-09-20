@@ -23,10 +23,18 @@ Deletes the named LDIF file from the server.
 
 ### Example 1
 ```powershell
-Remove-R1DirectoryLdifFile -fileName 'example.ldif'
+Remove-R1DirectoryLdifFile -fileName 'companydirectory.ldif'
 ```
 
 Deletes the file, after prompting for confirmation.
+
+### Example 2
+```powershell
+Get-R1DirectoryLdifFile | ForEach-Object { Remove-R1DirectoryLdifFile -fileName $PSItem }
+```
+
+Deletes every LDIF file on the server, including the ones Save-R1DirectoryLdif leaves behind under
+generated names, prompting for confirmation of each.
 
 ## PARAMETERS
 

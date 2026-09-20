@@ -26,10 +26,19 @@ relationship object.
 
 ### Example 1
 ```powershell
-New-R1NamingContextContent -dn 'o=vds' -relationshipObjectDn 'APP.ORDERS,APP.CUSTOMERS'
+New-R1NamingContextContent -dn 'ou=people,o=views' -relationshipObjectDn 'inetorgperson' -schema 'default'
 ```
 
-Adds a content node beneath o=vds built from the APP.ORDERS relationship object.
+Adds a content node beneath ou=people,o=views presenting the inetorgperson object of the LDAP
+schema named default.
+
+### Example 2
+```powershell
+New-R1NamingContextContent -dn 'EMPLOYEES,dv=northwind0,ou=context,o=views' -relationshipObjectDn 'APP.EMPLOYEES,APP.ORDERS,APP.CUSTOMERS' -schema 'northwind'
+```
+
+Adds a content node beneath the EMPLOYEES container presenting the customers related to each
+employee, following the path from APP.EMPLOYEES through APP.ORDERS to APP.CUSTOMERS.
 
 ## PARAMETERS
 
@@ -64,7 +73,7 @@ Accept wildcard characters: False
 ```
 
 ### -isQuoteTableNames
-Quotes table names in the generated queries.
+Quotes table names in the generated queries. Sent as false when not specified.
 
 ```yaml
 Type: Boolean
@@ -79,7 +88,7 @@ Accept wildcard characters: False
 ```
 
 ### -isQuoteColumnNames
-Quotes column names in the generated queries.
+Quotes column names in the generated queries. Sent as false when not specified.
 
 ```yaml
 Type: Boolean
@@ -94,7 +103,8 @@ Accept wildcard characters: False
 ```
 
 ### -isRelatedObjectsOnly
-Restricts the node to related objects only.
+Restricts the node to related objects only. Sent as false when not specified, as the API would
+otherwise take it to be true.
 
 ```yaml
 Type: Boolean
@@ -168,9 +178,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 The relationship object must already exist in a data catalog schema.
-
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
 
 ## RELATED LINKS
 

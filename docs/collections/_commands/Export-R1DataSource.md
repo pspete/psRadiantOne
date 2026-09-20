@@ -26,17 +26,24 @@ that was written is returned.
 
 ### Example 1
 ```powershell
-Export-R1DataSource -dataSources 'opendj' -Path 'C:\\backup'
+Export-R1DataSource -dataSources 'opendj' -Path 'C:\backup'
 ```
 
-Exports one data source.
+Exports opendj into C:\backup as a zip archive, under the file name the server gives it.
 
 ### Example 2
 ```powershell
-Export-R1DataSource -dataSources 'opendj', 'advworks' -Path 'C:\\backup'
+Export-R1DataSource -dataSources 'opendj', 'advworks' -Path 'C:\backup\datasources.zip'
 ```
 
-Exports two data sources into a single archive.
+Exports two data sources into a single archive with the name given.
+
+### Example 3
+```powershell
+Export-R1DataSource -dataSources 'opendj' -performOpOnSchemas $false
+```
+
+Exports opendj without its schemas into the Downloads directory.
 
 ## PARAMETERS
 

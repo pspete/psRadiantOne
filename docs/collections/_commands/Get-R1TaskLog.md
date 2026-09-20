@@ -34,7 +34,8 @@ The whole log is returned when no number of lines is given.
 Get-R1TaskLog -id 'e4ef6b3e'
 ```
 
-Returns the log the task has written so far.
+Returns the log the task has written so far. A long running task can write tens of thousands of
+lines.
 
 ### Example 2
 ```powershell

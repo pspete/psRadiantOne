@@ -23,10 +23,11 @@ Discards an upload session and the templates it holds, without importing any of 
 
 ### Example 1
 ```powershell
-Remove-R1DataSourceTypeImport -id 'imp1'
+Remove-R1DataSourceTypeImport -id $Session.id
 ```
 
-Discards the upload session.
+Discards a staged import, after prompting for confirmation. Once an import has been applied with
+Complete-R1DataSourceTypeImport, this clears the staging area.
 
 ## PARAMETERS
 

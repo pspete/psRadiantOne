@@ -23,7 +23,7 @@ Uploads a jar into the library catalog. The file is sent as multipart form data.
 
 ### Example 1
 ```powershell
-Import-R1Library -Path .\\acs-1.0.jar
+Import-R1Library -Path .\acs-1.0.jar
 ```
 
 Uploads a library.

@@ -175,8 +175,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+The data source must be reachable when the schema is created.
+
+The schema is linked to the data source on creation. Remove-R1DataSourceSchemaLink removes the link.
 
 ## RELATED LINKS
 

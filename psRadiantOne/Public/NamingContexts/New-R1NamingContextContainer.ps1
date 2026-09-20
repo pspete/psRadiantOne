@@ -21,19 +21,19 @@ function New-R1NamingContextContainer {
 			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
-		[bool]$isQuoteTableNames,
+		[bool]$isQuoteTableNames = $false,
 
 		[parameter(
 			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
-		[bool]$isQuoteColumnNames,
+		[bool]$isQuoteColumnNames = $false,
 
 		[parameter(
 			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
-		[bool]$isRelatedObjectsOnly,
+		[bool]$isRelatedObjectsOnly = $false,
 
 		[parameter(
 			Mandatory = $false,
@@ -52,7 +52,23 @@ function New-R1NamingContextContainer {
 
 		$URI = Resolve-R1ServiceUrl -Service Namespace -Path "naming_contexts/$($dn | Get-EscapedString)/add_container"
 
-		$Body = $PSBoundParameters | Get-Parameter -ParametersToRemove dn | ConvertTo-R1JsonBody
+		#The flags are always sent, as the control panel sends them: the API otherwise defaults
+		#isRelatedObjectsOnly to true
+		$Request = [ordered]@{
+			relationshipObjectDn = $relationshipObjectDn
+			isQuoteColumnNames   = $isQuoteColumnNames
+			isQuoteTableNames    = $isQuoteTableNames
+		}
+
+		if ($PSBoundParameters.ContainsKey('schema')) {
+
+			$Request['schema'] = $schema
+
+		}
+
+		$Request['isRelatedObjectsOnly'] = $isRelatedObjectsOnly
+
+		$Body = $Request | ConvertTo-R1JsonBody
 
 		if ($PSCmdlet.ShouldProcess($dn, 'Add Child Container')) {
 

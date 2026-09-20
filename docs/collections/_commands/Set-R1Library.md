@@ -24,7 +24,7 @@ Replaces the jar held at the given Maven coordinates with the file supplied.
 
 ### Example 1
 ```powershell
-Set-R1Library -groupId 'com.example' -artifactId 'acs' -version '1.0' -Path .\\acs-1.0.jar
+Set-R1Library -groupId 'com.example' -artifactId 'acs' -version '1.0' -Path .\acs-1.0.jar
 ```
 
 Replaces the jar of an existing library.
@@ -134,9 +134,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### psRadiantOne.Library
 
 ## NOTES
-
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
 
 ## RELATED LINKS
 

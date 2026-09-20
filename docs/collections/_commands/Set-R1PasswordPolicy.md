@@ -31,12 +31,15 @@ Set-R1PasswordPolicy [-policyName] <String> [[-targetType] <String>] [[-targetDn
 ```
 
 ## DESCRIPTION
-Updates the settings of a password policy.
+Updates the settings of a password policy, or creates one which does not exist.
 
 The resource is retrieved before it is updated, and sent back with the supplied values applied
 over it, so a property left unspecified keeps its current value. The command therefore issues a
 GET followed by a PUT, and the account needs permission to read the resource as well as to
 change it.
+
+A policy which does not yet exist is created, starting from the empty policy the API supplies, so
+a property left unspecified takes the API default rather than a current value.
 
 Note that passwordMustChangeAfterReset and userMayChangePassword together drive the expired
 password flow: the first causes a login after an administrative reset to report the password as
@@ -618,5 +621,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Void
 
 ## NOTES
+
+The default policy is the one with an empty name, so a policy created here is always named.
 
 ## RELATED LINKS

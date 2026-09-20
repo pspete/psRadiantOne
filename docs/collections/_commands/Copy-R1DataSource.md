@@ -29,6 +29,15 @@ Copy-R1DataSource -existingDataSource 'opendj' -newDataSourceName 'opendj-test'
 
 Copies the opendj data source.
 
+### Example 2
+```powershell
+Copy-R1DataSource -existingDataSource 'advworks' -newDataSourceName 'advworks-test'
+Get-R1DataSource -name 'advworks-test' | Test-R1DataSourceConnection -useExistingCredentials
+```
+
+Copies a data source and tests the copy. The stored password is copied too, so the copy connects
+with -useExistingCredentials.
+
 ## PARAMETERS
 
 ### -existingDataSource

@@ -25,10 +25,11 @@ it on the server. The file that was written is returned.
 
 ### Example 1
 ```powershell
-Save-R1DirectoryLdif -sourceDn 'o=example' -scope 'SUB' -fileName 'example.ldif' -Path 'C:\\backup'
+Save-R1DirectoryLdif -sourceDn 'o=companydirectory' -scope 'SUB' -fileName 'companydirectory.ldif' -Path 'C:\backup'
 ```
 
-Downloads a subtree as LDIF.
+Exports a subtree as LDIF and downloads it into C:\backup. The server keeps a copy under a generated
+name, which Remove-R1DirectoryLdifFile deletes.
 
 ## PARAMETERS
 

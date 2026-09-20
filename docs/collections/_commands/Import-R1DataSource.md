@@ -25,14 +25,22 @@ XML one. The file is sent as multipart form data.
 
 ### Example 1
 ```powershell
-Import-R1DataSource -Path .\\datasources.json
+Import-R1DataSource -Path .\opendj.zip
 ```
 
-Imports a JSON export.
+Imports the data sources in an archive written by Export-R1DataSource. The import is refused if one of
+them already exists.
 
 ### Example 2
 ```powershell
-Import-R1DataSource -Path .\\datasources.xml -Xml
+Import-R1DataSource -Path .\opendj.zip -overrideExisting $true
+```
+
+Imports the archive, replacing any data source of the same name.
+
+### Example 3
+```powershell
+Import-R1DataSource -Path .\datasources.xml -Xml
 ```
 
 Imports an XML export.

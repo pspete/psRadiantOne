@@ -1,3 +1,92 @@
+# Unreleased
+
+- N/A
+
+# 0.4
+
+## Added
+
+- Read commands for the directory namespace configuration which had none:
+  - Caches: `Get-R1Cache`, `Get-R1CacheProperty`, `Get-R1CacheRefresh`,
+    `Get-R1CacheRealTimeConnector`, `Get-R1CacheRealTimeConnectorDiagnostic`,
+    `Get-R1CacheRealTimeConnectorConfig` and `Get-R1CacheRealTimeConnectorType`. A cache pipes to
+    the other cache commands by its label.
+  - LDAP and database proxies: `Get-R1NamingContextLdapProxyBackend`,
+    `Get-R1NamingContextLdapProxyAdvanced`, `Get-R1NamingContextMergedBackend` and
+    `Get-R1NamingContextDbProxyProperty`.
+  - Content, label and link nodes: `Get-R1NamingContextContentProperty`,
+    `Get-R1NamingContextContentRdnAttribute`, `Get-R1NamingContextContentAdvanced`,
+    `Get-R1NamingContextConfigurationParameter`, `Get-R1NamingContextLabelProperty`,
+    `Get-R1NamingContextLinkProperty`, `Get-R1NamingContextLinkParameterTree`,
+    `Get-R1NamingContextLinkParameterTreeAttribute` and `Get-R1NamingContextLinkParameterString`.
+  - The object builder: `Get-R1PrimaryObject`, `Get-R1AvailablePrimaryObject`,
+    `Get-R1SecondaryObject` and `Get-R1ComputedAttributeFunction`.
+  - Directory stores: `Get-R1StoreProperty` and `Get-R1StoreBackup`.
+  - `Get-R1NamingContextInterceptionScriptCode` and `Get-R1NamingContextReplication`.
+- Format views listing caches, real time connectors and their types, computed attribute functions,
+  content RDN attributes and link parameter attributes as tables.
+- `Get-R1PasswordPolicy -Default` returns the default password policy, which the API identifies by
+  an empty policy name and `-policyName` could not ask for.
+- Commands which configure LDAP and database proxies:
+  - `Mount-R1NamingContextBackend` mounts an LDAP directory or a database on a naming context node.
+  - `Set-R1NamingContextLdapProxyBackend` and `Set-R1NamingContextLdapProxyAdvanced` update an
+    LDAP proxy.
+  - `Add-R1NamingContextMergedBackend` and `Remove-R1NamingContextMergedBackend` merge a second
+    LDAP data source into an LDAP proxy, and remove it again.
+  - `Set-R1NamingContextInterceptionScriptCode` replaces the interception script of a naming
+    context.
+- Commands which configure label and content nodes and the object builder:
+  - `Set-R1NamingContextLabelProperty` updates a label node.
+  - `Set-R1NamingContextContentProperty` and `Set-R1NamingContextContentAdvanced` update how a
+    content or container node names and presents its entries.
+  - `Set-R1SecondaryObject` saves the object model of a primary object, and `Get-R1RelatedObject`
+    returns the objects related to it for adding to the model.
+- Commands which build the parts of an object model in the object builder: `New-R1ObjectInputSource`,
+  `New-R1ObjectExtension` and `New-R1JoinProfile` build input sources, extensions and joins,
+  `New-R1ComputedAttributeExpression` builds a computed attribute expression from a function,
+  `Test-R1ComputedAttributeExpression` checks that one compiles, and
+  `Convert-R1ComputedAttributeExpression` rewrites expressions for a renamed attribute. Each returns
+  its result for saving with `Set-R1SecondaryObject`.
+- Commands which manage RadiantOne Directory stores: `Set-R1StoreProperty`, `Reset-R1StoreIndex`,
+  `Backup-R1Store`, `Export-R1StoreBackup`, `Restore-R1Store` and `Import-R1StoreBackup`.
+  `Mount-R1NamingContextBackend` mounts a store with `-Store`.
+  `Import-R1StoreData` initializes a store from an LDIF file.
+- Commands which create and manage persistent caches: `New-R1Cache`, `Set-R1CacheRefresh`,
+  `Initialize-R1Cache`, `Set-R1CacheProperty` and `Import-R1Cache`, and for real time refresh
+  `Set-R1CacheRealTimeConnectorConfig`, `Export-R1CacheRealTimeConnectorScript` and
+  `Invoke-R1CacheRealTimeConnectorScript`. `Remove-R1Cache` deletes a cache.
+- `New-R1NamingContextInterceptionScript` and `Set-R1NamingContextInterceptionScript` give a content
+  node a new interception script, or one which already exists.
+
+## Fixed
+
+- A command issued before `Connect-R1Session` stops at the session check. The check reported a
+  terminating error, which ended the check alone: the command carried on and failed a second time
+  on the request, reporting an invalid URI.
+- `New-R1NamingContextContent` and `New-R1NamingContextContainer` always send
+  `isQuoteTableNames`, `isQuoteColumnNames` and `isRelatedObjectsOnly`, as false unless
+  specified. `isRelatedObjectsOnly` was previously left out unless given, and the API takes an
+  absent value to be true.
+- `Set-R1NamingContextContentAdvanced` clears a where clause when given an empty string, sending it
+  as the control panel does. It sent null, which the API ignores.
+- `Test-R1Aci` sends the ACI string as the request body, which is what the endpoint reads. It sent
+  an object built from its parameters, which came back as an unparsable ACI string, so it now takes
+  `-aciString` alone. `New-R1Aci` builds an ACI from individual permissions.
+- `Set-R1Aci` leaves the ACI string out of an update, which is what the control panel does: the
+  server builds it from the other properties, and sending the string it built for the ACI as it
+  stood was refused with 409. An empty `loaOperator`, `applyGroupDns` and `applyIps` are left out
+  too, and `targetAttributes` is sent as null rather than an empty list.
+- `Set-R1PasswordPolicy` creates a policy which does not exist, starting from the empty policy the
+  API supplies. It read the named policy first, and that read answers 500 when the policy is not
+  there, so nothing was ever sent.
+- `Set-R1FIDUserRole` sets the roles on the user. It used an endpoint the API marks deprecated,
+  which a RadiantOne 8.5.3 deployment answers 404.
+- `Get-R1PasswordPolicy -NewPolicy` sends the policy name the endpoint requires, which it answered
+  "Required parameter 'policyName' is not present." without.
+- `Remove-R1DataSourcePlugin` no longer fails a removal the API carried out. The API answers a
+  successful delete with HTTP 500 and no error details; the plugin listing is now checked on error,
+  and gone from the listing is treated as success, with a warning rather than a terminating error.
+
 # 0.3
 
 ## Added

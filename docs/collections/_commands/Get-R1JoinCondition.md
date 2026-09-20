@@ -25,17 +25,19 @@ attributes being joined on, and returns the condition it produced. Nothing is sa
 
 ### Example 1
 ```powershell
-Get-R1JoinCondition -secondaryObject 'inetOrgPerson' -primaryJoinAttribute 'EMPLOYEEID' -secondaryJoinAttribute 'employeeID'
+Get-R1JoinCondition -secondaryObject 'inetOrgPerson' -primaryJoinAttribute 'uid' -secondaryJoinAttribute 'uid'
 ```
 
-Returns the join condition built from those properties.
+Returns the join condition built from those properties, in the form the join commands take:
+(&(uid=@[uid:varchar])(objectclass=inetOrgPerson)).
 
 ### Example 2
 ```powershell
-(Get-R1JoinCondition -secondaryObject 'inetOrgPerson' -primaryJoinAttribute 'EMPLOYEEID' -secondaryJoinAttribute 'employeeID').joinCondition | Test-R1JoinCondition
+Get-R1JoinCondition -secondaryObject 'inetOrgPerson' -primaryJoinAttribute 'EMPLOYEEID' -secondaryJoinAttribute 'employeeNumber'
 ```
 
-Builds a join condition and checks that the server accepts it.
+Returns the condition joining the EMPLOYEEID column of a database object to the employeeNumber
+attribute of inetOrgPerson entries.
 
 ## PARAMETERS
 

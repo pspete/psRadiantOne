@@ -33,14 +33,14 @@ overwritten. A server file is named instead, and addBehavior controls the same t
 
 ### Example 1
 ```powershell
-Import-R1DirectorySchemaFile -Path .\\custom.ldif
+Import-R1DirectorySchemaFile -Path .\custom.ldif
 ```
 
 Uploads and imports a local schema file.
 
 ### Example 2
 ```powershell
-Import-R1DirectorySchemaFile -Path .\\custom.ldif -isOverride $true
+Import-R1DirectorySchemaFile -Path .\custom.ldif -isOverride $true
 ```
 
 Uploads and imports a local schema file, overwriting entries which already exist.

@@ -26,7 +26,16 @@ Adds a new root naming context to the directory namespace at the given DN.
 New-R1NamingContext -dn 'o=mynewroot'
 ```
 
-Adds a root naming context at o=mynewroot.
+Adds a root naming context at o=mynewroot. It is a label until a backend is mounted on it or a
+level added beneath it.
+
+### Example 2
+```powershell
+New-R1NamingContext -dn 'o=proxy'
+Mount-R1NamingContextBackend -dn 'o=proxy' -datasource 'vds' -remoteBaseDn 'o=companydirectory'
+```
+
+Adds a root naming context and mounts an LDAP directory on it.
 
 ## PARAMETERS
 
@@ -88,9 +97,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### psRadiantOne.NewNamingContextResponse
 
 ## NOTES
-
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
 
 ## RELATED LINKS
 

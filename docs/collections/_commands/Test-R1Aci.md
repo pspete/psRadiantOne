@@ -13,285 +13,47 @@ Reports whether an access control instruction can be parsed.
 ## SYNTAX
 
 ```
-Test-R1Aci [[-name] <String>] [[-aciString] <String>] [[-parsable] <Boolean>] [[-targetDn] <String>]
- [[-targetScope] <String>] [[-targetFilter] <String>] [[-includeTargetAttributes] <Boolean>]
- [[-targetAttributes] <String[]>] [[-permsType] <String>] [[-selectedOperations] <String[]>]
- [[-loaOperator] <String>] [[-loaLevel] <Int32>] [[-daysOfWeek] <String[]>] [[-timeRanges] <String[]>]
- [[-applyUserDns] <String[]>] [[-applyGroupDns] <String[]>] [[-applyIps] <String[]>] [<CommonParameters>]
+Test-R1Aci [-aciString] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Validates an access control instruction and reports whether the API can parse it, without creating
-it.
+Reports whether the API can parse an ACI given as a string, and returns it broken into its parts.
+Nothing is created.
 
-The endpoint is a GET which carries the ACI as its request body, which is unusual but is how the API
-defines it.
+An ACI which parses comes back with parsable true and its target, permissions and restrictions
+filled in. One which does not comes back with parsable false.
+
+To build an ACI from individual permissions rather than a string, use New-R1Aci, which takes the
+target, the operations and the restrictions as parameters.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-Test-R1Aci -aciString '(target=...)(version 3.0; acl "example"; allow(read) userdn="ldap:///anyone";)'
+Test-R1Aci -aciString '(targetattr = "*")(target = "ldap:///cn=schema")(targetscope = "base")(version 3.0;acl "update schema";allow (all) (groupdn = "ldap:///cn=directory administrators,ou=globalgroups,cn=config");)'
 ```
 
-Reports whether the raw ACI string can be parsed.
+Reports whether the ACI string can be parsed, and returns its parts.
+
+### Example 2
+```powershell
+Get-R1Aci | Test-R1Aci
+```
+
+Checks every ACI configured on the deployment.
 
 ## PARAMETERS
 
 ### -aciString
-The ACI expressed as a raw ACI string, as an alternative to describing it with the structured parameters.
+The ACI as a string.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 1
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -applyGroupDns
-The group DNs the ACI applies to.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 15
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -applyIps
-The IP addresses the ACI applies to.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 16
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -applyUserDns
-The user DNs the ACI applies to. Accepts the keywords anyone, all, self and parent.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 14
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -daysOfWeek
-The days the ACI applies on.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-Accepted values: MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
-
-Required: False
-Position: 12
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -includeTargetAttributes
-Whether the target attribute expression is inclusive.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 6
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -loaLevel
-The level of assurance to compare against, 0 to 4.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 11
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -loaOperator
-The comparison operator used against the level of assurance, e.g. <=
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 10
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -name
-A name for the ACI.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 0
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -parsable
-Whether the ACI can be represented as a structured object rather than only as a raw string.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -permsType
-Whether the ACI allows or denies the selected operations. ALLOW or DENY.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: ALLOW, DENY
-
-Required: False
-Position: 8
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -selectedOperations
-The operations allowed or denied. READ, WRITE, SEARCH, SELF_WRITE, ADD, PROXY, DELETE, MOVE_CURRENT, COMPARE or MOVE_FUTURE.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-Accepted values: READ, WRITE, SEARCH, SELF_WRITE, ADD, PROXY, DELETE, MOVE_CURRENT, COMPARE, MOVE_FUTURE
-
-Required: False
-Position: 9
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -targetAttributes
-The attribute names the ACI targets. Omit for all attributes.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 7
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -targetDn
-The DN the ACI targets.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -targetFilter
-An LDAP filter limiting the entries the ACI applies to.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 5
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -targetScope
-The scope the ACI applies over. BASE, ONE or SUBTREE.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: BASE, ONE, SUBTREE
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -timeRanges
-The time ranges the ACI applies during, e.g. 1030-1230
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 13
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
@@ -304,16 +66,19 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.String
 
-### System.Boolean
-
-### System.String[]
-
-### System.Int32
-
 ## OUTPUTS
 
-### System.Boolean
+### psRadiantOne.Aci
 
 ## NOTES
 
+The endpoint is a GET which carries the ACI as its request body, and reads that body as the ACI
+string itself rather than as JSON.
+
 ## RELATED LINKS
+
+[New-R1Aci](New-R1Aci)
+
+[Get-R1Aci](Get-R1Aci)
+
+[Set-R1Aci](Set-R1Aci)

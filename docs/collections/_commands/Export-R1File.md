@@ -25,14 +25,14 @@ written is returned.
 
 ### Example 1
 ```powershell
-Export-R1File -files '/conf/app.properties' -Path 'C:\\backup'
+Export-R1File -files '/vds_server/custom/src/psr1/app.properties' -Path 'C:\backup'
 ```
 
-Downloads one file.
+Downloads one file into C:\backup.
 
 ### Example 2
 ```powershell
-Export-R1File -files '/conf/one.txt', '/conf/two.txt' -Path 'C:\\backup'
+Export-R1File -files '/certs/one.txt', '/certs/two.txt' -Path 'C:\backup'
 ```
 
 Downloads two files as an archive.

@@ -30,17 +30,25 @@ The import runs as a task, and the task it launched is returned.
 
 ### Example 1
 ```powershell
-Import-R1DirectoryLdif -Path .\\example.ldif
+Import-R1DirectoryLdif -Path .\example.ldif
 ```
 
 Uploads and imports a local LDIF file.
 
 ### Example 2
 ```powershell
-Import-R1DirectoryLdif -filename 'example.ldif' -overwrite $true
+Import-R1DirectoryLdif -filename 'companydirectory.ldif' -overwrite $true
 ```
 
 Imports a file already on the server, overwriting entries which already exist.
+
+### Example 3
+```powershell
+$Task = Import-R1DirectoryLdif -Path .\example.ldif
+Get-R1TaskLog -id $Task.taskId -numberOfLines 15
+```
+
+Starts an import and shows the end of the log of the task running it.
 
 ## PARAMETERS
 

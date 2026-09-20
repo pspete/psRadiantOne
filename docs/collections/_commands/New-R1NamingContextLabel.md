@@ -24,10 +24,17 @@ nodes and holds no data of its own.
 
 ### Example 1
 ```powershell
-New-R1NamingContextLabel -dn 'o=vds' -rdn 'ou=testlabel'
+New-R1NamingContextLabel -dn 'o=views' -rdn 'ou=people'
 ```
 
-Adds the label ou=testlabel beneath o=vds.
+Adds the label ou=people beneath o=views.
+
+### Example 2
+```powershell
+'ou=people', 'ou=groups' | ForEach-Object { New-R1NamingContextLabel -dn 'o=views' -rdn $PSItem }
+```
+
+Adds two labels beneath o=views. Get-R1NamingContextChild lists them.
 
 ## PARAMETERS
 
@@ -104,9 +111,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Void
 
 ## NOTES
-
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
 
 ## RELATED LINKS
 

@@ -29,14 +29,14 @@ Returns every template held in an upload session, or a single one when it is nam
 
 ### Example 1
 ```powershell
-Get-R1DataSourceTypeImportMeta -importId 'imp1'
+Get-R1DataSourceTypeImportMeta -importId $Session.id
 ```
 
-Returns every template in the session.
+Returns every template in a staged import.
 
 ### Example 2
 ```powershell
-Get-R1DataSourceTypeImportMeta -importId 'imp1' -name 'My Custom'
+Get-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom'
 ```
 
 Returns one template.

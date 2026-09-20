@@ -22,6 +22,11 @@ Get-R1PasswordPolicy [<CommonParameters>]
 Get-R1PasswordPolicy -policyName <String> [<CommonParameters>]
 ```
 
+### Default
+```
+Get-R1PasswordPolicy [-Default] [<CommonParameters>]
+```
+
 ### NewPolicy
 ```
 Get-R1PasswordPolicy [-NewPolicy] [<CommonParameters>]
@@ -31,8 +36,9 @@ Get-R1PasswordPolicy [-NewPolicy] [<CommonParameters>]
 Returns the password policies configured on the deployment.
 
 With no parameters, the names of the configured policies are returned. Specify policyName to
-return the full settings of one policy - the API requires it as a query parameter. Specify
-NewPolicy to return an empty policy populated with the API defaults, as a starting point.
+return the full settings of one policy - the API requires it as a query parameter. Specify Default
+for the default policy, which the API identifies by an empty policy name. Specify NewPolicy to
+return an empty policy populated with the API defaults, as a starting point.
 
 ## EXAMPLES
 
@@ -52,12 +58,34 @@ Returns the full settings of the named policy.
 
 ### Example 3
 ```powershell
+Get-R1PasswordPolicy -Default
+```
+
+Returns the full settings of the default policy.
+
+### Example 4
+```powershell
 Get-R1PasswordPolicy -NewPolicy
 ```
 
 Returns an empty policy populated with the API defaults.
 
 ## PARAMETERS
+
+### -Default
+Return the default policy, which the API identifies by an empty policy name.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Default
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -NewPolicy
 Return an empty policy populated with the API defaults, as a starting point for a new one.

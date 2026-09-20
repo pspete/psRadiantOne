@@ -25,14 +25,23 @@ list what has been exported, or Save-R1DirectoryLdif to download instead of stor
 
 ### Example 1
 ```powershell
-Export-R1DirectoryLdif -sourceDn 'o=example' -scope 'SUB' -fileName 'example.ldif'
+Export-R1DirectoryLdif -sourceDn 'o=companydirectory' -scope 'SUB' -fileName 'companydirectory.ldif'
 ```
 
 Exports a subtree to a file on the server.
 
 ### Example 2
 ```powershell
-Export-R1DirectoryLdif -sourceDn 'o=example' -scope 'SUB' -fileName 'example.ldif' -targetDn 'o=copy'
+Export-R1DirectoryLdif -sourceDn 'o=companydirectory' -scope 'SUB' -fileName 'companydirectory.ldif'
+do { Start-Sleep -Seconds 5 } until (Get-R1DirectoryLdifFile | Where-Object { $PSItem -eq 'companydirectory.ldif' })
+```
+
+Exports a subtree and waits for the file to appear. The export runs in the background, so the file
+is not listed straight away.
+
+### Example 3
+```powershell
+Export-R1DirectoryLdif -sourceDn 'o=companydirectory' -scope 'SUB' -fileName 'copy.ldif' -targetDn 'o=copy'
 ```
 
 Exports a subtree, rewriting the entries under a different DN.

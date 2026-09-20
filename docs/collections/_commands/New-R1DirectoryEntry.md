@@ -36,6 +36,19 @@ New-R1DirectoryEntry -dn 'ou=people,o=example' -attributes $Attributes
 
 Adds an organizational unit.
 
+### Example 2
+```powershell
+$Attributes = @(
+    [pscustomobject]@{ name = 'objectClass'; values = @('top', 'person', 'organizationalPerson', 'inetOrgPerson') }
+    [pscustomobject]@{ name = 'uid'; values = @('one') }
+    [pscustomobject]@{ name = 'cn'; values = @('User One') }
+    [pscustomobject]@{ name = 'sn'; values = @('One') }
+)
+New-R1DirectoryEntry -dn 'uid=one,ou=people,o=example' -attributes $Attributes
+```
+
+Adds a user. The DN is the full DN of the new entry, not the DN of its parent.
+
 ## PARAMETERS
 
 ### -dn
@@ -54,7 +67,7 @@ Accept wildcard characters: False
 ```
 
 ### -attributes
-The attributes to return. Without any, every attribute is returned.
+The attributes of the new entry, each with a name and its values.
 
 ```yaml
 Type: Object[]

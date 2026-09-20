@@ -27,7 +27,7 @@ installs it, and Remove-R1DataSourceTypeImport discards it.
 
 ### Example 1
 ```powershell
-$Staged = Add-R1DataSourcePlugin -Path .\\connector.jar
+$Staged = Add-R1DataSourcePlugin -Path .\connector.jar
 Complete-R1DataSourceTypeImport -id $Staged.id -templates $Staged.newTemplates.name
 ```
 
