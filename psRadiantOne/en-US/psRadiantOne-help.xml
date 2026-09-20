@@ -14285,7 +14285,8 @@ Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues $Names</de
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>No command lists pipelines, and a pipeline id cannot be built from what this module reads: the identity source half of it lives under the global profiles branch, which the API does not expose. Take the id from the control panel.</maml:para>
+        <maml:para>The configuration comes back empty rather than as an error for an id that resolves to nothing, so an empty result proves neither that the id was right nor that it was wrong.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -28856,7 +28857,7 @@ $Model | Set-R1SecondaryObject -dn 'EMPLOYEES,o=join' -primaryObject 'vdAPPEMPLO
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>The refresh can finish before the call returns: against a small directory the operation comes back already in state DONE, with the counts in its result. Nothing is left to stop or resume in that case.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -37114,7 +37115,7 @@ Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>Only a refresh which was stopped can be resumed. One which ran to completion is refused with the state it is in.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -57439,7 +57440,7 @@ Get-R1PromotionState</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>Only a refresh which is still running can be stopped. One which has already finished is refused with the state it is in.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

@@ -83,4 +83,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+The refresh can finish before the call returns: against a small directory the operation comes
+back already in state DONE, with the counts in its result. Nothing is left to stop or resume in
+that case.
+
 ## RELATED LINKS

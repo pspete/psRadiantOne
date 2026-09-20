@@ -89,4 +89,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+Only a refresh which is still running can be stopped. One which has already finished is refused
+with the state it is in.
+
 ## RELATED LINKS
