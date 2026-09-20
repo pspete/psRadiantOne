@@ -1,5 +1,9 @@
 # Unreleased
 
+- N/A
+
+# 0.4
+
 ## Added
 
 - Read commands for the directory namespace configuration which had none:
