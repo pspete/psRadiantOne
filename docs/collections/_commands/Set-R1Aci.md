@@ -383,4 +383,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+The ACI string is not sent: the server builds it from the target, the permissions and the
+restrictions, and sending the string it built for the ACI as it stands is refused.
+
 ## RELATED LINKS

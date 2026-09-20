@@ -4614,7 +4614,7 @@ Export-R1StoreBackup -dn 'o=store' -Path 'C:\backup'</dev:code>
     </command:details>
     <maml:description>
       <maml:para>Returns the access control instructions defined on the deployment.</maml:para>
-      <maml:para>Specify aciId together with the baseDn holding it to return a single ACI. When no aciId is given, every ACI is returned, optionally limited to one baseDn. Get-R1AciLocation returns the DNs which hold ACIs.</maml:para>
+      <maml:para>With no parameters, the ACIs held at the root are returned. Specify baseDn for the ACIs held at an entry. Specify aciId together with the baseDn holding it to return a single ACI.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -4634,7 +4634,7 @@ Export-R1StoreBackup -dn 'o=store' -Path 'C:\backup'</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>baseDn</maml:name>
           <maml:description>
-            <maml:para>The base DN the ACI applies at. Get-R1AciLocation returns the DNs which hold ACIs.</maml:para>
+            <maml:para>The DN holding the ACI. Omit it for the ACIs held at the root.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -4649,7 +4649,7 @@ Export-R1StoreBackup -dn 'o=store' -Path 'C:\backup'</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>baseDn</maml:name>
           <maml:description>
-            <maml:para>The base DN the ACI applies at. Get-R1AciLocation returns the DNs which hold ACIs.</maml:para>
+            <maml:para>The DN holding the ACI. Omit it for the ACIs held at the root.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -4676,7 +4676,7 @@ Export-R1StoreBackup -dn 'o=store' -Path 'C:\backup'</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
         <maml:name>baseDn</maml:name>
         <maml:description>
-          <maml:para>The base DN the ACI applies at. Get-R1AciLocation returns the DNs which hold ACIs.</maml:para>
+          <maml:para>The DN holding the ACI. Omit it for the ACIs held at the root.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -4716,7 +4716,7 @@ Export-R1StoreBackup -dn 'o=store' -Path 'C:\backup'</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>An ACI held at the root cannot be returned on its own: the single read requires a DN, and an empty one is refused with HTTP 400. Return them with the listing instead.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -14079,9 +14079,23 @@ Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues $Names</de
     </command:details>
     <maml:description>
       <maml:para>Returns the password policies configured on the deployment.</maml:para>
-      <maml:para>With no parameters, the names of the configured policies are returned. Specify policyName to return the full settings of one policy - the API requires it as a query parameter. Specify NewPolicy to return an empty policy populated with the API defaults, as a starting point.</maml:para>
+      <maml:para>With no parameters, the names of the configured policies are returned. Specify policyName to return the full settings of one policy - the API requires it as a query parameter. Specify Default for the default policy, which the API identifies by an empty policy name. Specify NewPolicy to return an empty policy populated with the API defaults, as a starting point.</maml:para>
     </maml:description>
     <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-R1PasswordPolicy</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Default</maml:name>
+          <maml:description>
+            <maml:para>Return the default policy, which the API identifies by an empty policy name.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-R1PasswordPolicy</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
@@ -14113,6 +14127,18 @@ Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues $Names</de
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Default</maml:name>
+        <maml:description>
+          <maml:para>Return the default policy, which the API identifies by an empty policy name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>NewPolicy</maml:name>
         <maml:description>
@@ -14180,6 +14206,13 @@ Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues $Names</de
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Get-R1PasswordPolicy -Default</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the full settings of the default policy.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
         <dev:code>Get-R1PasswordPolicy -NewPolicy</dev:code>
         <dev:remarks>
           <maml:para>Returns an empty policy populated with the API defaults.</maml:para>
@@ -24231,7 +24264,7 @@ New-R1DataSourceTypeImportMeta -importId $Session.id -DataSourceType $Template</
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -24292,7 +24325,7 @@ New-R1DataSourceTypeImportMeta -importId $Session.id -DataSourceType $Template</
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
           <maml:name>attributes</maml:name>
           <maml:description>
-            <maml:para>The attributes to return. Without any, every attribute is returned.</maml:para>
+            <maml:para>The attributes of the new entry, each with a name and its values.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
           <dev:type>
@@ -24353,7 +24386,7 @@ New-R1DataSourceTypeImportMeta -importId $Session.id -DataSourceType $Template</
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
         <maml:name>attributes</maml:name>
         <maml:description>
-          <maml:para>The attributes to return. Without any, every attribute is returned.</maml:para>
+          <maml:para>The attributes of the new entry, each with a name and its values.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
         <dev:type>
@@ -24668,7 +24701,7 @@ New-R1DirectoryEntry -dn 'uid=one,ou=people,o=example' -attributes $Attributes</
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -31130,7 +31163,6 @@ New-R1TokenValidator @Validator</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>The scripts a real time connector ran against its data source are not undone by deleting the cache. Run its DECONFIGURE scripts first with Invoke-R1CacheRealTimeConnectorScript.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -31406,7 +31438,7 @@ Remove-R1Cache -dn 'o=hr'</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>The plugin is removed, but the API answers with HTTP 500 and no error details rather than with success, so the command reports an error for an operation which worked. Read the plugins back with Get-R1DataSourcePlugin rather than trusting the error, and rather than removing it again.</maml:para>
+        <maml:para>The API answers a successful removal with HTTP 500 and no error details. The command checks the plugin listing when that happens: gone from the listing is treated as success, with a warning rather than a terminating error, and an error is only raised when the plugin is still there.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -32666,7 +32698,7 @@ Remove-R1Cache -dn 'o=hr'</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -33759,7 +33791,7 @@ Remove-R1Cache -dn 'o=hr'</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -39051,7 +39083,7 @@ Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>The ACI string is not sent: the server builds it from the target, the permissions and the restrictions, and sending the string it built for the ACI as it stands is refused.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -43611,7 +43643,6 @@ Set-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom' -DataSour
       <maml:alert>
         <maml:para>The object identifier and whether the attribute is user generated are maintained by the server and cannot be changed here. They are sent back unaltered so that the update carries the complete definition.</maml:para>
         <maml:para>A collection which is specified replaces the collection currently configured, rather than being added to it. Retrieve the current value, add to it and pass the result back to append.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -44438,7 +44469,6 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
       <maml:alert>
         <maml:para>The object identifier and whether the class is user defined are maintained by the server and cannot be changed here. They are sent back unaltered so that the update carries the complete definition.</maml:para>
         <maml:para>A collection which is specified replaces the collection currently configured, rather than being added to it. Retrieve the current value, add to it and pass the result back to append.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -45669,7 +45699,7 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
     </command:details>
     <maml:description>
       <maml:para>Replaces the complete list of roles associated with a FID user. Any role not included in the supplied list is removed from the user.</maml:para>
-      <maml:para>The roles property is read-only on both the user and access token objects, so this command is the only way to change the roles associated with a user. It targets an endpoint the API marks as deprecated, but the RadiantOne 8.5.0 API offers no replacement for it.</maml:para>
+      <maml:para>The roles are set by updating the user, which is what the control panel does. The properties not being changed keep their current values.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -45802,7 +45832,7 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>The API also defines an endpoint dedicated to a user's roles, which it marks as deprecated. A RadiantOne 8.5.3 deployment answers 404 for it.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -47755,7 +47785,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -52330,8 +52360,9 @@ Set-R1NamingContextSpecialAttribute -dn 'o=vds' -unnestGroups ($Current.unnestGr
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Updates the settings of a password policy.</maml:para>
+      <maml:para>Updates the settings of a password policy, or creates one which does not exist.</maml:para>
       <maml:para>The resource is retrieved before it is updated, and sent back with the supplied values applied over it, so a property left unspecified keeps its current value. The command therefore issues a GET followed by a PUT, and the account needs permission to read the resource as well as to change it.</maml:para>
+      <maml:para>A policy which does not yet exist is created, starting from the empty policy the API supplies, so a property left unspecified takes the API default rather than a current value.</maml:para>
       <maml:para>Note that passwordMustChangeAfterReset and userMayChangePassword together drive the expired password flow: the first causes a login after an administrative reset to report the password as expired, and the second determines whether a reset token is issued for it.</maml:para>
     </maml:description>
     <command:syntax>
@@ -53245,7 +53276,7 @@ Set-R1NamingContextSpecialAttribute -dn 'o=vds' -unnestGroups ($Current.unnestGr
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>The default policy is the one with an empty name, so a policy created here is always named.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -57791,242 +57822,21 @@ Get-R1PromotionState</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Validates an access control instruction and reports whether the API can parse it, without creating it.</maml:para>
-      <maml:para>The endpoint is a GET which carries the ACI as its request body, which is unusual but is how the API defines it.</maml:para>
+      <maml:para>Reports whether the API can parse an ACI given as a string, and returns it broken into its parts. Nothing is created.</maml:para>
+      <maml:para>An ACI which parses comes back with parsable true and its target, permissions and restrictions filled in. One which does not comes back with parsable false.</maml:para>
+      <maml:para>To build an ACI from individual permissions rather than a string, use New-R1Aci, which takes the target, the operations and the restrictions as parameters.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Test-R1Aci</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
-          <maml:name>name</maml:name>
-          <maml:description>
-            <maml:para>A name for the ACI.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
           <maml:name>aciString</maml:name>
           <maml:description>
-            <maml:para>The ACI expressed as a raw ACI string, as an alternative to describing it with the structured parameters.</maml:para>
+            <maml:para>The ACI as a string.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="10" aliases="none">
-          <maml:name>loaOperator</maml:name>
-          <maml:description>
-            <maml:para>The comparison operator used against the level of assurance, e.g. &lt;=</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="11" aliases="none">
-          <maml:name>loaLevel</maml:name>
-          <maml:description>
-            <maml:para>The level of assurance to compare against, 0 to 4.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
-          <dev:type>
-            <maml:name>Int32</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="12" aliases="none">
-          <maml:name>daysOfWeek</maml:name>
-          <maml:description>
-            <maml:para>The days the ACI applies on.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">MONDAY</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">TUESDAY</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">WEDNESDAY</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">THURSDAY</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">FRIDAY</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SATURDAY</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SUNDAY</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-          <dev:type>
-            <maml:name>String[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="13" aliases="none">
-          <maml:name>timeRanges</maml:name>
-          <maml:description>
-            <maml:para>The time ranges the ACI applies during, e.g. 1030-1230</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-          <dev:type>
-            <maml:name>String[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="14" aliases="none">
-          <maml:name>applyUserDns</maml:name>
-          <maml:description>
-            <maml:para>The user DNs the ACI applies to. Accepts the keywords anyone, all, self and parent.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-          <dev:type>
-            <maml:name>String[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="15" aliases="none">
-          <maml:name>applyGroupDns</maml:name>
-          <maml:description>
-            <maml:para>The group DNs the ACI applies to.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-          <dev:type>
-            <maml:name>String[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="16" aliases="none">
-          <maml:name>applyIps</maml:name>
-          <maml:description>
-            <maml:para>The IP addresses the ACI applies to.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-          <dev:type>
-            <maml:name>String[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
-          <maml:name>parsable</maml:name>
-          <maml:description>
-            <maml:para>Whether the ACI can be represented as a structured object rather than only as a raw string.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
-          <dev:type>
-            <maml:name>Boolean</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
-          <maml:name>targetDn</maml:name>
-          <maml:description>
-            <maml:para>The DN the ACI targets.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
-          <maml:name>targetScope</maml:name>
-          <maml:description>
-            <maml:para>The scope the ACI applies over. BASE, ONE or SUBTREE.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">BASE</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">ONE</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SUBTREE</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
-          <maml:name>targetFilter</maml:name>
-          <maml:description>
-            <maml:para>An LDAP filter limiting the entries the ACI applies to.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="6" aliases="none">
-          <maml:name>includeTargetAttributes</maml:name>
-          <maml:description>
-            <maml:para>Whether the target attribute expression is inclusive.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
-          <dev:type>
-            <maml:name>Boolean</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="7" aliases="none">
-          <maml:name>targetAttributes</maml:name>
-          <maml:description>
-            <maml:para>The attribute names the ACI targets. Omit for all attributes.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-          <dev:type>
-            <maml:name>String[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="8" aliases="none">
-          <maml:name>permsType</maml:name>
-          <maml:description>
-            <maml:para>Whether the ACI allows or denies the selected operations. ALLOW or DENY.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">ALLOW</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">DENY</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="9" aliases="none">
-          <maml:name>selectedOperations</maml:name>
-          <maml:description>
-            <maml:para>The operations allowed or denied. READ, WRITE, SEARCH, SELF_WRITE, ADD, PROXY, DELETE, MOVE_CURRENT, COMPARE or MOVE_FUTURE.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">READ</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">WRITE</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SEARCH</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SELF_WRITE</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">ADD</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">PROXY</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">DELETE</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">MOVE_CURRENT</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">COMPARE</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">MOVE_FUTURE</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-          <dev:type>
-            <maml:name>String[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -58034,206 +57844,14 @@ Get-R1PromotionState</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
         <maml:name>aciString</maml:name>
         <maml:description>
-          <maml:para>The ACI expressed as a raw ACI string, as an alternative to describing it with the structured parameters.</maml:para>
+          <maml:para>The ACI as a string.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="15" aliases="none">
-        <maml:name>applyGroupDns</maml:name>
-        <maml:description>
-          <maml:para>The group DNs the ACI applies to.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-        <dev:type>
-          <maml:name>String[]</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="16" aliases="none">
-        <maml:name>applyIps</maml:name>
-        <maml:description>
-          <maml:para>The IP addresses the ACI applies to.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-        <dev:type>
-          <maml:name>String[]</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="14" aliases="none">
-        <maml:name>applyUserDns</maml:name>
-        <maml:description>
-          <maml:para>The user DNs the ACI applies to. Accepts the keywords anyone, all, self and parent.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-        <dev:type>
-          <maml:name>String[]</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="12" aliases="none">
-        <maml:name>daysOfWeek</maml:name>
-        <maml:description>
-          <maml:para>The days the ACI applies on.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-        <dev:type>
-          <maml:name>String[]</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="6" aliases="none">
-        <maml:name>includeTargetAttributes</maml:name>
-        <maml:description>
-          <maml:para>Whether the target attribute expression is inclusive.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
-        <dev:type>
-          <maml:name>Boolean</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="11" aliases="none">
-        <maml:name>loaLevel</maml:name>
-        <maml:description>
-          <maml:para>The level of assurance to compare against, 0 to 4.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
-        <dev:type>
-          <maml:name>Int32</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="10" aliases="none">
-        <maml:name>loaOperator</maml:name>
-        <maml:description>
-          <maml:para>The comparison operator used against the level of assurance, e.g. &lt;=</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
-        <maml:name>name</maml:name>
-        <maml:description>
-          <maml:para>A name for the ACI.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
-        <maml:name>parsable</maml:name>
-        <maml:description>
-          <maml:para>Whether the ACI can be represented as a structured object rather than only as a raw string.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
-        <dev:type>
-          <maml:name>Boolean</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="8" aliases="none">
-        <maml:name>permsType</maml:name>
-        <maml:description>
-          <maml:para>Whether the ACI allows or denies the selected operations. ALLOW or DENY.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="9" aliases="none">
-        <maml:name>selectedOperations</maml:name>
-        <maml:description>
-          <maml:para>The operations allowed or denied. READ, WRITE, SEARCH, SELF_WRITE, ADD, PROXY, DELETE, MOVE_CURRENT, COMPARE or MOVE_FUTURE.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-        <dev:type>
-          <maml:name>String[]</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="7" aliases="none">
-        <maml:name>targetAttributes</maml:name>
-        <maml:description>
-          <maml:para>The attribute names the ACI targets. Omit for all attributes.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-        <dev:type>
-          <maml:name>String[]</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
-        <maml:name>targetDn</maml:name>
-        <maml:description>
-          <maml:para>The DN the ACI targets.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="5" aliases="none">
-        <maml:name>targetFilter</maml:name>
-        <maml:description>
-          <maml:para>An LDAP filter limiting the entries the ACI applies to.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
-        <maml:name>targetScope</maml:name>
-        <maml:description>
-          <maml:para>The scope the ACI applies over. BASE, ONE or SUBTREE.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="13" aliases="none">
-        <maml:name>timeRanges</maml:name>
-        <maml:description>
-          <maml:para>The time ranges the ACI applies during, e.g. 1030-1230</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-        <dev:type>
-          <maml:name>String[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -58248,35 +57866,11 @@ Get-R1PromotionState</dev:code>
           <maml:para></maml:para>
         </maml:description>
       </command:inputType>
-      <command:inputType>
-        <dev:type>
-          <maml:name>System.Boolean</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-      <command:inputType>
-        <dev:type>
-          <maml:name>System.String[]</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-      <command:inputType>
-        <dev:type>
-          <maml:name>System.Int32</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
     </command:inputTypes>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>System.Boolean</maml:name>
+          <maml:name>psRadiantOne.Aci</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -58285,19 +57879,39 @@ Get-R1PromotionState</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>The endpoint is a GET which carries the ACI as its request body, and reads that body as the ACI string itself rather than as JSON.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Test-R1Aci -aciString '(target=...)(version 3.0; acl "example"; allow(read) userdn="ldap:///anyone";)'</dev:code>
+        <dev:code>Test-R1Aci -aciString '(targetattr = "*")(target = "ldap:///cn=schema")(targetscope = "base")(version 3.0;acl "update schema";allow (all) (groupdn = "ldap:///cn=directory administrators,ou=globalgroups,cn=config");)'</dev:code>
         <dev:remarks>
-          <maml:para>Reports whether the raw ACI string can be parsed.</maml:para>
+          <maml:para>Reports whether the ACI string can be parsed, and returns its parts.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>Get-R1Aci | Test-R1Aci</dev:code>
+        <dev:remarks>
+          <maml:para>Checks every ACI configured on the deployment.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
-    <command:relatedLinks />
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>New-R1Aci</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-R1Aci</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-R1Aci</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>

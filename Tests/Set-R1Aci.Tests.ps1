@@ -124,6 +124,53 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'leaves out the aci string, which the server builds' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					($Body | ConvertFrom-Json).PSObject.Properties.Name -notcontains 'aciString'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'leaves out an empty applyIps, which the control panel omits' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					($Body | ConvertFrom-Json).PSObject.Properties.Name -notcontains 'applyIps'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'keeps the ones the aci already has' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Decoded = $Body | ConvertFrom-Json
+					($Decoded.loaOperator -eq '<=') -and ($Decoded.applyGroupDns -contains 'cn=grp,cn=config')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends those properties when they are specified' {
+
+				Set-R1Aci -aciId 1 -baseDn 'o=example' -applyGroupDns 'cn=group,o=example' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					($Body | ConvertFrom-Json).applyGroupDns -contains 'cn=group,o=example'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 		}
 
 	}

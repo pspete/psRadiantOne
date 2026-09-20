@@ -242,8 +242,18 @@ function Set-R1PasswordPolicy {
 		$URI = Resolve-R1ServiceUrl -Service Settings -Path 'password_policies/policy'
 
 		#Retrieve the policy and send it back with the supplied values applied over it, so a setting
-		#left unspecified keeps its current value.
-		$Existing = Get-R1PasswordPolicy -policyName $policyName
+		#left unspecified keeps its current value. A policy which does not exist is created by this
+		#request, and starts from the empty policy the API supplies rather than from a read: reading
+		#one which does not exist answers 500, and the listing is what says whether it does.
+		if (@(Get-R1PasswordPolicy) -contains $policyName) {
+
+			$Existing = Get-R1PasswordPolicy -policyName $policyName
+
+		} else {
+
+			$Existing = Get-R1PasswordPolicy -NewPolicy
+
+		}
 
 		$Template = [ordered]@{
 			name                                    = $policyName
@@ -283,6 +293,10 @@ function Set-R1PasswordPolicy {
 		}
 
 		$Request = Merge-R1Parameter -Template $Template -BoundParameter ($PSBoundParameters | Get-Parameter -ParametersToRemove policyName) -Fallback $Existing
+
+		#The policy is named by the body, and the empty policy the API supplies carries an empty
+		#name, which is the name of the default policy.
+		$Request['name'] = $policyName
 
 		$Body = $Request | ConvertTo-R1JsonBody
 
