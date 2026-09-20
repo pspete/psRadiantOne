@@ -13,7 +13,7 @@ The module covers the RadiantOne v8.x API as published in the vendor's OpenAPI d
 - **Prior to a Version 1.0.0 release**:
   - Expect changes, although we will do our best to keep these to a minimum
   - Issues / PRs are encouraged & appreciated
-  - Most commands have now been exercised against a live deployment, but around 1 in 5 still rest on the published API definition alone - see [Help Us Test](#help-us-test) below, your feedback genuinely shapes what ships next.
+  - Most commands have now been exercised against a live deployment, but around 1 in 9 still rest on the published API definition alone - see [Help Us Test](#help-us-test) below, your feedback genuinely shapes what ships next.
   - Real-world usage is still expected to shape further changes to command names, parameters/parameter names, and how commands are grouped - some may split into companion commands, others may combine. These patterns only emerge once commands are actually used, so don't consider anything final yet.
 
 | Main Branch              | Latest Build             | CodeFactor                 | Coverage                     | PowerShell Gallery        | License                      |
@@ -235,7 +235,7 @@ Every command also has a corresponding reference page under [`docs/collections/_
 
 ## Help Us Test
 
-Prior to a 1.0.0 release, 72 of the 364 commands have not yet been exercised against a live deployment: their behaviour rests on the vendor's published API definition alone. Most of the untested ones are the instance-wide settings, migration/promotion and schema-editing commands - the ones a test run can't touch without either a second environment to promote into or a real risk to a shared deployment. Each of those commands says so in the `NOTES` section of its help.
+Prior to a 1.0.0 release, 40 of the 364 commands have not yet been exercised against a live deployment: their behaviour rests on the vendor's published API definition alone. What is left is what a test run can't reach on its own - migration and promotion, which need a second environment to move configuration into; licensing, which needs a real licence file; jar, library and private-file uploads; schema and directory-schema edits with no safe undo; and a handful of instance-wide settings which can lock a tenant out of its own control panel or re-key its encrypted attributes. Each of those commands says so in the `NOTES` section of its help.
 
 To list them:
 
