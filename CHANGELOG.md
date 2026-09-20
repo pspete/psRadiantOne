@@ -68,6 +68,13 @@
 - `Test-R1Aci` sends the ACI string as the request body, which is what the endpoint reads. It sent
   an object built from its parameters, which came back as an unparsable ACI string, so it now takes
   `-aciString` alone. `New-R1Aci` builds an ACI from individual permissions.
+- `Set-R1Aci` leaves the ACI string out of an update, which is what the control panel does: the
+  server builds it from the other properties, and sending the string it built for the ACI as it
+  stood was refused with 409. An empty `loaOperator`, `applyGroupDns` and `applyIps` are left out
+  too, and `targetAttributes` is sent as null rather than an empty list.
+- `Set-R1PasswordPolicy` creates a policy which does not exist, starting from the empty policy the
+  API supplies. It read the named policy first, and that read answers 500 when the policy is not
+  there, so nothing was ever sent.
 - `Set-R1FIDUserRole` sets the roles on the user. It used an endpoint the API marks deprecated,
   which a RadiantOne 8.5.3 deployment answers 404.
 - `Get-R1PasswordPolicy -NewPolicy` sends the policy name the endpoint requires, which it answered
