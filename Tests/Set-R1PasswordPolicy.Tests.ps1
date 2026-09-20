@@ -58,6 +58,28 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 				}
 			}
 
+			#The command asks the listing whether the policy exists, reads it when it does, and
+			#starts from the empty policy the API supplies when it does not
+			Mock Get-R1PasswordPolicy -MockWith {
+				if ($NewPolicy) {
+					[pscustomobject]@{ name = ''; targetType = $null; targetDn = $null; precedence = 1000; passwordMinLength = 0 }
+				} elseif ($policyName) {
+					[pscustomobject]@{
+						name                         = 'Default'
+						targetType                   = 'SUBTREE'
+						targetDn                     = 'dc=example,dc=com'
+						precedence                   = 500
+						passwordMustChangeAfterReset = $true
+						userMayChangePassword        = $true
+						passwordMinLength            = 10
+						passwordExpires              = $true
+						passwordLockout              = $true
+					}
+				} else {
+					@('Default')
+				}
+			}
+
 			Set-R1PasswordPolicy -policyName 'Default' -passwordMinLength 14 -Confirm:$false
 
 		}
@@ -88,7 +110,37 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			It 'retrieves the policy before updating it' {
 
-				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Method -eq 'GET' } -Times 1 -Exactly -Scope It
+				Should -Invoke -CommandName Get-R1PasswordPolicy -ParameterFilter { $policyName -eq 'Default' } -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'starts from the empty policy when the policy does not exist' {
+
+				Set-R1PasswordPolicy -policyName 'psr1-new' -passwordMinLength 12 -Confirm:$false
+
+				Should -Invoke -CommandName Get-R1PasswordPolicy -ParameterFilter { $NewPolicy } -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'does not read a policy which does not exist' {
+
+				Set-R1PasswordPolicy -policyName 'psr1-new' -passwordMinLength 12 -Confirm:$false
+
+				Should -Invoke -CommandName Get-R1PasswordPolicy -ParameterFilter { $policyName -eq 'psr1-new' } -Times 0 -Exactly -Scope It
+
+			}
+
+			It 'sends the name of the policy it is creating' {
+
+				Set-R1PasswordPolicy -policyName 'psr1-new' -passwordMinLength 12 -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Sent = $Body | ConvertFrom-Json
+					($Sent.name -eq 'psr1-new') -and ($Sent.passwordMinLength -eq 12)
+
+				} -Times 1 -Exactly -Scope It
 
 			}
 
