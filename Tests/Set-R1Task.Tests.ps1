@@ -127,6 +127,40 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Non-recurrent task' {
+
+			BeforeEach {
+
+				Mock Invoke-R1RestMethod -MockWith {
+					[pscustomobject]@{
+						'id'                = 'a1477b99'
+						'name'              = 'Cache Init for o=CapHR'
+						'recurrent'         = $false
+						'dedicatedJvm'      = $true
+						'jvmParameters'     = $null
+						'executionInterval' = 'N_A'
+						'status'            = 'FINISHED'
+						'logs'              = @('log1', 'log2')
+					}
+				}
+
+				Set-R1Task -id 'a1477b99' -Confirm:$false
+
+			}
+
+			It 'does not send the N_A sentinel back as executionInterval' {
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$null -eq ($Body | ConvertFrom-Json).executionInterval
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
 	}
 
 }

@@ -1,6 +1,9 @@
 # Unreleased
 
-- N/A
+## Fixed
+
+- `Set-R1Task` no longer sends the `N_A` sentinel `Get-R1Task` reports for `executionInterval` on a
+  non-recurrent task back on the PUT, which the API rejected with `Invalid time format: N_A`.
 
 # 0.4
 
