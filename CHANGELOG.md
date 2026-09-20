@@ -79,6 +79,9 @@
   which a RadiantOne 8.5.3 deployment answers 404.
 - `Get-R1PasswordPolicy -NewPolicy` sends the policy name the endpoint requires, which it answered
   "Required parameter 'policyName' is not present." without.
+- `Remove-R1DataSourcePlugin` no longer fails a removal the API carried out. The API answers a
+  successful delete with HTTP 500 and no error details; the plugin listing is now checked on error,
+  and gone from the listing is treated as success, with a warning rather than a terminating error.
 
 # 0.3
 
