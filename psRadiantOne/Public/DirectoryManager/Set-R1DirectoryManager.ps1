@@ -64,11 +64,13 @@ function Set-R1DirectoryManager {
 
 		}
 
-		$Request['password'] = $password | ConvertTo-InsecureString
+		#Both password fields are sent base64 encoded, as the control panel sends them. The plaintext
+		#the published schema documents is refused as an invalid value
+		$Request['password'] = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(($password | ConvertTo-InsecureString)))
 
 		if ($PSBoundParameters.ContainsKey('oldPassword')) {
 
-			$Request['oldPassword'] = $oldPassword | ConvertTo-InsecureString
+			$Request['oldPassword'] = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(($oldPassword | ConvertTo-InsecureString)))
 
 		}
 

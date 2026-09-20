@@ -44259,7 +44259,6 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
     <maml:alertSet>
       <maml:alert>
         <maml:para>The directory manager is generally a shared, high privilege account, and a failed password change is disruptive. Test this command against a deployment you can afford to break before using it against one you cannot.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

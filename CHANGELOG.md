@@ -4,6 +4,9 @@
 
 - `New-R1RecursiveSchemaRelationship` takes the `-depth` the API requires. Without it every call
   was refused with `'depth': must not be null.`
+- `Set-R1DirectoryManager` sends both password values base64 encoded, as the control panel does.
+  The plaintext the published schema documents was refused with
+  `one or more fields have invalid values. Please check the API specs for allowed values.`
 - `Set-R1Task` no longer sends the `N_A` sentinel `Get-R1Task` reports for `executionInterval` on a
   non-recurrent task back on the PUT, which the API rejected with `Invalid time format: N_A`.
 
