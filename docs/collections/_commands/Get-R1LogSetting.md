@@ -120,7 +120,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+The Component and Plugin sets both return real settings against a live deployment. The DataSource
+set has not: on a deployment tried so far it answers HTTP 500 with no error details for every data
+source name given, including one which does not exist. The API restricts this set to a custom type
+data source, and none tried has been a genuine one.
 
 ## RELATED LINKS
