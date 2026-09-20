@@ -50,6 +50,14 @@ function Set-R1Task {
 		#left unspecified keeps its current value.
 		$Existing = Get-R1Task -id $id
 
+		#non-recurrent tasks report executionInterval as the sentinel 'N_A', which the API rejects
+		#if sent back on a PUT, so it cannot be used as a fallback value
+		if ($Existing.executionInterval -eq 'N_A') {
+
+			$Existing.executionInterval = $null
+
+		}
+
 		#status, recurrent, the execution times and the log list are reported by the API but are not
 		#part of the update
 		$Template = [ordered]@{

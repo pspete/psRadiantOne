@@ -163,8 +163,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 The status, whether the task is recurrent, its execution times and its log list are reported by
 the API but are not part of the update, so they are not sent.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+Any update, even one that changes nothing, re-runs the task. Expect status and lastExecution
+to reset.
 
 ## RELATED LINKS
 

@@ -128,9 +128,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 Test the code with Test-R1InterceptionScriptCode before setting it, and rebuild the jar with
 New-R1InterceptionScriptJar afterwards.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1GlobalInterceptionScript](Get-R1GlobalInterceptionScript)

@@ -56,7 +56,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 				}
 			}
 
-			$response = New-R1RecursiveSchemaRelationship -schemaName 'default' -source 'APP.EMPLOYEES' -foreignKeys 'MANAGERID' -Confirm:$false
+			$response = New-R1RecursiveSchemaRelationship -schemaName 'default' -source 'APP.EMPLOYEES' -foreignKeys 'MANAGERID' -depth 5 -Confirm:$false
 
 		}
 
@@ -77,7 +77,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
 					$Decoded = $Body | ConvertFrom-Json
-					($Decoded.source -eq 'APP.EMPLOYEES') -and (@($Decoded.foreignKeys).Count -eq 1)
+					($Decoded.source -eq 'APP.EMPLOYEES') -and (@($Decoded.foreignKeys).Count -eq 1) -and ($Decoded.depth -eq 5)
 
 				} -Times 1 -Exactly -Scope It
 

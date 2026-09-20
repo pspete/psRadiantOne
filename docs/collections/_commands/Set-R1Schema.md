@@ -166,9 +166,6 @@ The last modified time is maintained by the server and is sent back unaltered so
 carries the complete resource. The list of selected objects applies only when a schema is created
 and is not sent on update, as the API documents.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1Schema](Get-R1Schema)
