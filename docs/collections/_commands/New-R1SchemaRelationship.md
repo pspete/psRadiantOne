@@ -181,8 +181,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
+The create returns nothing, so the new relationship's identifier has to be read back from the
+schema before Set-R1SchemaRelationship or Remove-R1SchemaRelationship can act on it.
 
 ## RELATED LINKS
 

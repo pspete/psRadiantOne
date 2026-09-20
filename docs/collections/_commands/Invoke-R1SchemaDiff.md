@@ -131,7 +131,7 @@ Accept wildcard characters: False
 ```
 
 ### -changes
-The changes to apply, as returned by Compare-R1Schema.
+The changes to apply, taken from the rootNode tree Compare-R1Schema returns.
 
 ```yaml
 Type: Object[]

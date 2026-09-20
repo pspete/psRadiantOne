@@ -824,7 +824,6 @@ Complete-R1DataSourceTypeImport -id $Staged.id -templates $Staged.newTemplates.n
     <maml:alertSet>
       <maml:alert>
         <maml:para>This appends to the schema, unlike the other collection commands, which replace. Use New-R1SchemaTable to add a table whose properties need to be described.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1740,7 +1739,7 @@ Get-R1StoreBackup -dn 'o=store'</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>The result carries the differences as a tree under rootNode, not as a flat list. Walk it to build the collection Invoke-R1SchemaDiff takes.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -19944,7 +19943,7 @@ Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="7" aliases="none">
           <maml:name>changes</maml:name>
           <maml:description>
-            <maml:para>The changes to apply, as returned by Compare-R1Schema.</maml:para>
+            <maml:para>The changes to apply, taken from the rootNode tree Compare-R1Schema returns.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
           <dev:type>
@@ -20053,7 +20052,7 @@ Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="7" aliases="none">
         <maml:name>changes</maml:name>
         <maml:description>
-          <maml:para>The changes to apply, as returned by Compare-R1Schema.</maml:para>
+          <maml:para>The changes to apply, taken from the rootNode tree Compare-R1Schema returns.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
         <dev:type>
@@ -20322,7 +20321,7 @@ Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -25903,7 +25902,7 @@ New-R1DirectoryEntry -dn 'uid=one,ou=people,o=example' -attributes $Attributes</
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -28930,6 +28929,18 @@ Get-R1Operation -name $op.name</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+          <maml:name>depth</maml:name>
+          <maml:description>
+            <maml:para>The number of levels the relationship is followed through.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>0</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
           <maml:description>
@@ -28991,6 +29002,18 @@ Get-R1Operation -name $op.name</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+        <maml:name>depth</maml:name>
+        <maml:description>
+          <maml:para>The number of levels the relationship is followed through.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>0</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
         <maml:description>
@@ -29044,9 +29067,9 @@ Get-R1Operation -name $op.name</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>New-R1RecursiveSchemaRelationship -schemaName 'default' -source 'APP.EMPLOYEES' -foreignKeys 'MANAGERID'</dev:code>
+        <dev:code>New-R1RecursiveSchemaRelationship -schemaName 'default' -source 'APP.EMPLOYEES' -foreignKeys 'MANAGERID' -depth 5</dev:code>
         <dev:remarks>
-          <maml:para>Joins the employees table to itself through the manager identifier.</maml:para>
+          <maml:para>Joins the employees table to itself through the manager identifier, following five levels.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -29483,7 +29506,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -29761,7 +29784,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para>The create returns nothing, so the new relationship's identifier has to be read back from the schema before Set-R1SchemaRelationship or Remove-R1SchemaRelationship can act on it.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -30087,7 +30110,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -30649,7 +30672,6 @@ New-R1TokenValidator @Validator</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>The request body is the complete list of published schemas, so a name left out is unpublished. Retrieve the current list with Get-R1PublishedSchema and pass back the whole of it to add one.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -35256,7 +35278,7 @@ Remove-R1Cache -dn 'o=hr'</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -53917,7 +53939,6 @@ Set-R1NamingContextSpecialAttribute -dn 'o=vds' -unnestGroups ($Current.unnestGr
     <maml:alertSet>
       <maml:alert>
         <maml:para>The last modified time is maintained by the server and is sent back unaltered so that the update carries the complete resource. The list of selected objects applies only when a schema is created and is not sent on update, as the API documents.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -54810,7 +54831,6 @@ Set-R1SchemaFullObject -schemaName 'default' -tablesWithFields $Schema.tablesWit
     <maml:alertSet>
       <maml:alert>
         <maml:para>A collection which is specified replaces the collection currently configured, rather than being added to it. Retrieve the current value, add to it and pass the result back to append.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -54993,7 +55013,6 @@ Set-R1SchemaFullObject -schemaName 'default' -tablesWithFields $Schema.tablesWit
     <maml:alertSet>
       <maml:alert>
         <maml:para>The fields supplied replace those configured, so a field left out is removed. Retrieve the current collection with Get-R1SchemaTableField and pass back the whole of it.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

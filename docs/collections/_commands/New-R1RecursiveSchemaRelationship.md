@@ -13,8 +13,8 @@ Creates a relationship from a table to itself.
 ## SYNTAX
 
 ```
-New-R1RecursiveSchemaRelationship [-schemaName] <String> [-source] <String> [-foreignKeys] <String[]> [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-R1RecursiveSchemaRelationship [-schemaName] <String> [-source] <String> [-foreignKeys] <String[]>
+ [-depth] <Int32> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -25,10 +25,10 @@ hierarchies such as an employee reporting line are described.
 
 ### Example 1
 ```powershell
-New-R1RecursiveSchemaRelationship -schemaName 'default' -source 'APP.EMPLOYEES' -foreignKeys 'MANAGERID'
+New-R1RecursiveSchemaRelationship -schemaName 'default' -source 'APP.EMPLOYEES' -foreignKeys 'MANAGERID' -depth 5
 ```
 
-Joins the employees table to itself through the manager identifier.
+Joins the employees table to itself through the manager identifier, following five levels.
 
 ## PARAMETERS
 
@@ -73,6 +73,21 @@ Aliases:
 Required: True
 Position: 3
 Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -depth
+The number of levels the relationship is followed through.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 4
+Default value: 0
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
