@@ -82,6 +82,39 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'The API answers a successful removal with an error' {
+
+			It 'does not throw when the plugin is gone from the listing' {
+
+				Mock Invoke-R1RestMethod -MockWith { throw 'The API returned HTTP 500 Internal Server Error with no error details.' }
+				Mock Get-R1DataSourcePlugin -MockWith { @() }
+
+				{ Remove-R1DataSourcePlugin -pluginName 'acs' -Confirm:$false -WarningAction SilentlyContinue } | Should -Not -Throw
+
+			}
+
+			It 'warns rather than throwing when the plugin is gone from the listing' {
+
+				Mock Invoke-R1RestMethod -MockWith { throw 'The API returned HTTP 500 Internal Server Error with no error details.' }
+				Mock Get-R1DataSourcePlugin -MockWith { @() }
+
+				Remove-R1DataSourcePlugin -pluginName 'acs' -Confirm:$false -WarningVariable Warned -WarningAction SilentlyContinue
+
+				$Warned | Should -Not -BeNullOrEmpty
+
+			}
+
+			It 'throws when the plugin is still listed' {
+
+				Mock Invoke-R1RestMethod -MockWith { throw 'The API returned HTTP 500 Internal Server Error with no error details.' }
+				Mock Get-R1DataSourcePlugin -MockWith { @([pscustomobject]@{ name = 'acs' }) }
+
+				{ Remove-R1DataSourcePlugin -pluginName 'acs' -Confirm:$false } | Should -Throw
+
+			}
+
+		}
+
 	}
 
 }
