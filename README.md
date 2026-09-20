@@ -235,7 +235,7 @@ Every command also has a corresponding reference page under [`docs/collections/_
 
 ## Help Us Test
 
-Prior to a 1.0.0 release, 40 of the 364 commands have not yet been exercised against a live deployment: their behaviour rests on the vendor's published API definition alone. What is left is what a test run can't reach on its own - migration and promotion, licensing, jar, library and private-file uploads, schema and directory-schema edits; and a handful of instance-wide settings. Each of those commands says so in the `NOTES` section of its help.
+Prior to a 1.0.0 release, 39 of the 364 commands have not yet been exercised against a live deployment: their behaviour rests on the vendor's published API definition alone. What is left is what a test run can't reach on its own - migration and promotion, licensing, jar, library and private-file uploads, schema and directory-schema edits; and a handful of instance-wide settings. Each of those commands says so in the `NOTES` section of its help.
 
 To list them:
 

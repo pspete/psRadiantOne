@@ -97,9 +97,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [New-R1InterceptionScriptJar](New-R1InterceptionScriptJar)
