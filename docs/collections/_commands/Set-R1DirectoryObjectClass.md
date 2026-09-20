@@ -162,9 +162,6 @@ definition.
 A collection which is specified replaces the collection currently configured, rather than being
 added to it. Retrieve the current value, add to it and pass the result back to append.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1DirectoryObjectClass](Get-R1DirectoryObjectClass)

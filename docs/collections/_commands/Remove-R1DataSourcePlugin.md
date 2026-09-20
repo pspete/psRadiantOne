@@ -89,9 +89,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-The plugin is removed, but the API answers with HTTP 500 and no error details rather than with
-success, so the command reports an error for an operation which worked. Read the plugins back with
-Get-R1DataSourcePlugin rather than trusting the error, and rather than removing it again.
+The API answers a successful removal with HTTP 500 and no error details. The command checks the
+plugin listing when that happens: gone from the listing is treated as success, with a warning
+rather than a terminating error, and an error is only raised when the plugin is still there.
 
 ## RELATED LINKS
 
