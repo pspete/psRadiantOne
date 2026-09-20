@@ -59,11 +59,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-No command lists pipelines, and a pipeline id cannot be built from what this module reads: the
-identity source half of it lives under the global profiles branch, which the API does not expose.
-Take the id from the control panel.
-
-The configuration comes back empty rather than as an error for an id that resolves to nothing, so
-an empty result proves neither that the id was right nor that it was wrong.
-
 ## RELATED LINKS
