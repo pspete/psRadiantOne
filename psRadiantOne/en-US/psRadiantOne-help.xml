@@ -1739,7 +1739,7 @@ Get-R1StoreBackup -dn 'o=store'</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>The result carries the differences as a tree under rootNode, not as a flat list. Walk it to build the collection Invoke-R1SchemaDiff takes.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -29784,7 +29784,7 @@ Get-R1Operation -name $op.name</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>The create returns nothing, so the new relationship's identifier has to be read back from the schema before Set-R1SchemaRelationship or Remove-R1SchemaRelationship can act on it.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

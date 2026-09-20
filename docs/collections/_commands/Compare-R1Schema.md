@@ -105,9 +105,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-The result carries the differences as a tree under rootNode, not as a flat list. Walk it to
-build the collection Invoke-R1SchemaDiff takes.
-
 ## RELATED LINKS
 
 [Invoke-R1SchemaDiff](Invoke-R1SchemaDiff)

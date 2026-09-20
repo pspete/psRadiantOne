@@ -181,9 +181,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-The create returns nothing, so the new relationship's identifier has to be read back from the
-schema before Set-R1SchemaRelationship or Remove-R1SchemaRelationship can act on it.
-
 ## RELATED LINKS
 
 [Get-R1SchemaRelationship](Get-R1SchemaRelationship)
