@@ -36100,7 +36100,7 @@ Remove-R1Cache -dn 'o=hr'</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -39313,7 +39313,6 @@ Get-R1TaskLog -id $Task.taskId -numberOfLines 15</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>Changing attribute encryption risks making already encrypted attributes unreadable.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -44649,7 +44648,7 @@ Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -49452,7 +49451,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
+        <maml:para></maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -51623,7 +51622,6 @@ $Script | Set-R1NamingContextInterceptionScriptCode -dn 'o=proxy'</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>A collection which is specified replaces the collection currently configured, rather than being added to it. Retrieve the current value, add to it and pass the result back to append.</maml:para>
-        <maml:para>This command has not been exercised against a live deployment, so its behaviour rests on the published API definition alone.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
