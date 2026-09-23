@@ -36,7 +36,7 @@ function New-R1DirectoryEntry {
 
 		$Request = $PSBoundParameters | Get-Parameter
 
-		$Request['attributes'] = @($Request['attributes'])
+		$Request['attributes'] = @(ConvertTo-R1NameValueList -InputObject $attributes -ValueName values -MultiValued)
 
 		$Body = $Request | ConvertTo-R1SecretBody
 

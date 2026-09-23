@@ -137,6 +137,34 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'expands a dictionary into advanced properties' {
+
+				Set-R1LogSetting -component 'RadiantOne LDAP Access' -advancedProperties @{ maxHistory = '10' } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$a = @(($Body | ConvertFrom-Json).advancedProperties)
+					($a.Count -eq 1) -and ($a[0].key -eq 'maxHistory') -and ($a[0].value -eq '10')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends advanced properties already in the api shape unchanged' {
+
+				Set-R1LogSetting -component 'RadiantOne LDAP Access' -advancedProperties @{ key = 'maxHistory'; value = '10' } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$a = @(($Body | ConvertFrom-Json).advancedProperties)
+					($a.Count -eq 1) -and ($a[0].key -eq 'maxHistory') -and ($a[0].value -eq '10')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'does not send the identifying parameter as a body property' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {

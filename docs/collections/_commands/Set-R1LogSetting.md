@@ -15,7 +15,7 @@ Updates the log settings of a component.
 ### Component (Default)
 ```
 Set-R1LogSetting -component <String> [-logLevel <String>] [-rolloverSize <String>]
- [-archiveMaxFileCount <Int64>] [-integrityAssurance <Boolean>] [-advancedProperties <Hashtable[]>]
+ [-archiveMaxFileCount <Int64>] [-integrityAssurance <Boolean>] [-advancedProperties <Object[]>]
  [-enableDebugSSL <Boolean>] [-logNotificationFailure <Boolean>] [-accessLogTextFormat <String>]
  [-accessLogCsvFormat <String>] [-addColumnNamesHeadersToCsv <Boolean>]
  [-ignoreAccessLogsNamingContext <String>] [-textDestination <String>] [-textRolloverDestination <String>]
@@ -27,7 +27,7 @@ Set-R1LogSetting -component <String> [-logLevel <String>] [-rolloverSize <String
 ### DataSource
 ```
 Set-R1LogSetting -dsName <String> [-logLevel <String>] [-rolloverSize <String>] [-archiveMaxFileCount <Int64>]
- [-integrityAssurance <Boolean>] [-advancedProperties <Hashtable[]>] [-enableDebugSSL <Boolean>]
+ [-integrityAssurance <Boolean>] [-advancedProperties <Object[]>] [-enableDebugSSL <Boolean>]
  [-logNotificationFailure <Boolean>] [-accessLogTextFormat <String>] [-accessLogCsvFormat <String>]
  [-addColumnNamesHeadersToCsv <Boolean>] [-ignoreAccessLogsNamingContext <String>] [-textDestination <String>]
  [-textRolloverDestination <String>] [-textDeleteGlob <String>] [-scanFolder <String>]
@@ -39,7 +39,7 @@ Set-R1LogSetting -dsName <String> [-logLevel <String>] [-rolloverSize <String>] 
 ### Plugin
 ```
 Set-R1LogSetting -pluginName <String> [-logLevel <String>] [-rolloverSize <String>]
- [-archiveMaxFileCount <Int64>] [-integrityAssurance <Boolean>] [-advancedProperties <Hashtable[]>]
+ [-archiveMaxFileCount <Int64>] [-integrityAssurance <Boolean>] [-advancedProperties <Object[]>]
  [-enableDebugSSL <Boolean>] [-logNotificationFailure <Boolean>] [-accessLogTextFormat <String>]
  [-accessLogCsvFormat <String>] [-addColumnNamesHeadersToCsv <Boolean>]
  [-ignoreAccessLogsNamingContext <String>] [-textDestination <String>] [-textRolloverDestination <String>]
@@ -83,6 +83,13 @@ Set-R1LogSetting -dsName 'SomeDataSource' -logLevel TRACE
 ```
 
 Raises the log level of a data source.
+
+### Example 4
+```powershell
+Set-R1LogSetting -component 'RadiantOne Server' -advancedProperties @{ 'some.property' = 'somevalue' }
+```
+
+Sets an advanced logging property.
 
 ## PARAMETERS
 
@@ -163,10 +170,13 @@ Accept wildcard characters: False
 ```
 
 ### -advancedProperties
-Advanced logging properties, each a hashtable with key and value keys.
+Advanced logging properties, as a hashtable keyed by property name.
+
+Properties already in the shape the API takes them, each with key and value properties, are sent
+unchanged.
 
 ```yaml
-Type: Hashtable[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases:
 
@@ -490,7 +500,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.Boolean
 
-### System.Collections.Hashtable[]
+### System.Object[]
 
 ### System.Int32
 

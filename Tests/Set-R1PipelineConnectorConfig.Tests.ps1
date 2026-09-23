@@ -107,6 +107,20 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'expands a dictionary into properties' {
+
+				Set-R1PipelineConnectorConfig -pipelineId 'pipe-1' -properties @{ host = 'other.example.com' } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$p = @(($Body | ConvertFrom-Json).properties)
+					($p.Count -eq 1) -and ($p[0].name -eq 'host') -and ($p[0].value -eq 'other.example.com')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 		}
 
 	}
