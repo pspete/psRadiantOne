@@ -78,6 +78,10 @@ function Add-R1ComputedAttribute {
 
 		} else {
 
+			#Attribute names are matched without regard to case, so the name the model already
+			#carries is used in preference to the one supplied
+			$name = $Attribute.virtualName
+
 			#The computed origin and its precedent are appended: the server drops the computed
 			#attribute outright if the precedent is sent ahead of the backend ones
 			$Attribute.origin = @(@($Attribute.origin | Where-Object { $_ -ne 'computed' }) + 'computed')

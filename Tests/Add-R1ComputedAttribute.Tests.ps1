@@ -144,6 +144,20 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'uses the name the model carries over the one supplied' {
+
+				Add-R1ComputedAttribute -dn 'EMPLOYEES,o=vds' -primaryObject 'vdAPPEMPLOYEES' -name 'city' -expression 'randomUUID()' -Confirm:$false
+
+				Should -Invoke -CommandName Set-R1SecondaryObject -ParameterFilter {
+
+					$Attribute = $finalOutput.attributes | Where-Object { $_.virtualName -eq 'City' }
+					(@($finalOutput.computedAttributes)[-1].name -ceq 'City') -and
+					(@($Attribute.precedentAttributes)[-1].name -ceq 'City')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'sends the requested active state' {
 
 				Add-R1ComputedAttribute -dn 'EMPLOYEES,o=vds' -primaryObject 'vdAPPEMPLOYEES' -name 'City' -expression 'randomUUID()' -active $false -Confirm:$false
