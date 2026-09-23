@@ -27,6 +27,29 @@ captured by Windows PowerShell parameter binding or module logging.
 
 ### Example 1
 ```powershell
+New-R1DirectoryEntry -dn 'ou=people,o=example' -attributes @{
+    objectClass = 'top', 'organizationalUnit'
+    ou          = 'people'
+}
+```
+
+Adds an organizational unit. Each key is an attribute name; an attribute with several values takes
+a list.
+
+### Example 2
+```powershell
+New-R1DirectoryEntry -dn 'uid=one,ou=people,o=example' -attributes @{
+    objectClass = 'top', 'person', 'organizationalPerson', 'inetOrgPerson'
+    uid         = 'one'
+    cn          = 'User One'
+    sn          = 'One'
+}
+```
+
+Adds a user. The DN is the full DN of the new entry, not the DN of its parent.
+
+### Example 3
+```powershell
 $Attributes = @(
     [pscustomobject]@{ name = 'objectClass'; values = @('top', 'organizationalUnit') }
     [pscustomobject]@{ name = 'ou'; values = @('people') }
@@ -34,20 +57,7 @@ $Attributes = @(
 New-R1DirectoryEntry -dn 'ou=people,o=example' -attributes $Attributes
 ```
 
-Adds an organizational unit.
-
-### Example 2
-```powershell
-$Attributes = @(
-    [pscustomobject]@{ name = 'objectClass'; values = @('top', 'person', 'organizationalPerson', 'inetOrgPerson') }
-    [pscustomobject]@{ name = 'uid'; values = @('one') }
-    [pscustomobject]@{ name = 'cn'; values = @('User One') }
-    [pscustomobject]@{ name = 'sn'; values = @('One') }
-)
-New-R1DirectoryEntry -dn 'uid=one,ou=people,o=example' -attributes $Attributes
-```
-
-Adds a user. The DN is the full DN of the new entry, not the DN of its parent.
+Adds an organizational unit, with the attributes given in the shape the API takes them.
 
 ## PARAMETERS
 
@@ -67,7 +77,11 @@ Accept wildcard characters: False
 ```
 
 ### -attributes
-The attributes of the new entry, each with a name and its values.
+The attributes of the new entry, as a hashtable keyed by attribute name, with an attribute's
+values as its value.
+
+Attributes already in the shape the API takes them, each with name and values properties, are sent
+unchanged.
 
 ```yaml
 Type: Object[]

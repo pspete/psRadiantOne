@@ -75,6 +75,21 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'expands a dictionary into attributes with an array of values' {
+
+				New-R1DirectoryEntry -dn 'o=example' -attributes @{ objectClass = 'top', 'organization'; o = 'example' } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Decoded = [System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json
+					$o = @($Decoded.attributes) | Where-Object { $PSItem.name -eq 'o' }
+					$oc = @($Decoded.attributes) | Where-Object { $PSItem.name -eq 'objectClass' }
+					(@($Decoded.attributes).Count -eq 2) -and ($o.values -is [array]) -and ($o.values[0] -eq 'example') -and (($oc.values -join ',') -eq 'top,organization')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'sends the body as bytes so an attribute value cannot be captured' {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter { $Body -is [byte[]] } -Times 1 -Exactly -Scope It

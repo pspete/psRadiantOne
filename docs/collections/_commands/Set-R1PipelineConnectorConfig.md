@@ -13,7 +13,7 @@ Updates the connector configuration of an identity observability pipeline.
 ## SYNTAX
 
 ```
-Set-R1PipelineConnectorConfig [-pipelineId] <String> [-properties] <Hashtable[]> [[-type] <String>] [-WhatIf]
+Set-R1PipelineConnectorConfig [-pipelineId] <String> [-properties] <Object[]> [[-type] <String>] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
@@ -27,7 +27,7 @@ when only the properties are being changed. The command issues a GET followed by
 
 ### Example 1
 ```powershell
-Set-R1PipelineConnectorConfig -pipelineId 'somepipeline' -properties @{ name = 'host'; value = 'splunk.example.com' }
+Set-R1PipelineConnectorConfig -pipelineId 'somepipeline' -properties @{ host = 'splunk.example.com' }
 ```
 
 Sets a connector property, keeping the connector type.
@@ -81,10 +81,13 @@ Accept wildcard characters: False
 ```
 
 ### -properties
-The connector properties, each a hashtable with at least name and value keys.
+The connector properties, as a hashtable keyed by property name.
+
+Properties already in the shape the API takes them, each with name and value properties, are sent
+unchanged.
 
 ```yaml
-Type: Hashtable[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases:
 
@@ -117,7 +120,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.String
 
-### System.Collections.Hashtable[]
+### System.Object[]
 
 ## OUTPUTS
 

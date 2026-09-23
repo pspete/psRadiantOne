@@ -24872,7 +24872,8 @@ New-R1DataSourceTypeImportMeta -importId $Session.id -DataSourceType $Template</
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
           <maml:name>attributes</maml:name>
           <maml:description>
-            <maml:para>The attributes of the new entry, each with a name and its values.</maml:para>
+            <maml:para>The attributes of the new entry, as a hashtable keyed by attribute name, with an attribute's values as its value.</maml:para>
+            <maml:para>Attributes already in the shape the API takes them, each with name and values properties, are sent unchanged.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
           <dev:type>
@@ -24933,7 +24934,8 @@ New-R1DataSourceTypeImportMeta -importId $Session.id -DataSourceType $Template</
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
         <maml:name>attributes</maml:name>
         <maml:description>
-          <maml:para>The attributes of the new entry, each with a name and its values.</maml:para>
+          <maml:para>The attributes of the new entry, as a hashtable keyed by attribute name, with an attribute's values as its value.</maml:para>
+          <maml:para>Attributes already in the shape the API takes them, each with name and values properties, are sent unchanged.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
         <dev:type>
@@ -25007,26 +25009,35 @@ New-R1DataSourceTypeImportMeta -importId $Session.id -DataSourceType $Template</
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>New-R1DirectoryEntry -dn 'ou=people,o=example' -attributes @{
+    objectClass = 'top', 'organizationalUnit'
+    ou          = 'people'
+}</dev:code>
+        <dev:remarks>
+          <maml:para>Adds an organizational unit. Each key is an attribute name; an attribute with several values takes a list.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>New-R1DirectoryEntry -dn 'uid=one,ou=people,o=example' -attributes @{
+    objectClass = 'top', 'person', 'organizationalPerson', 'inetOrgPerson'
+    uid         = 'one'
+    cn          = 'User One'
+    sn          = 'One'
+}</dev:code>
+        <dev:remarks>
+          <maml:para>Adds a user. The DN is the full DN of the new entry, not the DN of its parent.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
         <dev:code>$Attributes = @(
     [pscustomobject]@{ name = 'objectClass'; values = @('top', 'organizationalUnit') }
     [pscustomobject]@{ name = 'ou'; values = @('people') }
 )
 New-R1DirectoryEntry -dn 'ou=people,o=example' -attributes $Attributes</dev:code>
         <dev:remarks>
-          <maml:para>Adds an organizational unit.</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>$Attributes = @(
-    [pscustomobject]@{ name = 'objectClass'; values = @('top', 'person', 'organizationalPerson', 'inetOrgPerson') }
-    [pscustomobject]@{ name = 'uid'; values = @('one') }
-    [pscustomobject]@{ name = 'cn'; values = @('User One') }
-    [pscustomobject]@{ name = 'sn'; values = @('One') }
-)
-New-R1DirectoryEntry -dn 'uid=one,ou=people,o=example' -attributes $Attributes</dev:code>
-        <dev:remarks>
-          <maml:para>Adds a user. The DN is the full DN of the new entry, not the DN of its parent.</maml:para>
+          <maml:para>Adds an organizational unit, with the attributes given in the shape the API takes them.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -49264,11 +49275,12 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>advancedProperties</maml:name>
           <maml:description>
-            <maml:para>Advanced logging properties, each a hashtable with key and value keys.</maml:para>
+            <maml:para>Advanced logging properties, as a hashtable keyed by property name.</maml:para>
+            <maml:para>Properties already in the shape the API takes them, each with key and value properties, are sent unchanged.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">Hashtable[]</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
           <dev:type>
-            <maml:name>Hashtable[]</maml:name>
+            <maml:name>Object[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -49577,11 +49589,12 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>advancedProperties</maml:name>
           <maml:description>
-            <maml:para>Advanced logging properties, each a hashtable with key and value keys.</maml:para>
+            <maml:para>Advanced logging properties, as a hashtable keyed by property name.</maml:para>
+            <maml:para>Properties already in the shape the API takes them, each with key and value properties, are sent unchanged.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">Hashtable[]</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
           <dev:type>
-            <maml:name>Hashtable[]</maml:name>
+            <maml:name>Object[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -49875,11 +49888,12 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>advancedProperties</maml:name>
           <maml:description>
-            <maml:para>Advanced logging properties, each a hashtable with key and value keys.</maml:para>
+            <maml:para>Advanced logging properties, as a hashtable keyed by property name.</maml:para>
+            <maml:para>Properties already in the shape the API takes them, each with key and value properties, are sent unchanged.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">Hashtable[]</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
           <dev:type>
-            <maml:name>Hashtable[]</maml:name>
+            <maml:name>Object[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -50175,11 +50189,12 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
         <maml:name>advancedProperties</maml:name>
         <maml:description>
-          <maml:para>Advanced logging properties, each a hashtable with key and value keys.</maml:para>
+          <maml:para>Advanced logging properties, as a hashtable keyed by property name.</maml:para>
+          <maml:para>Properties already in the shape the API takes them, each with key and value properties, are sent unchanged.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">Hashtable[]</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
         <dev:type>
-          <maml:name>Hashtable[]</maml:name>
+          <maml:name>Object[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -50452,7 +50467,7 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
       </command:inputType>
       <command:inputType>
         <dev:type>
-          <maml:name>System.Collections.Hashtable[]</maml:name>
+          <maml:name>System.Object[]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -50502,6 +50517,13 @@ Set-R1LdapClientAccessMapping -mappings ($existing + @{ userId = 'newuser'; mapp
         <dev:code>Set-R1LogSetting -dsName 'SomeDataSource' -logLevel TRACE</dev:code>
         <dev:remarks>
           <maml:para>Raises the log level of a data source.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
+        <dev:code>Set-R1LogSetting -component 'RadiantOne Server' -advancedProperties @{ 'some.property' = 'somevalue' }</dev:code>
+        <dev:remarks>
+          <maml:para>Sets an advanced logging property.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -54375,11 +54397,12 @@ Set-R1NamingContextSpecialAttribute -dn 'o=vds' -unnestGroups ($Current.unnestGr
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
           <maml:name>properties</maml:name>
           <maml:description>
-            <maml:para>The connector properties, each a hashtable with at least name and value keys.</maml:para>
+            <maml:para>The connector properties, as a hashtable keyed by property name.</maml:para>
+            <maml:para>Properties already in the shape the API takes them, each with name and value properties, are sent unchanged.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">Hashtable[]</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
           <dev:type>
-            <maml:name>Hashtable[]</maml:name>
+            <maml:name>Object[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -54460,11 +54483,12 @@ Set-R1NamingContextSpecialAttribute -dn 'o=vds' -unnestGroups ($Current.unnestGr
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
         <maml:name>properties</maml:name>
         <maml:description>
-          <maml:para>The connector properties, each a hashtable with at least name and value keys.</maml:para>
+          <maml:para>The connector properties, as a hashtable keyed by property name.</maml:para>
+          <maml:para>Properties already in the shape the API takes them, each with name and value properties, are sent unchanged.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">Hashtable[]</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
         <dev:type>
-          <maml:name>Hashtable[]</maml:name>
+          <maml:name>Object[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -54493,7 +54517,7 @@ Set-R1NamingContextSpecialAttribute -dn 'o=vds' -unnestGroups ($Current.unnestGr
       </command:inputType>
       <command:inputType>
         <dev:type>
-          <maml:name>System.Collections.Hashtable[]</maml:name>
+          <maml:name>System.Object[]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -54518,7 +54542,7 @@ Set-R1NamingContextSpecialAttribute -dn 'o=vds' -unnestGroups ($Current.unnestGr
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>Set-R1PipelineConnectorConfig -pipelineId 'somepipeline' -properties @{ name = 'host'; value = 'splunk.example.com' }</dev:code>
+        <dev:code>Set-R1PipelineConnectorConfig -pipelineId 'somepipeline' -properties @{ host = 'splunk.example.com' }</dev:code>
         <dev:remarks>
           <maml:para>Sets a connector property, keeping the connector type.</maml:para>
         </dev:remarks>
