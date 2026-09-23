@@ -9,10 +9,13 @@
   others.
 - `New-R1ComputedAttributeExpression -value` takes the values in the order the signature lists them
   and names each from the function's own parameters. `-values` keeps taking them keyed by name.
+
+## Changed
+
 - `New-R1DirectoryEntry -attributes`, `Set-R1LogSetting -advancedProperties` and
   `Set-R1PipelineConnectorConfig -properties` take a hashtable keyed by name, such as
-  `@{ cn = 'User One'; objectClass = 'top', 'person' }`, in place of a list of name and value
-  items. A list already in that shape is still sent unchanged.
+  `@{ cn = 'User One'; objectClass = 'top', 'person' }`, as well as a list of name and value items,
+  which is still sent unchanged.
 - `Set-R1DirectoryEntry -add`, `-delete` and `-replace` take a hashtable keyed by attribute name,
   can be combined in one call, and bind from the pipeline by property name.
   `-modifications` still takes the modifications in the API's own shape.
