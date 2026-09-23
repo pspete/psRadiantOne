@@ -44737,9 +44737,84 @@ Set-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom' -DataSour
     </command:details>
     <maml:description>
       <maml:para>Applies LDAP modifications to an entry. Each modification pairs a type of ADD, DELETE or REPLACE with the attributes it affects, which is how an LDAP modify operation is expressed.</maml:para>
+      <maml:para>`-add`, `-delete` and `-replace` each take a hashtable keyed by attribute name, such as `@{ l = 'London'; mail = 'one@example.test', 'two@example.test' }`. Any of them can be combined in one call, which sends a single request applying the deletions first, then the additions, then the replacements. A value of `$null` or `@()` is sent as an empty list of values.</maml:para>
+      <maml:para>`-modifications` takes the modifications in the shape the API defines, for full control over their order.</maml:para>
       <maml:para>The request body is sent as UTF8 bytes, so an attribute value carrying a credential cannot be captured by Windows PowerShell parameter binding or module logging.</maml:para>
     </maml:description>
     <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Set-R1DirectoryEntry</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>dn</maml:name>
+          <maml:description>
+            <maml:para>The DN of the entry.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>add</maml:name>
+          <maml:description>
+            <maml:para>Values to add to attributes, keyed by attribute name. The values an attribute already holds are kept.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+          <dev:type>
+            <maml:name>IDictionary</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>delete</maml:name>
+          <maml:description>
+            <maml:para>Values to delete from attributes, keyed by attribute name. A value of `$null` or `@()` removes the attribute entirely.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+          <dev:type>
+            <maml:name>IDictionary</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>replace</maml:name>
+          <maml:description>
+            <maml:para>Values to replace the values of attributes with, keyed by attribute name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+          <dev:type>
+            <maml:name>IDictionary</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Set-R1DirectoryEntry</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
@@ -44803,6 +44878,42 @@ Set-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom' -DataSour
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>add</maml:name>
+        <maml:description>
+          <maml:para>Values to add to attributes, keyed by attribute name. The values an attribute already holds are kept.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+        <dev:type>
+          <maml:name>IDictionary</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>delete</maml:name>
+        <maml:description>
+          <maml:para>Values to delete from attributes, keyed by attribute name. A value of `$null` or `@()` removes the attribute entirely.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+        <dev:type>
+          <maml:name>IDictionary</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>replace</maml:name>
+        <maml:description>
+          <maml:para>Values to replace the values of attributes with, keyed by attribute name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+        <dev:type>
+          <maml:name>IDictionary</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
         <maml:name>modifications</maml:name>
         <maml:description>
@@ -44843,7 +44954,23 @@ Set-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom' -DataSour
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None</maml:name>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Collections.IDictionary</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Object[]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -44868,33 +44995,36 @@ Set-R1DataSourceTypeImportMeta -importId $Session.id -name 'My Custom' -DataSour
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>$Modifications = @(
-    [pscustomobject]@{ modifyType = 'REPLACE'; attributes = @([pscustomobject]@{ name = 'description'; values = @('Updated') }) }
-)
-Set-R1DirectoryEntry -dn 'o=example' -modifications $Modifications</dev:code>
+        <dev:code>Set-R1DirectoryEntry -dn 'o=example' -replace @{ description = 'Updated' }</dev:code>
         <dev:remarks>
           <maml:para>Replaces the description of an entry.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>$Modifications = @(
-    [pscustomobject]@{ modifyType = 'ADD'; attributes = @([pscustomobject]@{ name = 'mail'; values = @('one@example.test') }) }
-)
-Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:code>
+        <dev:code>Set-R1DirectoryEntry -dn 'uid=one,o=example' -delete @{ telephoneNumber = $null } -add @{ mail = 'one@example.test' } -replace @{ l = 'London' }</dev:code>
         <dev:remarks>
-          <maml:para>Adds a value to an attribute, keeping the values it already has.</maml:para>
+          <maml:para>Removes an attribute altogether, adds a value to another, and replaces a third, in one request.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>Import-Csv .\regions.csv |
+    Select-Object dn, @{ n = 'replace'; e = { @{ region = $_.region } } } |
+    Set-R1DirectoryEntry</dev:code>
+        <dev:remarks>
+          <maml:para>Replaces the region of each entry listed in a CSV file with dn and region columns.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
         <dev:code>$Modifications = @(
     [pscustomobject]@{ modifyType = 'DELETE'; attributes = @([pscustomobject]@{ name = 'telephoneNumber'; values = @() }) }
     [pscustomobject]@{ modifyType = 'REPLACE'; attributes = @([pscustomobject]@{ name = 'l'; values = @('London') }) }
 )
 Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications</dev:code>
         <dev:remarks>
-          <maml:para>Removes an attribute altogether, by deleting it with no values, and replaces another in the same request.</maml:para>
+          <maml:para>Sends modifications already in the shape the API defines.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

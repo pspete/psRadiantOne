@@ -75,6 +75,14 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'sends a null value as an empty array when multivalued' {
+
+				$Result = ConvertTo-R1NameValueList -InputObject @{ phone = $null } -ValueName values -MultiValued
+
+				($Result | ConvertTo-Json -Compress) | Should -Be '{"name":"phone","values":[]}'
+
+			}
+
 			It 'sends a single value as a scalar when not multivalued' {
 
 				$Result = ConvertTo-R1NameValueList -InputObject @{ host = 'splunk.example.com' }

@@ -83,6 +83,123 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'takes the dn and modifications by position' {
+
+				Set-R1DirectoryEntry 'o=positional' $Modifications -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$URI -like '*/o%3Dpositional/ldap_modify'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
+		Context 'Attributes' {
+
+			BeforeEach {
+
+				$Decode = { [System.Text.Encoding]::UTF8.GetString($args[0]) | ConvertFrom-Json }
+
+			}
+
+			It 'sends a replace modification' {
+
+				Set-R1DirectoryEntry -dn 'o=attr' -replace @{ region = 'EAST' } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($URI -notlike '*/o%3Dattr/*') { return $false }
+					$m = @(& $Decode $Body)
+					($m.Count -eq 1) -and ($m[0].modifyType -eq 'REPLACE') -and ($m[0].attributes[0].name -eq 'region') -and
+					($m[0].attributes[0].values -is [array]) -and ($m[0].attributes[0].values[0] -eq 'EAST')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends several attributes in one modification' {
+
+				Set-R1DirectoryEntry -dn 'o=attr' -replace @{ region = 'EAST'; lastname = 'Jones' } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($URI -notlike '*/o%3Dattr/*') { return $false }
+					$m = @(& $Decode $Body)
+					($m.Count -eq 1) -and (@($m[0].attributes).Count -eq 2)
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends delete, add and replace in that order in one request' {
+
+				Set-R1DirectoryEntry -dn 'o=attr' -replace @{ l = 'London' } -add @{ mail = 'one@example.test' } -delete @{ phone = @() } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($URI -notlike '*/o%3Dattr/*') { return $false }
+					(@(& $Decode $Body).modifyType -join ',') -eq 'DELETE,ADD,REPLACE'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'sends a null delete value as an empty array' {
+
+				Set-R1DirectoryEntry -dn 'o=attr' -delete @{ phone = $null } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($URI -notlike '*/o%3Dattr/*') { return $false }
+					$Json = [System.Text.Encoding]::UTF8.GetString($Body)
+					$Json -match '"values"\s*:\s*\[\s*\]'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'omits a modification type given an empty hashtable' {
+
+				Set-R1DirectoryEntry -dn 'o=attr' -replace @{ l = 'London' } -add @{ } -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($URI -notlike '*/o%3Dattr/*') { return $false }
+					(@(& $Decode $Body).modifyType -join ',') -eq 'REPLACE'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'binds the modifications from piped objects' {
+
+				[pscustomobject]@{ dn = 'o=pipe1'; replace = @{ region = 'EAST' } },
+				[pscustomobject]@{ dn = 'o=pipe2'; add = @{ mail = 'x@example.test' }; replace = @{ region = 'WEST' } } |
+					Set-R1DirectoryEntry -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($URI -like '*/o%3Dpipe1/*') -and ((@(& $Decode $Body).modifyType -join ',') -eq 'REPLACE')
+
+				} -Times 1 -Exactly -Scope It
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($URI -like '*/o%3Dpipe2/*') -and ((@(& $Decode $Body).modifyType -join ',') -eq 'ADD,REPLACE')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'throws when no modification is supplied' {
+
+				{ Set-R1DirectoryEntry -dn 'o=attr' -Confirm:$false } | Should -Throw '*at least one attribute*'
+
+			}
+
 		}
 
 	}

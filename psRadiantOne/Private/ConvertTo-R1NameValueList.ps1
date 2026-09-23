@@ -21,7 +21,8 @@ function ConvertTo-R1NameValueList {
 	The property of each item holding the value.
 
 	.PARAMETER MultiValued
-	Always send each value as an array, even when a single value is supplied.
+	Always send each value as an array, even when a single value is supplied. A null value is sent as
+	an empty array.
 
 	.EXAMPLE
 	ConvertTo-R1NameValueList -InputObject @{ cn = 'User One'; objectClass = 'top', 'person' } -ValueName values -MultiValued
@@ -63,7 +64,9 @@ function ConvertTo-R1NameValueList {
 
 				foreach ($Key in $Item.Keys) {
 
-					$Value = if ($MultiValued) { , @($Item[$Key]) } else { $Item[$Key] }
+					$Value = if (-not $MultiValued) { $Item[$Key] }
+					elseif ($null -eq $Item[$Key]) { , @() }
+					else { , @($Item[$Key]) }
 
 					[ordered]@{ $KeyName = "$Key"; $ValueName = $Value }
 
