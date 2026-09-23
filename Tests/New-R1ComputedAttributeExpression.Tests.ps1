@@ -93,6 +93,68 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 		}
 
+		Context 'Values in signature order' {
+
+			BeforeEach {
+
+				Mock Get-R1ComputedAttributeFunction -MockWith {
+					[pscustomobject]@{
+						signature  = 'replaceNull(attribute, defaultValue)'
+						parameters = @(
+							[pscustomobject]@{ name = 'attribute'; required = $true }
+							[pscustomobject]@{ name = 'defaultValue'; required = $true }
+						)
+					}
+				}
+
+			}
+
+			It 'names each value from the function parameters' {
+
+				New-R1ComputedAttributeExpression -dn 'EMPLOYEES,o=vds' -primaryObject 'vdAPPEMPLOYEES' -signature 'replaceNull(attribute, defaultValue)' -value 'FIRSTNAME', 'none' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Decoded = $Body | ConvertFrom-Json
+					(@($Decoded.values)[0].name -eq 'attribute') -and (@($Decoded.values)[0].value -eq 'FIRSTNAME') -and
+					(@($Decoded.values)[1].name -eq 'defaultValue') -and (@($Decoded.values)[1].value -eq 'none')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'throws when the signature is not in the function list' {
+
+				{ New-R1ComputedAttributeExpression -dn 'EMPLOYEES,o=vds' -primaryObject 'vdAPPEMPLOYEES' -signature 'nosuch(attribute)' -value 'FIRSTNAME' -Confirm:$false } |
+					Should -Throw -ExpectedMessage "*'nosuch(attribute)' not found*"
+
+			}
+
+			It 'throws when too few values are supplied' {
+
+				{ New-R1ComputedAttributeExpression -dn 'EMPLOYEES,o=vds' -primaryObject 'vdAPPEMPLOYEES' -signature 'replaceNull(attribute, defaultValue)' -value 'FIRSTNAME' -Confirm:$false } |
+					Should -Throw -ExpectedMessage '*2 required*1 supplied*'
+
+			}
+
+			It 'sends an empty values array for a function which takes none' {
+
+				Mock Get-R1ComputedAttributeFunction -MockWith {
+					[pscustomobject]@{ signature = 'randomUUID()'; parameters = @() }
+				}
+
+				New-R1ComputedAttributeExpression -dn 'EMPLOYEES,o=vds' -primaryObject 'vdAPPEMPLOYEES' -signature 'randomUUID()' -Confirm:$false
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					$Body -match '"values"\s*:\s*\[\s*\]'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+		}
+
 	}
 
 }

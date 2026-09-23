@@ -1,5 +1,15 @@
 # Unreleased
 
+## Added
+
+- Computed attribute commands: `Get-R1ComputedAttribute`, `Add-R1ComputedAttribute`,
+  `Set-R1ComputedAttribute` and `Remove-R1ComputedAttribute`, which wrap the two coupled changes a
+  computed attribute is in the object model - the expression, and the computed origin of the
+  attribute it is presented as. A computed attribute pipes from `Get-R1ComputedAttribute` to the
+  others.
+- `New-R1ComputedAttributeExpression -value` takes the values in the order the signature lists them
+  and names each from the function's own parameters. `-values` keeps taking them keyed by name.
+
 ## Fixed
 
 - `New-R1RecursiveSchemaRelationship` takes the `-depth` the API requires. Without it every call
