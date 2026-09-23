@@ -70,10 +70,18 @@ function Set-R1ComputedAttribute {
 			throw "No computed attribute named '$name' on $dn ($primaryObject). Use Add-R1ComputedAttribute to create it."
 		}
 
+		#Attribute names are matched without regard to case, so the name the descriptor carries is
+		#used in preference to the one supplied
+		$Descriptor = $Object.finalOutput.attributes | Where-Object { $_.virtualName -eq $name }
+
+		if ($null -ne $Descriptor) { $name = $Descriptor.virtualName }
+
 		if ($PSBoundParameters.ContainsKey('expression') -or $PSBoundParameters.ContainsKey('active')) {
 
 			if ($PSBoundParameters.ContainsKey('expression')) { $ComputedAttribute.expression = $expression }
 			if ($PSBoundParameters.ContainsKey('active')) { $ComputedAttribute.active = $active }
+
+			$ComputedAttribute.name = $name
 
 			if ($PSCmdlet.ShouldProcess("$dn ($primaryObject)", "Set Computed Attribute '$name'")) {
 
@@ -99,6 +107,7 @@ function Set-R1ComputedAttribute {
 			}
 
 			$Precedent.priority = $priority
+			$Precedent.name = $Attribute.virtualName
 
 			if ($PSCmdlet.ShouldProcess("$dn ($primaryObject)", "Set Computed Attribute '$name' Priority")) {
 

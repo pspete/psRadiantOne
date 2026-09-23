@@ -161,6 +161,33 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'writes the entry name the descriptor carries over the one supplied' {
+
+				Set-R1ComputedAttribute -dn 'EMPLOYEES,o=vds' -primaryObject 'vdAPPEMPLOYEES' -name 'city' -expression 'upper(City)' -Confirm:$false
+
+				Should -Invoke -CommandName Set-R1SecondaryObject -ParameterFilter {
+
+					$Entry = $finalOutput.computedAttributes | Where-Object { $_.name -eq 'City' }
+					$Entry.name -ceq 'City'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'writes the precedent name the descriptor carries over the one supplied' {
+
+				Set-R1ComputedAttribute -dn 'EMPLOYEES,o=vds' -primaryObject 'vdAPPEMPLOYEES' -name 'city' -priority 'HIGHEST' -Confirm:$false
+
+				Should -Invoke -CommandName Set-R1SecondaryObject -ParameterFilter {
+
+					$Attribute = $finalOutput.attributes | Where-Object { $_.virtualName -eq 'City' }
+					$Precedent = $Attribute.precedentAttributes | Where-Object { $_.origin -eq 'computed' }
+					$Precedent.name -ceq 'City'
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'throws when nothing is specified to change' {
 
 				{ Set-R1ComputedAttribute -dn 'EMPLOYEES,o=vds' -primaryObject 'vdAPPEMPLOYEES' -name 'City' -Confirm:$false } |
