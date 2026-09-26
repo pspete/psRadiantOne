@@ -15,7 +15,7 @@ function Set-R1PipelineConnectorConfig {
 			ValueFromPipelineByPropertyName = $true
 		)]
 		[ValidateNotNullOrEmpty()]
-		[hashtable[]]$properties,
+		[object[]]$properties,
 
 		[parameter(
 			Mandatory = $false,
@@ -44,7 +44,7 @@ function Set-R1PipelineConnectorConfig {
 		}
 
 		$Request = Merge-R1Parameter -Template $Template -BoundParameter ($PSBoundParameters | Get-Parameter -ParametersToRemove pipelineId) -Fallback $Existing
-		$Request['properties'] = @($Request['properties'])
+		$Request['properties'] = @(ConvertTo-R1NameValueList -InputObject $Request['properties'])
 
 		$Body = $Request | ConvertTo-R1JsonBody -EmptyArrayProperty properties
 

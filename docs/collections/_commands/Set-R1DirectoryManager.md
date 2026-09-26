@@ -161,7 +161,4 @@ The directory manager is generally a shared, high privilege account, and a faile
 disruptive. Test this command against a deployment you can afford to break before using it against
 one you cannot.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS

@@ -12,6 +12,13 @@ Builds a computed attribute expression from a function.
 
 ## SYNTAX
 
+### Value (Default)
+```
+New-R1ComputedAttributeExpression [-dn] <String> [-primaryObject] <String> [-signature] <String>
+ [-value <String[]>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Values
 ```
 New-R1ComputedAttributeExpression [-dn] <String> [-primaryObject] <String> [-signature] <String>
  [-values] <IDictionary> [-WhatIf] [-Confirm] [<CommonParameters>]
@@ -24,6 +31,11 @@ signatures.
 
 Nothing is saved on the server: the expression is returned for use in a computed attribute.
 
+The server substitutes the values positionally. Pass them with -value in the order the signature
+lists them and each is named from the function's own parameter list. -values takes them keyed by
+parameter name instead, and has to be an ordered dictionary: a plain hashtable enumerates in no
+particular order and the values are substituted in whatever order that turns out to be.
+
 ## EXAMPLES
 
 ### Example 1
@@ -32,6 +44,20 @@ New-R1ComputedAttributeExpression -dn 'EMPLOYEES,o=join' -primaryObject 'vdAPPEM
 ```
 
 Returns upper(FIRSTNAME).
+
+### Example 2
+```powershell
+New-R1ComputedAttributeExpression -dn 'EMPLOYEES,o=join' -primaryObject 'vdAPPEMPLOYEES' -signature 'replaceNull(attribute, defaultValue)' -value 'FIRSTNAME', 'unknown'
+```
+
+Returns replaceNull(FIRSTNAME,unknown), naming each value from the parameters of the function.
+
+### Example 3
+```powershell
+New-R1ComputedAttributeExpression -dn 'EMPLOYEES,o=join' -primaryObject 'vdAPPEMPLOYEES' -signature 'randomUUID()'
+```
+
+Returns randomUUID(), a function which takes no values.
 
 ## PARAMETERS
 
@@ -80,12 +106,29 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -value
+The value of each parameter of the function, in the order the signature lists them. The function is
+looked up to name them, so the signature must be one Get-R1ComputedAttributeFunction returns.
+
+```yaml
+Type: String[]
+Parameter Sets: Value
+Aliases:
+
+Required: False
+Position: Named
+Default value: @()
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -values
-The value of each parameter of the function, keyed by the parameter name.
+The value of each parameter of the function, keyed by the parameter name. Pass an ordered
+dictionary: the values are substituted in the order the dictionary enumerates them.
 
 ```yaml
 Type: IDictionary
-Parameter Sets: (All)
+Parameter Sets: Values
 Aliases:
 
 Required: True

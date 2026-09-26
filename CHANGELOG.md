@@ -2,6 +2,42 @@
 
 - N/A
 
+# 0.5
+
+## Added
+
+- Computed attribute commands: `Get-R1ComputedAttribute`, `Add-R1ComputedAttribute`,
+  `Set-R1ComputedAttribute` and `Remove-R1ComputedAttribute`, which wrap the two coupled changes a
+  computed attribute is in the object model - the expression, and the computed origin of the
+  attribute it is presented as. A computed attribute pipes from `Get-R1ComputedAttribute` to the
+  others.
+- `New-R1ComputedAttributeExpression -value` takes the values in the order the signature lists them
+  and names each from the function's own parameters. `-values` keeps taking them keyed by name.
+
+## Changed
+
+- `New-R1DirectoryEntry -attributes`, `Set-R1LogSetting -advancedProperties` and
+  `Set-R1PipelineConnectorConfig -properties` take a hashtable keyed by name, such as
+  `@{ cn = 'User One'; objectClass = 'top', 'person' }`, as well as a list of name and value items,
+  which is still sent unchanged.
+- `Set-R1DirectoryEntry -add`, `-delete` and `-replace` take a hashtable keyed by attribute name,
+  can be combined in one call, and bind from the pipeline by property name.
+  `-modifications` still takes the modifications in the API's own shape.
+
+## Fixed
+
+- `Get-R1Task -id` and `Get-R1TaskLog -id` take `taskId` as an alias, so the launched task
+  `Initialize-R1Cache`, `Import-R1DirectoryLdif`, `Import-R1StoreData` and `Reset-R1StoreIndex`
+  return pipes straight into them. Previously the property bound to nothing and `Get-R1Task`
+  returned every task.
+- `New-R1RecursiveSchemaRelationship` takes the `-depth` the API requires. Without it every call
+  was refused with `'depth': must not be null.`
+- `Set-R1DirectoryManager` sends both password values base64 encoded, as the control panel does.
+  The plaintext the published schema documents was refused with
+  `one or more fields have invalid values. Please check the API specs for allowed values.`
+- `Set-R1Task` no longer sends the `N_A` sentinel `Get-R1Task` reports for `executionInterval` on a
+  non-recurrent task back on the PUT, which the API rejected with `Invalid time format: N_A`.
+
 # 0.4
 
 ## Added

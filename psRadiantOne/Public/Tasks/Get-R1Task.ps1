@@ -9,6 +9,7 @@ function Get-R1Task {
 			ParameterSetName = 'Id'
 		)]
 		[ValidateNotNullOrEmpty()]
+		[Alias('taskId')]
 		[string]$id
 	)
 

@@ -97,6 +97,18 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'accepts the taskId a launched task reports' {
+
+				$null = [pscustomobject]@{ taskId = 'e4ef6b3e' } | Get-R1Task
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($URI -eq 'https://radiantone.company.com/system-administration-service/tasks/e4ef6b3e')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'has expected typename' {
 
 				$response = Get-R1Task -id 'e4ef6b3e'

@@ -71,7 +71,7 @@ function Set-R1LogSetting {
 			Mandatory = $false,
 			ValueFromPipelineByPropertyName = $true
 		)]
-		[hashtable[]]$advancedProperties,
+		[object[]]$advancedProperties,
 
 		[parameter(
 			Mandatory = $false,
@@ -226,7 +226,7 @@ function Set-R1LogSetting {
 
 		if ($Request.Contains('advancedProperties')) {
 
-			$Request['advancedProperties'] = @($Request['advancedProperties'])
+			$Request['advancedProperties'] = @(ConvertTo-R1NameValueList -InputObject $Request['advancedProperties'] -KeyName key)
 
 		}
 

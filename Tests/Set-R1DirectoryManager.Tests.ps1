@@ -94,7 +94,7 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 					if ($Method -ne 'PUT') { return $false }
 					$Decoded = [System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json
-					($Decoded.username -eq 'cn=Directory Manager') -and ($Decoded.password -eq 'P@ssword')
+					($Decoded.username -eq 'cn=Directory Manager') -and ($Decoded.password -eq 'UEBzc3dvcmQ=')
 
 				} -Times 1 -Exactly -Scope It
 
@@ -106,9 +106,23 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
 
-					($Method -eq 'PUT') -and (([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).oldPassword -eq '0ldP@ss')
+					($Method -eq 'PUT') -and (([System.Text.Encoding]::UTF8.GetString($Body) | ConvertFrom-Json).oldPassword -eq 'MGxkUEBzcw==')
 
 				} -Times 1 -Exactly -Scope It
+
+			}
+
+			It 'does not send either password as plaintext' {
+
+				Set-R1DirectoryManager -username 'cn=Directory Manager' -password ('N3wP@ss' | ConvertTo-SecureString -AsPlainText -Force) -oldPassword ('0ldP@ss' | ConvertTo-SecureString -AsPlainText -Force) -Confirm:$false
+
+				Should -Not -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					if ($Method -ne 'PUT') { return $false }
+					$Raw = [System.Text.Encoding]::UTF8.GetString($Body)
+					($Raw -match 'N3wP@ss') -or ($Raw -match '0ldP@ss')
+
+				} -Scope It
 
 			}
 

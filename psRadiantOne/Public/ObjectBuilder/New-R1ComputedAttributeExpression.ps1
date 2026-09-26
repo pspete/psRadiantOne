@@ -1,6 +1,6 @@
 # .ExternalHelp psRadiantOne-help.xml
 function New-R1ComputedAttributeExpression {
-	[CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
+	[CmdletBinding(DefaultParameterSetName = 'Value', SupportsShouldProcess, ConfirmImpact = 'Low')]
 	[OutputType('System.String')]
 	param(
 		[parameter(
@@ -25,6 +25,15 @@ function New-R1ComputedAttributeExpression {
 		[string]$signature,
 
 		[parameter(
+			ParameterSetName = 'Value',
+			Mandatory = $false,
+			ValueFromPipelineByPropertyName = $false
+		)]
+		[ValidateNotNull()]
+		[string[]]$value = @(),
+
+		[parameter(
+			ParameterSetName = 'Values',
 			Mandatory = $true,
 			ValueFromPipelineByPropertyName = $false
 		)]
@@ -39,6 +48,38 @@ function New-R1ComputedAttributeExpression {
 	}#begin
 
 	Process {
+
+		if ($PSCmdlet.ParameterSetName -eq 'Value') {
+
+			#The server substitutes values positionally, so they are named from the function's own
+			#parameter list rather than left to the order a dictionary happens to enumerate in
+			$Function = Get-R1ComputedAttributeFunction -dn $dn -primaryObject $primaryObject |
+				Where-Object { $PSItem.signature -eq $signature }
+
+			if ($null -eq $Function) {
+
+				throw "Computed attribute function '$signature' not found on $dn ($primaryObject)."
+
+			}
+
+			$Parameter = @($Function.parameters)
+			$Required = @($Parameter | Where-Object { $PSItem.required }).Count
+
+			if ($value.Count -lt $Required -or $value.Count -gt $Parameter.Count) {
+
+				throw "'$signature' takes $Required required and $($Parameter.Count) total values, $($value.Count) supplied."
+
+			}
+
+			$values = [ordered]@{}
+
+			for ($i = 0; $i -lt $value.Count; $i++) {
+
+				$values[$Parameter[$i].name] = $value[$i]
+
+			}
+
+		}
 
 		$URI = Resolve-R1ServiceUrl -Service Namespace -Path "naming_contexts/$($dn | Get-EscapedString)/object_builder/primary_objects/$($primaryObject | Get-EscapedString)/computed_attr_functions"
 

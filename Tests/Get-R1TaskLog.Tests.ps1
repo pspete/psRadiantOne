@@ -64,6 +64,18 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 
 			}
 
+			It 'accepts the taskId a launched task reports' {
+
+				$null = [pscustomobject]@{ taskId = 'e4ef6b3e' } | Get-R1TaskLog
+
+				Should -Invoke -CommandName Invoke-R1RestMethod -ParameterFilter {
+
+					($URI -eq 'https://radiantone.company.com/system-administration-service/tasks/e4ef6b3e/logs')
+
+				} -Times 1 -Exactly -Scope It
+
+			}
+
 			It 'returns the log as lines rather than one string' {
 
 				$response = Get-R1TaskLog -id 'e4ef6b3e'

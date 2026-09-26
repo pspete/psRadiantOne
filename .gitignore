@@ -1,5 +1,6 @@
 .vscode/*
 CLAUDE.md
+ENHANCEMENTS.md
 Release/
 radiantone-openapi-*.yaml
 coverage.xml

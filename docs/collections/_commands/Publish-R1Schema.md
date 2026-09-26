@@ -107,9 +107,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 The request body is the complete list of published schemas, so a name left out is unpublished.
 Retrieve the current list with Get-R1PublishedSchema and pass back the whole of it to add one.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1PublishedSchema](Get-R1PublishedSchema)

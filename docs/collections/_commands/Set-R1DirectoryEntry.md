@@ -12,6 +12,13 @@ Modifies the attributes of an entry.
 
 ## SYNTAX
 
+### Attributes (Default)
+```
+Set-R1DirectoryEntry [-dn] <String> [-add <IDictionary>] [-delete <IDictionary>] [-replace <IDictionary>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Modifications
 ```
 Set-R1DirectoryEntry [-dn] <String> [-modifications] <Object[]> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -20,6 +27,14 @@ Set-R1DirectoryEntry [-dn] <String> [-modifications] <Object[]> [-WhatIf] [-Conf
 Applies LDAP modifications to an entry. Each modification pairs a type of ADD, DELETE or REPLACE
 with the attributes it affects, which is how an LDAP modify operation is expressed.
 
+`-add`, `-delete` and `-replace` each take a hashtable keyed by attribute name, such as
+`@{ l = 'London'; mail = 'one@example.test', 'two@example.test' }`. Any of them can be combined in
+one call, which sends a single request applying the deletions first, then the additions, then the
+replacements. A value of `$null` or `@()` is sent as an empty list of values.
+
+`-modifications` takes the modifications in the shape the API defines, for full control over their
+order.
+
 The request body is sent as UTF8 bytes, so an attribute value carrying a credential cannot be
 captured by Windows PowerShell parameter binding or module logging.
 
@@ -27,25 +42,28 @@ captured by Windows PowerShell parameter binding or module logging.
 
 ### Example 1
 ```powershell
-$Modifications = @(
-    [pscustomobject]@{ modifyType = 'REPLACE'; attributes = @([pscustomobject]@{ name = 'description'; values = @('Updated') }) }
-)
-Set-R1DirectoryEntry -dn 'o=example' -modifications $Modifications
+Set-R1DirectoryEntry -dn 'o=example' -replace @{ description = 'Updated' }
 ```
 
 Replaces the description of an entry.
 
 ### Example 2
 ```powershell
-$Modifications = @(
-    [pscustomobject]@{ modifyType = 'ADD'; attributes = @([pscustomobject]@{ name = 'mail'; values = @('one@example.test') }) }
-)
-Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications
+Set-R1DirectoryEntry -dn 'uid=one,o=example' -delete @{ telephoneNumber = $null } -add @{ mail = 'one@example.test' } -replace @{ l = 'London' }
 ```
 
-Adds a value to an attribute, keeping the values it already has.
+Removes an attribute altogether, adds a value to another, and replaces a third, in one request.
 
 ### Example 3
+```powershell
+Import-Csv .\regions.csv |
+    Select-Object dn, @{ n = 'replace'; e = { @{ region = $_.region } } } |
+    Set-R1DirectoryEntry
+```
+
+Replaces the region of each entry listed in a CSV file with dn and region columns.
+
+### Example 4
 ```powershell
 $Modifications = @(
     [pscustomobject]@{ modifyType = 'DELETE'; attributes = @([pscustomobject]@{ name = 'telephoneNumber'; values = @() }) }
@@ -54,8 +72,7 @@ $Modifications = @(
 Set-R1DirectoryEntry -dn 'uid=one,o=example' -modifications $Modifications
 ```
 
-Removes an attribute altogether, by deleting it with no values, and replaces another in the same
-request.
+Sends modifications already in the shape the API defines.
 
 ## PARAMETERS
 
@@ -74,12 +91,58 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -add
+Values to add to attributes, keyed by attribute name. The values an attribute already holds are kept.
+
+```yaml
+Type: IDictionary
+Parameter Sets: Attributes
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -delete
+Values to delete from attributes, keyed by attribute name. A value of `$null` or `@()` removes the
+attribute entirely.
+
+```yaml
+Type: IDictionary
+Parameter Sets: Attributes
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -replace
+Values to replace the values of attributes with, keyed by attribute name.
+
+```yaml
+Type: IDictionary
+Parameter Sets: Attributes
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -modifications
 The modifications to apply, each pairing a modify type of ADD, DELETE or REPLACE with the attributes it affects.
 
 ```yaml
 Type: Object[]
-Parameter Sets: (All)
+Parameter Sets: Modifications
 Aliases:
 
 Required: True
@@ -125,7 +188,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### System.String
+
+### System.Collections.IDictionary
+
+### System.Object[]
 
 ## OUTPUTS
 

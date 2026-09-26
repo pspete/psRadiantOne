@@ -126,9 +126,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 The fields supplied replace those configured, so a field left out is removed. Retrieve the
 current collection with Get-R1SchemaTableField and pass back the whole of it.
 
-This command has not been exercised against a live deployment, so its behaviour rests on the
-published API definition alone.
-
 ## RELATED LINKS
 
 [Get-R1SchemaTableField](Get-R1SchemaTableField)

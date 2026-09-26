@@ -23,7 +23,13 @@ function New-R1RecursiveSchemaRelationship {
 			ValueFromPipelineByPropertyName = $true
 		)]
 		[ValidateNotNullOrEmpty()]
-		[string[]]$foreignKeys
+		[string[]]$foreignKeys,
+
+		[parameter(
+			Mandatory = $true,
+			ValueFromPipelineByPropertyName = $true
+		)]
+		[int]$depth
 	)
 
 	Begin {
