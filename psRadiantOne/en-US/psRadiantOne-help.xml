@@ -25600,6 +25600,8 @@ New-R1DirectoryADUser -cn jsmith -sAMAccountName jsmith -givenName Jane -sn Smit
     </command:details>
     <maml:description>
       <maml:para>Adds an entry at the given DN with the attributes supplied.</maml:para>
+      <maml:para>Given object classes in place of attributes, the command reads them from the directory schema, following each up through its superclasses, and offers a parameter for every attribute an entry of those classes can carry, named after the attribute and taking any alias the schema gives it. A multivalued attribute takes a list, and an attribute the schema requires is mandatory. The entry is sent with every object class reached, and with the attributes given as parameters.</maml:para>
+      <maml:para>These parameters are only offered when -objectClass is given as a literal value, rather than from the pipeline, and a session is connected, as they are read from the schema while the command's parameters are bound. They are not listed in this help.</maml:para>
       <maml:para>The request body is sent as UTF8 bytes, so an attribute value carrying a credential cannot be captured by Windows PowerShell parameter binding or module logging.</maml:para>
     </maml:description>
     <command:syntax>
@@ -25665,6 +25667,67 @@ New-R1DirectoryADUser -cn jsmith -sAMAccountName jsmith -givenName Jane -sn Smit
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>New-R1DirectoryEntry</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>dn</maml:name>
+          <maml:description>
+            <maml:para>The DN of the entry.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+          <maml:name>rdn</maml:name>
+          <maml:description>
+            <maml:para>The RDN of the entry. The API names the new entry by its dn, so this is not a way to create a child of the dn given.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>objectClass</maml:name>
+          <maml:description>
+            <maml:para>The object classes of the entry, structural and auxiliary. Their superclasses are added to the entry, and their attributes are offered as parameters.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
@@ -25700,6 +25763,18 @@ New-R1DirectoryADUser -cn jsmith -sAMAccountName jsmith -givenName Jane -sn Smit
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>objectClass</maml:name>
+        <maml:description>
+          <maml:para>The object classes of the entry, structural and auxiliary. Their superclasses are added to the entry, and their attributes are offered as parameters.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -25786,6 +25861,13 @@ New-R1DirectoryADUser -cn jsmith -sAMAccountName jsmith -givenName Jane -sn Smit
 New-R1DirectoryEntry -dn 'ou=people,o=example' -attributes $Attributes</dev:code>
         <dev:remarks>
           <maml:para>Adds an organizational unit, with the attributes given in the shape the API takes them.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
+        <dev:code>New-R1DirectoryEntry -dn 'uid=one,ou=people,o=example' -objectClass inetOrgPerson -cn 'User One' -sn One -uid one -mail one@example.com</dev:code>
+        <dev:remarks>
+          <maml:para>Adds a user, with the object classes top, person, organizationalPerson and inetOrgPerson, from parameters built from the schema.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

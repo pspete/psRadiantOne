@@ -72,3 +72,6 @@ $Script:psRadiantOneSession = [ordered]@{
 } | Add-CustomType -Type psRadiantOne.Session
 
 New-Variable -Name psRadiantOneSession -Value $Script:psRadiantOneSession -Scope Script -Force
+
+# Object classes read from the schema, keyed by BaseURI and object class, for dynamic parameters
+$Script:psRadiantOneObjectClassCache = @{ }

@@ -9,6 +9,9 @@
   named parameters. `New-R1DirectoryADUser` takes the account settings either as individual
   toggles or as a `userAccountControl` value, and `New-R1DirectoryADGroup` takes the scope and
   category by name.
+- `New-R1DirectoryEntry -objectClass` builds the entry from its object classes: their superclasses
+  are read from the schema and added, and their attributes are offered as parameters, mandatory
+  where the schema requires them.
 
 # 0.5
 
