@@ -1,6 +1,14 @@
 # Unreleased
 
-- N/A
+## Added
+
+- `New-R1DirectoryOrganizationalUnit` adds an organizational unit beneath a parent DN, with the
+  attributes the control panel offers for one.
+- `New-R1DirectoryInetOrgPerson`, `New-R1DirectoryADUser`, `New-R1DirectoryGroup` and
+  `New-R1DirectoryADGroup` add the other entries the control panel's New Entry menu offers, from
+  named parameters. `New-R1DirectoryADUser` takes the account settings either as individual
+  toggles or as a `userAccountControl` value, and `New-R1DirectoryADGroup` takes the scope and
+  category by name.
 
 # 0.5
 
