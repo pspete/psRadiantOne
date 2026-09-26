@@ -1,5 +1,9 @@
 # Unreleased
 
+- N/A
+
+# 0.5
+
 ## Added
 
 - Computed attribute commands: `Get-R1ComputedAttribute`, `Add-R1ComputedAttribute`,
