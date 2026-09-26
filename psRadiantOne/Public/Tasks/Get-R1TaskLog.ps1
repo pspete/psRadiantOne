@@ -8,6 +8,7 @@ function Get-R1TaskLog {
 			ValueFromPipelineByPropertyName = $true
 		)]
 		[ValidateNotNullOrEmpty()]
+		[Alias('taskId')]
 		[string]$id,
 
 		[parameter(

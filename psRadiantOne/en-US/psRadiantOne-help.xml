@@ -16822,7 +16822,7 @@ Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues $Names</de
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-R1Task</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="taskId">
           <maml:name>id</maml:name>
           <maml:description>
             <maml:para>The identifier of the task.</maml:para>
@@ -16837,7 +16837,7 @@ Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues $Names</de
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="taskId">
         <maml:name>id</maml:name>
         <maml:description>
           <maml:para>The identifier of the task.</maml:para>
@@ -16933,7 +16933,7 @@ Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues $Names</de
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-R1TaskLog</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="taskId">
           <maml:name>id</maml:name>
           <maml:description>
             <maml:para>The identifier of the task.</maml:para>
@@ -16960,7 +16960,7 @@ Set-R1NamingContextContentProperty -dn 'uid,ou=hr,o=views' -rdnValues $Names</de
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="taskId">
         <maml:name>id</maml:name>
         <maml:description>
           <maml:para>The identifier of the task.</maml:para>

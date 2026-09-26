@@ -22,6 +22,10 @@
 
 ## Fixed
 
+- `Get-R1Task -id` and `Get-R1TaskLog -id` take `taskId` as an alias, so the launched task
+  `Initialize-R1Cache`, `Import-R1DirectoryLdif`, `Import-R1StoreData` and `Reset-R1StoreIndex`
+  return pipes straight into them. Previously the property bound to nothing and `Get-R1Task`
+  returned every task.
 - `New-R1RecursiveSchemaRelationship` takes the `-depth` the API requires. Without it every call
   was refused with `'depth': must not be null.`
 - `Set-R1DirectoryManager` sends both password values base64 encoded, as the control panel does.
