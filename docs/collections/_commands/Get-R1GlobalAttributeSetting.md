@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Get-R1GlobalAttributeSetting
 schema: 2.0.0
+title: Get-R1GlobalAttributeSetting
+category: Global Attributes
 ---
 
 # Get-R1GlobalAttributeSetting

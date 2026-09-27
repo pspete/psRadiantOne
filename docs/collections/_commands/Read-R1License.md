@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Read-R1License
 schema: 2.0.0
+title: Read-R1License
+category: License
 ---
 
 # Read-R1License

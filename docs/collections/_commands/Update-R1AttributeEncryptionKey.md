@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Update-R1AttributeEncryptionKey
 schema: 2.0.0
+title: Update-R1AttributeEncryptionKey
+category: Attribute Encryption
 ---
 
 # Update-R1AttributeEncryptionKey

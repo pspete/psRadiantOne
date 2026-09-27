@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Add-R1PasswordDictionaryWord
 schema: 2.0.0
+title: Add-R1PasswordDictionaryWord
+category: Password Policies
 ---
 
 # Add-R1PasswordDictionaryWord

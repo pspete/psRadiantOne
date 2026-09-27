@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Initialize-R1Cache
 schema: 2.0.0
+title: Initialize-R1Cache
+category: Caches
 ---
 
 # Initialize-R1Cache

@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Export-R1AuditLog
 schema: 2.0.0
+title: Export-R1AuditLog
+category: Audit Logging
 ---
 
 # Export-R1AuditLog

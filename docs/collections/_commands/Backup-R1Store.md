@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Backup-R1Store
 schema: 2.0.0
+title: Backup-R1Store
+category: Persistent Store
 ---
 
 # Backup-R1Store

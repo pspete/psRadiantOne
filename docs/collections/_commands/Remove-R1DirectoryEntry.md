@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Remove-R1DirectoryEntry
 schema: 2.0.0
+title: Remove-R1DirectoryEntry
+category: Directory Browser
 ---
 
 # Remove-R1DirectoryEntry

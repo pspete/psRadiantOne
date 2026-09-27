@@ -54,6 +54,20 @@ import-module platyPS
 New-ExternalHelp -Path .\docs\collections\_commands\ -OutputPath .\psRadiantOne\en-US\psRadiantOne-help.xml -Force
 ```
 
+#### Project Site
+
+The same markdown files are published as the command reference on [psradiantone.pspete.dev][site], built by GitHub Pages from the `docs` folder.
+
+A new command's markdown file needs three front matter values beyond what `platyPS` generates:
+
+```yaml
+online version: https://psradiantone.pspete.dev/commands/Verb-R1Noun
+title: Verb-R1Noun
+category: Directory Browser
+```
+
+`category` groups the command in the site navigation; use the name of its `psRadiantOne\Public` folder, split into words.
+
 [commit]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 [OTBS]: https://github.com/PoshCode/PowerShellPracticeAndStyle/issues/81
 [new-issue]: https://github.com/pspete/psRadiantOne/issues/new
@@ -61,3 +75,4 @@ New-ExternalHelp -Path .\docs\collections\_commands\ -OutputPath .\psRadiantOne\
 [pester-repo]: https://github.com/pester/Pester
 [code-coverage]: https://app.codecov.io/gh/pspete/psRadiantOne
 [command-help]: https://github.com/pspete/psRadiantOne/tree/main/docs/collections/_commands
+[site]: https://psradiantone.pspete.dev

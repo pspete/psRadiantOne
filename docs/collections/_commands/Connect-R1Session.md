@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Connect-R1Session
 schema: 2.0.0
+title: Connect-R1Session
+category: Authentication
 ---
 
 # Connect-R1Session

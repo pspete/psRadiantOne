@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Remove-R1DirectoryObjectClass
 schema: 2.0.0
+title: Remove-R1DirectoryObjectClass
+category: Directory Schema
 ---
 
 # Remove-R1DirectoryObjectClass

@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Export-R1DirectorySchemaFile
 schema: 2.0.0
+title: Export-R1DirectorySchemaFile
+category: Directory Schema
 ---
 
 # Export-R1DirectorySchemaFile

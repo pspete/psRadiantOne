@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Mount-R1NamingContextBackend
 schema: 2.0.0
+title: Mount-R1NamingContextBackend
+category: Naming Contexts
 ---
 
 # Mount-R1NamingContextBackend

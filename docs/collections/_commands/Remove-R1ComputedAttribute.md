@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Remove-R1ComputedAttribute
 schema: 2.0.0
+title: Remove-R1ComputedAttribute
+category: Object Builder
 ---
 
 # Remove-R1ComputedAttribute

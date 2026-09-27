@@ -8,12 +8,14 @@ psRadiantOne is a PowerShell module that wraps the REST API of the [Radiant Logi
 
 The module covers the RadiantOne v8.x API as published in the vendor's OpenAPI definition, and targets both self-hosted deployments and SaaS tenants.
 
+Documentation and the command reference: [psradiantone.pspete.dev](https://psradiantone.pspete.dev)
+
 [vendor]: https://www.radiantlogic.com/
 
 - **Prior to a Version 1.0.0 release**:
   - Expect changes, although we will do our best to keep these to a minimum
   - Issues / PRs are encouraged & appreciated
-  - Most commands have now been exercised against a live deployment, but around 1 in 9 still rest on the published API definition alone - see [Help Us Test](#help-us-test) below, your feedback genuinely shapes what ships next.
+  - Most commands have now been exercised against a live deployment, but around 1 in 10 still rest on the published API definition alone - see [Help Us Test](#help-us-test) below, your feedback genuinely shapes what ships next.
   - Real-world usage is still expected to shape further changes to command names, parameters/parameter names, and how commands are grouped - some may split into companion commands, others may combine. These patterns only emerge once commands are actually used, so don't consider anything final yet.
 
 | Main Branch              | Latest Build             | CodeFactor                 | Coverage                     | PowerShell Gallery        | License                      |
@@ -252,7 +254,7 @@ PS C:\> Get-R1TaskLog -id $Id -numberOfLines 50
 
 ## List Of Commands
 
-_psRadiantOne_ currently ships 364 commands, grouped into the areas below. The full list is not reproduced command-by-command here - instead, once the module is imported:
+_psRadiantOne_ currently ships 373 commands, grouped into the areas below. The full list is not reproduced command-by-command here - instead, once the module is imported:
 
 ```powershell
 # List every command in the module
@@ -262,7 +264,7 @@ Get-Command -Module psRadiantOne
 Get-Help Connect-R1Session -Full
 ```
 
-Every command also has a corresponding reference page under [`docs/collections/_commands`](docs/collections/_commands), which is the same content `Get-Help` displays.
+Every command also has a reference page on the [project site](https://psradiantone.pspete.dev/commands/), which is the same content `Get-Help` displays; `Get-Help <command> -Online` opens it.
 
 | Area                            | Covers                                                                                                                  |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
@@ -296,7 +298,7 @@ Every command also has a corresponding reference page under [`docs/collections/_
 
 ## Help Us Test
 
-Prior to a 1.0.0 release, 38 of the 364 commands have not yet been exercised against a live deployment: their behaviour rests on the vendor's published API definition alone. What is left is what a test run can't reach on its own - migration and promotion, licensing, jar, library and private-file uploads, schema and directory-schema edits. Each of those commands says so in the `NOTES` section of its help.
+Prior to a 1.0.0 release, 38 of the 373 commands have not yet been exercised against a live deployment: their behaviour rests on the vendor's published API definition alone. What is left is what a test run can't reach on its own - migration and promotion, licensing, jar, library and private-file uploads, schema and directory-schema edits. Each of those commands says so in the `NOTES` section of its help.
 
 To list them:
 

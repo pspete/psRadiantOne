@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Test-R1DataSourceType
 schema: 2.0.0
+title: Test-R1DataSourceType
+category: Data Source Types
 ---
 
 # Test-R1DataSourceType

@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Stop-R1Task
 schema: 2.0.0
+title: Stop-R1Task
+category: Tasks
 ---
 
 # Stop-R1Task

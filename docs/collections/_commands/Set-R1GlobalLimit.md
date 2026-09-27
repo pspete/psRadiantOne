@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Set-R1GlobalLimit
 schema: 2.0.0
+title: Set-R1GlobalLimit
+category: Limits
 ---
 
 # Set-R1GlobalLimit

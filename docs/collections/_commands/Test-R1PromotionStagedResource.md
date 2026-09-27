@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Test-R1PromotionStagedResource
 schema: 2.0.0
+title: Test-R1PromotionStagedResource
+category: Promotion
 ---
 
 # Test-R1PromotionStagedResource

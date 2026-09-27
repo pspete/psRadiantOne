@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Import-R1InterceptionScript
 schema: 2.0.0
+title: Import-R1InterceptionScript
+category: Interception Scripts
 ---
 
 # Import-R1InterceptionScript

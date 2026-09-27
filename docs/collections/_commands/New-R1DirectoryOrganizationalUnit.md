@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/New-R1DirectoryOrganizationalUnit
 schema: 2.0.0
+title: New-R1DirectoryOrganizationalUnit
+category: Directory Browser
 ---
 
 # New-R1DirectoryOrganizationalUnit

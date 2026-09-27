@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Publish-R1Schema
 schema: 2.0.0
+title: Publish-R1Schema
+category: Schemas
 ---
 
 # Publish-R1Schema

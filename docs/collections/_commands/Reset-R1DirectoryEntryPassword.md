@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Reset-R1DirectoryEntryPassword
 schema: 2.0.0
+title: Reset-R1DirectoryEntryPassword
+category: Directory Browser
 ---
 
 # Reset-R1DirectoryEntryPassword

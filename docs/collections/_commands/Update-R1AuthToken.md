@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Update-R1AuthToken
 schema: 2.0.0
+title: Update-R1AuthToken
+category: Authentication
 ---
 
 # Update-R1AuthToken
