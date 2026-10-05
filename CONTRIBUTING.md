@@ -8,13 +8,13 @@ If you find an error in `psRadiantOne`, or have a question relating to the modul
 
 ## Pull Requests
 
-When submitting a Pull Request to psPAS, automated tasks will run in Appveyor.
+When submitting a Pull Request to psRadiantOne, automated tasks will run in GitHub Actions.
 
-- Appveyor will increment the version number (there is no need to do this manually)
 - The [`Pester`][pester-repo] tests for the module will run.
 - [Code Coverage][code-coverage] metrics for the module will be determined
-- Once code is merged into the `master` branch, and all tests pass, the module is automatically published to the PowerShell Gallery and tagged as a Release on GitHub
-  - No PR's should be submitted to the master branch; submitting to the Dev branch allows for required tests & documentation to be updated prior to any code release.
+- Describe the change under `## Unreleased` in [CHANGELOG.md](CHANGELOG.md); the version number is set from these notes (there is no need to change it manually)
+- Once code is merged into the `main` branch, and all tests pass, the module is automatically published to the PowerShell Gallery and tagged as a Release on GitHub
+  - No PR's should be submitted to the main branch; submitting to the Dev branch allows for required tests & documentation to be updated prior to any code release.
 
 ## Contributing Code
 
@@ -54,6 +54,20 @@ import-module platyPS
 New-ExternalHelp -Path .\docs\collections\_commands\ -OutputPath .\psRadiantOne\en-US\psRadiantOne-help.xml -Force
 ```
 
+#### Project Site
+
+The same markdown files are published as the command reference on [psradiantone.pspete.dev][site], built by GitHub Pages from the `docs` folder.
+
+A new command's markdown file needs three front matter values beyond what `platyPS` generates:
+
+```yaml
+online version: https://psradiantone.pspete.dev/commands/Verb-R1Noun
+title: Verb-R1Noun
+category: Directory Browser
+```
+
+`category` groups the command in the site navigation; use the name of its `psRadiantOne\Public` folder, split into words.
+
 [commit]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 [OTBS]: https://github.com/PoshCode/PowerShellPracticeAndStyle/issues/81
 [new-issue]: https://github.com/pspete/psRadiantOne/issues/new
@@ -61,3 +75,4 @@ New-ExternalHelp -Path .\docs\collections\_commands\ -OutputPath .\psRadiantOne\
 [pester-repo]: https://github.com/pester/Pester
 [code-coverage]: https://app.codecov.io/gh/pspete/psRadiantOne
 [command-help]: https://github.com/pspete/psRadiantOne/tree/main/docs/collections/_commands
+[site]: https://psradiantone.pspete.dev

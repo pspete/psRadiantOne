@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Compare-R1Schema
 schema: 2.0.0
+title: Compare-R1Schema
+category: Schema Diff
 ---
 
 # Compare-R1Schema

@@ -1,3 +1,4 @@
+#region Loader
 <#
 .SYNOPSIS
 
@@ -47,6 +48,7 @@ Get-ChildItem $PSScriptRoot\ -Recurse -Include '*.ps1' -Exclude '*.ps1xml' |
 		}
 
 	}
+#endregion Loader
 
 # AllowInsecureRedirect arrived in PowerShell 7.4. Resolved once at import rather than on every
 # request; Invoke-R1RestMethod sends the parameter only where it exists.
@@ -72,3 +74,6 @@ $Script:psRadiantOneSession = [ordered]@{
 } | Add-CustomType -Type psRadiantOne.Session
 
 New-Variable -Name psRadiantOneSession -Value $Script:psRadiantOneSession -Scope Script -Force
+
+# Object classes read from the schema, keyed by BaseURI and object class, for dynamic parameters
+$Script:psRadiantOneObjectClassCache = @{ }

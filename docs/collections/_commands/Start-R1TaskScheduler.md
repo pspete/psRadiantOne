@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Start-R1TaskScheduler
 schema: 2.0.0
+title: Start-R1TaskScheduler
+category: Tasks
 ---
 
 # Start-R1TaskScheduler

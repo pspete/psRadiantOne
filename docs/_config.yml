@@ -1,0 +1,114 @@
+# Site served by GitHub Pages from the /docs folder.
+# Preview locally with: bundle install && bundle exec jekyll serve
+
+remote_theme             : "mmistakes/minimal-mistakes@4.28.1"
+minimal_mistakes_skin    : "default"
+
+# Site Settings
+locale                   : "en-GB"
+title                    : "psRadiantOne"
+title_separator          : "-"
+name                     : "Pete Maan"
+description              : "PowerShell module for the Radiant Logic RadiantOne REST API."
+url                      : "https://psradiantone.pspete.dev"
+baseurl                  : ""
+repository               : "pspete/psRadiantOne"
+teaser                   : "/media/images/psRadiantOne-small.png"
+logo                     : "/media/images/psRadiantOne-Logo-small.png"
+masthead_title           : "psRadiantOne"
+og_image                 : "/media/images/psRadiantOne.png"
+search                   : true
+search_full_content      : false
+
+# Site Author
+author:
+  name                   : "Pete Maan"
+  avatar                 : "/assets/images/PSPETE_symbol.png"
+  bio                    : "psRadiantOne Developer"
+  location               : "UK"
+  links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/pspete"
+    - label: "www.pspete.dev"
+      icon: "fas fa-fw fa-link"
+      url: "https://www.pspete.dev"
+
+# Site Footer
+footer:
+  links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/pspete/psRadiantOne"
+    - label: "PowerShell Gallery"
+      icon: "fas fa-fw fa-cube"
+      url: "https://www.powershellgallery.com/packages/psRadiantOne"
+
+# Reading Files
+exclude:
+  - vendor
+  - .bundle
+  - .jekyll-cache
+  - .sass-cache
+  - Gemfile
+  - Gemfile.lock
+
+# Conversion
+markdown: kramdown
+highlighter: rouge
+excerpt_separator: "\n\n"
+
+kramdown:
+  input: GFM
+  hard_wrap: false
+  auto_ids: true
+  toc_levels: 1..6
+  smart_quotes: lsquo,rsquo,ldquo,rdquo
+
+sass:
+  style: compressed
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-include-cache
+  - jekyll-sitemap
+
+# Collections
+collections_dir: collections
+collections:
+  commands:
+    output: true
+    permalink: /:collection/:path
+  docs:
+    output: true
+    permalink: /:collection/:path/
+  pages:
+    output: true
+    permalink: /:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: commands
+    values:
+      layout: single
+      classes: wide command
+      toc: true
+      toc_sticky: true
+      sidebar:
+        nav: "commands"
+  - scope:
+      path: ""
+      type: docs
+    values:
+      layout: single
+      classes: wide
+      toc: true
+      toc_sticky: true
+      sidebar:
+        nav: "docs"
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single

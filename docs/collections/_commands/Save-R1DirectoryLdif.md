@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Save-R1DirectoryLdif
 schema: 2.0.0
+title: Save-R1DirectoryLdif
+category: Directory Browser
 ---
 
 # Save-R1DirectoryLdif

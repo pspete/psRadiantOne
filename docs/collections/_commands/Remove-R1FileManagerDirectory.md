@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Remove-R1FileManagerDirectory
 schema: 2.0.0
+title: Remove-R1FileManagerDirectory
+category: File Manager
 ---
 
 # Remove-R1FileManagerDirectory

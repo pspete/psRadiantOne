@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Move-R1DirectoryEntry
 schema: 2.0.0
+title: Move-R1DirectoryEntry
+category: Directory Browser
 ---
 
 # Move-R1DirectoryEntry

@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Remove-R1OidcProvider
 schema: 2.0.0
+title: Remove-R1OidcProvider
+category: OIDC
 ---
 
 # Remove-R1OidcProvider

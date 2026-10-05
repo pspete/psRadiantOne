@@ -1,0 +1,12 @@
+---
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
+@import "minimal-mistakes";
+
+// Command pages carry their own H1 from the platyPS markdown
+.command .page__inner-wrap > header {
+  display: none;
+}

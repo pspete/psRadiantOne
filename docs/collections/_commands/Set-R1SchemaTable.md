@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Set-R1SchemaTable
 schema: 2.0.0
+title: Set-R1SchemaTable
+category: Schemas
 ---
 
 # Set-R1SchemaTable

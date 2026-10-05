@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Set-R1NamingContextVirtualTreeProperty
 schema: 2.0.0
+title: Set-R1NamingContextVirtualTreeProperty
+category: Naming Contexts
 ---
 
 # Set-R1NamingContextVirtualTreeProperty

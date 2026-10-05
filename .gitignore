@@ -6,3 +6,4 @@ radiantone-openapi-*.yaml
 coverage.xml
 TestResults.xml
 codecov.exe
+build/

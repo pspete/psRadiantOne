@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Close-R1DirectoryPagedSearch
 schema: 2.0.0
+title: Close-R1DirectoryPagedSearch
+category: Directory Browser
 ---
 
 # Close-R1DirectoryPagedSearch

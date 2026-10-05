@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Merge-R1SchemaObject
 schema: 2.0.0
+title: Merge-R1SchemaObject
+category: Schemas
 ---
 
 # Merge-R1SchemaObject

@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Search-R1DirectoryEntryMember
 schema: 2.0.0
+title: Search-R1DirectoryEntryMember
+category: Directory Browser
 ---
 
 # Search-R1DirectoryEntryMember

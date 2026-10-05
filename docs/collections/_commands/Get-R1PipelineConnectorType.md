@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Get-R1PipelineConnectorType
 schema: 2.0.0
+title: Get-R1PipelineConnectorType
+category: Observability
 ---
 
 # Get-R1PipelineConnectorType

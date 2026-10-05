@@ -1,0 +1,32 @@
+main:
+  - title: "Docs"
+    url: /docs/getting-started/
+  - title: "Commands"
+    url: /commands/
+  - title: "Install"
+    url: /docs/install/
+  - title: "About"
+    url: /about/
+
+docs:
+  - title: "Getting Started"
+    children:
+      - title: "Installation"
+        url: /docs/install/
+      - title: "Getting Started"
+        url: /docs/getting-started/
+  - title: "Using psRadiantOne"
+    children:
+      - title: "Examples"
+        url: /docs/examples/
+      - title: "Things Worth Knowing"
+        url: /docs/behaviour/
+      - title: "Help Us Test"
+        url: /docs/help-us-test/
+  - title: "Reference"
+    children:
+      - title: "Command Reference"
+        url: /commands/
+
+# The commands sidebar is built from the commands collection, grouped by category.
+# See _includes/nav_list.

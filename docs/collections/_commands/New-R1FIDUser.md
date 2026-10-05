@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/New-R1FIDUser
 schema: 2.0.0
+title: New-R1FIDUser
+category: Users
 ---
 
 # New-R1FIDUser

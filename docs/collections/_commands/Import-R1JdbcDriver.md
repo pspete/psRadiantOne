@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Import-R1JdbcDriver
 schema: 2.0.0
+title: Import-R1JdbcDriver
+category: JDBC Drivers
 ---
 
 # Import-R1JdbcDriver

@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Remove-R1PrivateFile
 schema: 2.0.0
+title: Remove-R1PrivateFile
+category: Private Files
 ---
 
 # Remove-R1PrivateFile

@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Remove-R1Aci
 schema: 2.0.0
+title: Remove-R1Aci
+category: Access Control
 ---
 
 # Remove-R1Aci

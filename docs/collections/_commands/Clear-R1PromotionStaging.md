@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Clear-R1PromotionStaging
 schema: 2.0.0
+title: Clear-R1PromotionStaging
+category: Promotion
 ---
 
 # Clear-R1PromotionStaging

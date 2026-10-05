@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Get-R1DynamicGroupFormat
 schema: 2.0.0
+title: Get-R1DynamicGroupFormat
+category: Namespace Utilities
 ---
 
 # Get-R1DynamicGroupFormat

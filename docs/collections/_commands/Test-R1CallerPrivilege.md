@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Test-R1CallerPrivilege
 schema: 2.0.0
+title: Test-R1CallerPrivilege
+category: Authentication
 ---
 
 # Test-R1CallerPrivilege

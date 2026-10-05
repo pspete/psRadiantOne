@@ -1,8 +1,10 @@
 ---
 external help file: psRadiantOne-help.xml
 Module Name: psRadiantOne
-online version:
+online version: https://psradiantone.pspete.dev/commands/Import-R1File
 schema: 2.0.0
+title: Import-R1File
+category: File Manager
 ---
 
 # Import-R1File
