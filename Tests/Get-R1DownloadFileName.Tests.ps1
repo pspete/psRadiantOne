@@ -82,11 +82,17 @@ Describe $($PSCommandPath -Replace '.Tests.ps1') {
 		It 'returns nothing for a name which cannot name a file' -TestCases @(
 			@{ Disposition = 'attachment; filename=".."' }
 			@{ Disposition = 'attachment; filename="folder/"' }
-			@{ Disposition = 'attachment; filename="bad|name.zip"' }
 			@{ Disposition = 'attachment' }
 		) {
 
 			Get-R1DownloadFileName -Response (New-Response $Disposition) | Should -BeNullOrEmpty
+
+		}
+
+		#Only '/' and NUL are invalid in a file name on Linux and macOS, so '|' names a file there.
+		It 'returns nothing for a name with a character Windows does not allow' -Skip:([System.Environment]::OSVersion.Platform -ne 'Win32NT') {
+
+			Get-R1DownloadFileName -Response (New-Response 'attachment; filename="bad|name.zip"') | Should -BeNullOrEmpty
 
 		}
 
