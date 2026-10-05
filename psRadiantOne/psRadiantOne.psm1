@@ -10,7 +10,6 @@
 
 .OUTPUTS
 #>
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'DotSourceModule', Justification = 'Used within the ForEach-Object script block')]
 [CmdletBinding()]
 param(
 
