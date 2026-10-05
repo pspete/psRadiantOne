@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- N/A
+
+## [0.6.0] - 2026-10-05
+
 ### Added
 
 - `New-R1DirectoryOrganizationalUnit` adds an organizational unit beneath a parent DN, with the
