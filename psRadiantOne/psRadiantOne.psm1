@@ -1,3 +1,4 @@
+#region Loader
 <#
 .SYNOPSIS
 
@@ -9,6 +10,7 @@
 
 .OUTPUTS
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'DotSourceModule', Justification = 'Used within the ForEach-Object script block')]
 [CmdletBinding()]
 param(
 
@@ -47,6 +49,7 @@ Get-ChildItem $PSScriptRoot\ -Recurse -Include '*.ps1' -Exclude '*.ps1xml' |
 		}
 
 	}
+#endregion Loader
 
 # AllowInsecureRedirect arrived in PowerShell 7.4. Resolved once at import rather than on every
 # request; Invoke-R1RestMethod sends the parameter only where it exists.

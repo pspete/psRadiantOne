@@ -1,6 +1,8 @@
-# Unreleased
+# Changelog
 
-## Added
+## Unreleased
+
+### Added
 
 - `New-R1DirectoryOrganizationalUnit` adds an organizational unit beneath a parent DN, with the
   attributes the control panel offers for one.
@@ -13,9 +15,14 @@
   are read from the schema and added, and their attributes are offered as parameters, mandatory
   where the schema requires them.
 
-# 0.5
+### Changed
 
-## Added
+- Build, test and release moved from AppVeyor to GitHub Actions, using the shared pspete.Build
+  scripts. The module version now comes from the manifest, bumped by the Unreleased notes.
+
+## [0.5]
+
+### Added
 
 - Computed attribute commands: `Get-R1ComputedAttribute`, `Add-R1ComputedAttribute`,
   `Set-R1ComputedAttribute` and `Remove-R1ComputedAttribute`, which wrap the two coupled changes a
@@ -25,7 +32,7 @@
 - `New-R1ComputedAttributeExpression -value` takes the values in the order the signature lists them
   and names each from the function's own parameters. `-values` keeps taking them keyed by name.
 
-## Changed
+### Changed
 
 - `New-R1DirectoryEntry -attributes`, `Set-R1LogSetting -advancedProperties` and
   `Set-R1PipelineConnectorConfig -properties` take a hashtable keyed by name, such as
@@ -35,7 +42,7 @@
   can be combined in one call, and bind from the pipeline by property name.
   `-modifications` still takes the modifications in the API's own shape.
 
-## Fixed
+### Fixed
 
 - `Get-R1Task -id` and `Get-R1TaskLog -id` take `taskId` as an alias, so the launched task
   `Initialize-R1Cache`, `Import-R1DirectoryLdif`, `Import-R1StoreData` and `Reset-R1StoreIndex`
@@ -49,9 +56,9 @@
 - `Set-R1Task` no longer sends the `N_A` sentinel `Get-R1Task` reports for `executionInterval` on a
   non-recurrent task back on the PUT, which the API rejected with `Invalid time format: N_A`.
 
-# 0.4
+## [0.4]
 
-## Added
+### Added
 
 - Read commands for the directory namespace configuration which had none:
   - Caches: `Get-R1Cache`, `Get-R1CacheProperty`, `Get-R1CacheRefresh`,
@@ -105,7 +112,7 @@
 - `New-R1NamingContextInterceptionScript` and `Set-R1NamingContextInterceptionScript` give a content
   node a new interception script, or one which already exists.
 
-## Fixed
+### Fixed
 
 - A command issued before `Connect-R1Session` stops at the session check. The check reported a
   terminating error, which ended the check alone: the command carried on and failed a second time
@@ -134,9 +141,9 @@
   successful delete with HTTP 500 and no error details; the plugin listing is now checked on error,
   and gone from the listing is treated as success, with a warning rather than a terminating error.
 
-# 0.3
+## [0.3]
 
-## Added
+### Added
 
 - `Import-R1DataSource` takes `-overrideExisting`, `-performOpOnSchemas` and `-crossEnvironment`, and
   `Export-R1DataSource` the last two. An import is refused where the data source already exists
@@ -151,7 +158,7 @@
   `@{...}`. Dates display in local time. Nothing is lost: `Select-Object *` and `Format-List` still
   reach every property, including a task's log and an interception script's contents.
 
-## Changed
+### Changed
 
 - **`Set-R1DataSource` requires either `-password` or `-useExistingCredentials`.** They cannot be
   combined, and a call giving neither is refused. An existing call which updates a data source
@@ -164,7 +171,7 @@
   or the full path of a file. A download is saved under the name the API sends it with, or under the
   name the path ends in, and without a path to the current user's Downloads directory.
 
-## Fixed
+### Fixed
 
 - The five export commands write a binary download intact. An archive had been written out as one
   decimal number per byte, so it could not be opened.
@@ -179,9 +186,9 @@
   read back, and made every later read of any data source fail.
 - `Set-R1SchemaFullObject` sends the schema's `objects` back, which it had left out of the update.
 
-# 0.2
+## [0.2]
 
-## Fixed
+### Fixed
 
 - Commands which create an object no longer fail on PowerShell 7.4 and later.
 - `Reset-R1DirectoryEntryPassword` sets a usable password. A password set by an earlier version
@@ -190,7 +197,7 @@
   `-Tail` and `-TimeoutSec` are replaced by `-numberOfLines`, which the API expects and the command
   never sent. The whole log is returned as one line per string, as a tail already was.
 
-## Changed
+### Changed
 
 - `Import-R1DirectoryLdif` returns the task the import runs as, rather than its id alone.
 - `Connect-R1Session` populates the `WebSession`, `Version` and `ElapsedTime` session properties.
@@ -198,14 +205,14 @@
 - `Get-R1Session` returns an object rather than a dictionary, so `Select-Object` reads its
   properties, and prints without the token, the websession and the last response.
 
-# 0.1
+## [0.1]
 
 First release. Everything below is new, so the entries are grouped by the area of the RadiantOne API
 they cover rather than split into added, changed and fixed.
 
-## Added
+### Added
 
-### Session & authentication
+#### Session & authentication
 
 - `Connect-R1Session` / `Disconnect-R1Session` / `Get-R1Session`, `Update-R1AuthToken` and
   `Reset-R1Password`. `-BaseURI` takes the API endpoint address, which on a cloud tenant is the
@@ -219,7 +226,7 @@ they cover rather than split into added, changed and fixed.
 - `Get-R1AccessToken`, `New-R1AccessToken`, `Remove-R1AccessToken`. The token value is returned only
   when it is created and cannot be retrieved again.
 
-### Users, roles and the directory manager
+#### Users, roles and the directory manager
 
 - `Get-R1FIDUser`, `New-R1FIDUser`, `Set-R1FIDUser`, `Remove-R1FIDUser` and `Set-R1FIDUserRole`.
   `Get-R1FIDUser` follows the API's cursor pagination and returns every page. Roles may be supplied
@@ -227,7 +234,7 @@ they cover rather than split into added, changed and fixed.
 - `Get-R1FIDRole`, `New-R1FIDRole`, `Set-R1FIDRole`, `Remove-R1FIDRole`.
 - `Get-R1DirectoryManager` / `Set-R1DirectoryManager`, `Get-R1SpecialGroup` / `Set-R1SpecialGroup`.
 
-### Security settings
+#### Security settings
 
 - Access control: `Get-R1AccessControlSetting` / `Set-R1AccessControlSetting`, `Get-R1Aci`,
   `New-R1Aci`, `Set-R1Aci`, `Remove-R1Aci`, `Get-R1AciLocation` and `Test-R1Aci`.
@@ -246,7 +253,7 @@ they cover rather than split into added, changed and fixed.
   `Get-R1PasswordDictionary`, `Add-R1PasswordDictionaryWord`, `Remove-R1PasswordDictionaryWord`,
   `Get-R1PasswordEncryption` and `Test-R1PasswordStrengthRule`.
 
-### Platform settings
+#### Platform settings
 
 - Configuration pairs: `Get-`/`Set-R1ChangeLogSetting`, `Get-`/`Set-R1GlobalAttributeSetting`,
   `Get-`/`Set-R1LdapClientAccess`, `Get-`/`Set-R1LdapClientAccessMapping`,
@@ -265,7 +272,7 @@ they cover rather than split into added, changed and fixed.
   `Get-R1ServiceSummary`, `Get-R1WhatsNew`, `Get-R1SaasConfiguration`, `Get-R1LoginPageInfo`,
   `Get-R1ControlPanelMessage`.
 
-### Directory namespace
+#### Directory namespace
 
 - Global namespace settings: `Get-R1GlobalInterceptionSetting` / `Set-R1GlobalInterceptionSetting`,
   `Get-R1GlobalSpecialAttribute` / `Set-R1GlobalSpecialAttribute` and `Get-R1GlobalDynamicGroup`.
@@ -292,7 +299,7 @@ they cover rather than split into added, changed and fixed.
   `Get-R1NamingContextRelationshipTree`.
 - Namespace views: `Get-R1NamespaceView` and `Remove-R1NamespaceView`.
 
-### Directory schema
+#### Directory schema
 
 - Object classes: `Get-R1DirectoryObjectClass`, `New-R1DirectoryObjectClass`,
   `Set-R1DirectoryObjectClass`, `Remove-R1DirectoryObjectClass` and `Get-R1DirectoryObjectClassParent`.
@@ -304,7 +311,7 @@ they cover rather than split into added, changed and fixed.
   `Import-R1DirectorySchemaFile` and `Remove-R1DirectorySchemaFile`. Import takes either a local file,
   sent as multipart form data, or the name of a file already on the server.
 
-### Data catalog
+#### Data catalog
 
 - Schemas: `Get-R1Schema`, `New-R1Schema`, `Set-R1Schema`, `Remove-R1Schema`,
   `Get-R1SchemaFullObject` / `Set-R1SchemaFullObject`, `Get-R1SchemaAssociatedView`,
@@ -350,7 +357,7 @@ they cover rather than split into added, changed and fixed.
 - Schema comparison: `Compare-R1Schema` returns the differences between a schema and its data source,
   and `Invoke-R1SchemaDiff` applies them, either updating the schema or saving the result as a new one.
 
-### Directory browser
+#### Directory browser
 
 - Entries: `Get-R1DirectoryEntry`, `New-R1DirectoryEntry`, `Set-R1DirectoryEntry`,
   `Remove-R1DirectoryEntry`, `Rename-R1DirectoryEntry`, `Move-R1DirectoryEntry` and
@@ -365,7 +372,7 @@ they cover rather than split into added, changed and fixed.
   `Remove-R1DirectoryLdifFile` manage what is stored.
 - `Test-R1DirectoryAuthentication` and `Close-R1DirectoryPagedSearch`.
 
-### Task management
+#### Task management
 
 - Scheduler: `Get-R1TaskScheduler` / `Set-R1TaskScheduler`, `Start-R1TaskScheduler`,
   `Stop-R1TaskScheduler` and `Restart-R1TaskScheduler`.
@@ -375,7 +382,7 @@ they cover rather than split into added, changed and fixed.
   reaches the end, so the request is bounded by `-TimeoutSec` and returns what arrived within it.
   `New-R1CustomTask` uploads a compiled class and a properties file together.
 
-### Configuration promotion and the file manager
+#### Configuration promotion and the file manager
 
 - Promotion: `Get-R1PromotionState`, `Get-R1PromotionSetting`, `Start-R1PromotionStaging`,
   `Get-R1PromotionStagedResource`, `Test-R1PromotionStagedResource`, `Clear-R1PromotionStaging`,
@@ -386,7 +393,7 @@ they cover rather than split into added, changed and fixed.
   `Set-R1FileContent`, `Import-R1File`, `Export-R1File`, `Remove-R1File` and `New-R1Jar`.
 - `Reset-R1DashboardLink`, which restores the default dashboard links.
 
-## Notes
+### Notes
 
 These are the behaviours worth knowing before using the module, rather than a record of changes.
 
