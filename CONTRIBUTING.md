@@ -8,13 +8,13 @@ If you find an error in `psRadiantOne`, or have a question relating to the modul
 
 ## Pull Requests
 
-When submitting a Pull Request to psPAS, automated tasks will run in Appveyor.
+When submitting a Pull Request to psRadiantOne, automated tasks will run in GitHub Actions.
 
-- Appveyor will increment the version number (there is no need to do this manually)
 - The [`Pester`][pester-repo] tests for the module will run.
 - [Code Coverage][code-coverage] metrics for the module will be determined
-- Once code is merged into the `master` branch, and all tests pass, the module is automatically published to the PowerShell Gallery and tagged as a Release on GitHub
-  - No PR's should be submitted to the master branch; submitting to the Dev branch allows for required tests & documentation to be updated prior to any code release.
+- Describe the change under `## Unreleased` in [CHANGELOG.md](CHANGELOG.md); the version number is set from these notes (there is no need to change it manually)
+- Once code is merged into the `main` branch, and all tests pass, the module is automatically published to the PowerShell Gallery and tagged as a Release on GitHub
+  - No PR's should be submitted to the main branch; submitting to the Dev branch allows for required tests & documentation to be updated prior to any code release.
 
 ## Contributing Code
 

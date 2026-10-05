@@ -18,16 +18,16 @@ Documentation and the command reference: [psradiantone.pspete.dev](https://psrad
   - Most commands have now been exercised against a live deployment, but around 1 in 10 still rest on the published API definition alone - see [Help Us Test](#help-us-test) below, your feedback genuinely shapes what ships next.
   - Real-world usage is still expected to shape further changes to command names, parameters/parameter names, and how commands are grouped - some may split into companion commands, others may combine. These patterns only emerge once commands are actually used, so don't consider anything final yet.
 
-| Main Branch              | Latest Build             | CodeFactor                 | Coverage                     | PowerShell Gallery        | License                      |
+| Main Branch              | Dev Branch               | CodeFactor                 | Coverage                     | PowerShell Gallery        | License                      |
 | ------------------------ | ------------------------ | -------------------------- | ---------------------------- | ------------------------- | ---------------------------- |
-| [![appveyor][]][av-site] | [![tests][]][tests-site] | [![codefactor][]][cf-site] | [![codecov][]][codecov-link] | [![psgallery][]][ps-site] | [![license][]][license-link] |
+| [![build][]][build-site] | [![dev][]][dev-site]     | [![codefactor][]][cf-site] | [![codecov][]][codecov-link] | [![psgallery][]][ps-site] | [![license][]][license-link] |
 
-[appveyor]: https://ci.appveyor.com/api/projects/status/github/pspete/psRadiantOne?branch=main&svg=true
-[av-site]: https://ci.appveyor.com/project/pspete/psRadiantOne/branch/main
+[build]: https://github.com/pspete/psRadiantOne/actions/workflows/ci.yml/badge.svg?branch=main&event=push
+[build-site]: https://github.com/pspete/psRadiantOne/actions/workflows/ci.yml?query=branch%3Amain
 [psgallery]: https://img.shields.io/powershellgallery/v/psRadiantOne.svg
 [ps-site]: https://www.powershellgallery.com/packages/psRadiantOne
-[tests]: https://img.shields.io/appveyor/tests/pspete/psRadiantOne.svg
-[tests-site]: https://ci.appveyor.com/project/pspete/psRadiantOne
+[dev]: https://github.com/pspete/psRadiantOne/actions/workflows/ci.yml/badge.svg?branch=dev&event=push
+[dev-site]: https://github.com/pspete/psRadiantOne/actions/workflows/ci.yml?query=branch%3Adev
 [downloads]: https://img.shields.io/powershellgallery/dt/psRadiantOne.svg?color=blue
 [cf-site]: https://www.codefactor.io/repository/github/pspete/psRadiantOne
 [codefactor]: https://www.codefactor.io/repository/github/pspete/psradiantone/badge?s=1093220a061c51b1db44a6f3d7fa8b9fb23d4a6f
