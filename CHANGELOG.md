@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- N/A
+### Changed
+
+- CI caches the PowerShell modules it installs, so dependency installs skip the PowerShell Gallery on a cache hit.
 
 ## [0.6.0] - 2026-10-05
 
