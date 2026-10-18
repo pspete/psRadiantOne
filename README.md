@@ -33,7 +33,7 @@ Documentation and the command reference: [psradiantone.pspete.dev](https://psrad
 [codefactor]: https://www.codefactor.io/repository/github/pspete/psradiantone/badge?s=1093220a061c51b1db44a6f3d7fa8b9fb23d4a6f
 [codecov]: https://codecov.io/gh/pspete/psRadiantOne/branch/main/graph/badge.svg
 [codecov-link]: https://codecov.io/gh/pspete/psRadiantOne
-[license]: https://img.shields.io/github/license/pspete/psRadiantOne.svg
+[license]: https://img.shields.io/badge/license-MIT-green.svg
 [license-link]: https://github.com/pspete/psRadiantOne/blob/main/LICENSE.md
 
 ---
